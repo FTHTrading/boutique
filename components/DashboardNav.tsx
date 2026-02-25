@@ -120,9 +120,9 @@ export function DashboardNav() {
       {/* Footer */}
       <div className="border-t border-gray-100 p-4">
         <div className="flex items-center gap-3">
-          <UserButton afterSignOutUrl="/" />
+          {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && <UserButton afterSignOutUrl="/" />}
           <div className="min-w-0">
-            <p className="text-xs text-gray-500 truncate">Signed in</p>
+            <p className="text-xs text-gray-500 truncate">Team Member</p>
             <Link href="/" className="text-[10px] text-gray-400 hover:text-amber-700 flex items-center gap-1">
               <Globe size={10} /> View public site
             </Link>
