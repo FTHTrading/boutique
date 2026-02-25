@@ -1,0 +1,44 @@
+{
+  "name": "coffee-advisory-os",
+  "version": "1.0.0",
+  "description": "AI-Native Coffee Distribution Advisory Intelligence Stack",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "psql -U postgres -d advisory_os -f database/schema.sql",
+    "mcp:start": "tsx agents/mcp-server.ts"
+  },
+  "dependencies": {
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@vercel/postgres": "^0.7.2",
+    "pgvector": "^0.1.8",
+    "openai": "^4.28.0",
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "pdfkit": "^0.14.0",
+    "zod": "^3.22.4",
+    "date-fns": "^3.3.1",
+    "sharp": "^0.33.2",
+    "@clerk/nextjs": "^4.29.9",
+    "recharts": "^2.12.0",
+    "lucide-react": "^0.344.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.1",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.35",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
