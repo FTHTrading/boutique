@@ -25,12 +25,19 @@ import CreditAgent from './credit.agent';
 import SupplierAgent from './supplier.agent';
 import OutreachAgent from './outreach.agent';
 import ComplianceAgent from './compliance.agent';
+import { CompanyResearchAgent } from './company-research-agent';
+import { ContactValidationAgent } from './contact-validation-agent';
+import { ContractAgent } from './contract-agent';
+
+const companyResearchAgent = new CompanyResearchAgent();
+const contactValidationAgent = new ContactValidationAgent();
+const contractAgent = new ContractAgent();
 
 // Create MCP server
 const server = new Server(
   {
-    name: 'coffee-advisory-os',
-    version: '1.0.0',
+    name: 'fth-trading-platform',
+    version: '2.0.0',
   },
   {
     capabilities: {
@@ -149,6 +156,75 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
       
+      // === Enterprise Sales Intelligence Tools ===
+
+      // Company Research
+      {
+        name: 'research_company',
+        description: 'Research a company from its public website. Extracts company info and explicitly listed contacts only. Lawful sources only — no email guessing.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            website_url: { type: 'string', description: 'Full URL of the company website (e.g. https://example.com)' },
+            target_commodities: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'List of commodities to check relevance for (e.g. ["crude oil", "copper"])'
+            },
+          },
+          required: ['website_url'],
+        },
+      },
+
+      // Contact Validation
+      {
+        name: 'validate_contact',
+        description: 'Validate an email address and check consent status before any outreach',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            email: { type: 'string', description: 'Email address to validate' },
+            contact_id: { type: 'string', description: 'Optional CRM contact UUID for consent check' },
+          },
+          required: ['email'],
+        },
+      },
+
+      // Contract Generation
+      {
+        name: 'generate_contract',
+        description: 'Generate a contract (NCNDA, Supply Agreement, etc.) with eSignature link',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            contract_type: { type: 'string', enum: ['NCNDA', 'Supply Agreement', 'Offtake Agreement', 'MOU', 'Broker Agreement'] },
+            party_b_name: { type: 'string', description: 'Legal name of counterparty company' },
+            party_b_signatory: { type: 'string', description: 'Full name of authorised signatory' },
+            party_b_email: { type: 'string', description: 'Signatory email address' },
+            commodity: { type: 'string', description: 'Commodity covered by the agreement' },
+            governing_law: { type: 'string', description: 'Governing jurisdiction (e.g. England and Wales)' },
+            deal_value: { type: 'number', description: 'Optional deal value in USD' },
+            special_terms: { type: 'string', description: 'Any additional special terms to include' },
+          },
+          required: ['contract_type', 'party_b_name', 'party_b_email', 'commodity'],
+        },
+      },
+
+      // AI Outreach Draft
+      {
+        name: 'draft_crm_outreach_email',
+        description: 'Generate an AI-drafted personalised outreach email for a CRM contact. Returns draft only — does NOT send. Consent is checked first.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            contact_id: { type: 'string', description: 'CRM contact UUID' },
+            outreach_type: { type: 'string', enum: ['initial_outreach', 'follow_up', 'contract_follow_up', 'commodity_update'], description: 'Type of outreach' },
+            context: { type: 'string', description: 'Optional context or talking points to include in the email' },
+          },
+          required: ['contact_id'],
+        },
+      },
+
       // Analytics Tools
       {
         name: 'get_dashboard_metrics',
@@ -280,6 +356,63 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           ],
         };
       
+      case 'research_company': {
+        const result = await companyResearchAgent.researchCompany(
+          args.website_url as string,
+          (args.target_commodities as string[]) || []
+        );
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'validate_contact': {
+        const result = await contactValidationAgent.validateEmail(
+          args.email as string,
+          args.contact_id as string | undefined
+        );
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'generate_contract': {
+        const result = await contractAgent.generateContract({
+          contract_type: args.contract_type as string,
+          party_b_name: args.party_b_name as string,
+          party_b_signatory: (args.party_b_signatory as string) || '',
+          party_b_email: args.party_b_email as string,
+          commodity: args.commodity as string,
+          governing_law: (args.governing_law as string) || 'England and Wales',
+          deal_value: args.deal_value as number | undefined,
+          special_terms: args.special_terms as string | undefined,
+        });
+        // Return safe summary (exclude full HTML)
+        const { document_html: _, ...summary } = result;
+        return {
+          content: [{ type: 'text', text: JSON.stringify(summary, null, 2) }],
+        };
+      }
+
+      case 'draft_crm_outreach_email': {
+        // POST to the outreach API to get an AI draft (respects consent)
+        const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/api/outreach`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'draft',
+            contact_id: args.contact_id,
+            outreach_type: args.outreach_type || 'initial_outreach',
+            context: args.context,
+          }),
+        });
+        const data = await res.json();
+        return {
+          content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+        };
+      }
+
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
@@ -325,8 +458,8 @@ async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   
-  console.error('☕ Coffee Advisory OS MCP Server running');
-  console.error('Agents: Proposal | Credit | Supplier | Outreach | Compliance');
+  console.error('🏦 FTH Trading Platform MCP Server running');
+  console.error('Agents: Proposal | Credit | Supplier | Outreach | Compliance | CompanyResearch | ContactValidation | Contract');
 }
 
 main().catch((error) => {

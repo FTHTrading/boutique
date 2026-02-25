@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
+import { useState, useEffect, useCallback } from 'react'
 import { 
   Shield, 
   AlertTriangle, 
@@ -11,120 +10,82 @@ import {
   Search,
   FileText,
   User,
-  Clock
+  Clock,
+  RefreshCw
 } from 'lucide-react'
 
-// Mock data - In production, fetch from API
-const mockFlags = [
-  {
-    id: '1',
-    deal_number: 'DEAL-2026-002',
-    client_name: 'Global Metals Ltd',
-    commodity: 'Gold',
-    destination: 'United States',
-    flag_type: 'AML',
-    severity: 'CRITICAL',
-    message: 'High-value transaction ($950,000 USD). Enhanced due diligence required.',
-    recommendation: 'Obtain: (1) Enhanced KYC documentation, (2) Beneficial ownership disclosure (>25% owners), (3) Source of funds verification, (4) Source of wealth documentation. Retain for 5+ years.',
-    requires_human_review: true,
-    blocks_execution: true,
-    resolved: false,
-    created_at: '2026-02-23T10:30:00Z',
-  },
-  {
-    id: '2',
-    deal_number: 'DEAL-2026-002',
-    client_name: 'Global Metals Ltd',
-    commodity: 'Gold',
-    destination: 'United States',
-    flag_type: 'EXPORT_CONTROL',
-    severity: 'CRITICAL',
-    message: 'Commodity "Gold" flagged as restricted. Reason: Export controls may apply',
-    recommendation: 'Verify: (1) Export control classification (ECCN/USML), (2) Export license requirements, (3) End-use/end-user restrictions. Consult export control counsel if uncertain.',
-    requires_human_review: true,
-    blocks_execution: true,
-    resolved: false,
-    created_at: '2026-02-23T10:30:00Z',
-  },
-  {
-    id: '3',
-    deal_number: 'DEAL-2026-001',
-    client_name: 'Acme Coffee Corp',
-    commodity: 'Coffee',
-    destination: 'United States',
-    flag_type: 'AML',
-    severity: 'HIGH',
-    message: 'High-value transaction ($320,000 USD). Enhanced due diligence required.',
-    recommendation: 'Obtain: (1) Enhanced KYC documentation, (2) Beneficial ownership disclosure (>25% owners), (3) Source of funds verification, (4) Source of wealth documentation. Retain for 5+ years.',
-    requires_human_review: true,
-    blocks_execution: false,
-    resolved: false,
-    created_at: '2026-02-24T14:15:00Z',
-  },
-  {
-    id: '4',
-    deal_number: 'DEAL-2026-004',
-    client_name: 'European Foods GmbH',
-    commodity: 'Cocoa',
-    destination: 'Germany',
-    flag_type: 'DOCS',
-    severity: 'MEDIUM',
-    message: 'Required documentation for Germany / Cocoa trade.',
-    recommendation: 'Prepare and retain: Commercial Invoice, Packing List, Bill of Lading, Phytosanitary Certificate, Certificate of Origin, ICCO (International Cocoa Organization) documentation. Verify authenticity. Retain for 5+ years per recordkeeping requirements.',
-    requires_human_review: false,
-    blocks_execution: false,
-    resolved: true,
-    resolved_by: 'Sarah Chen',
-    resolved_at: '2026-02-24T16:00:00Z',
-    resolution_notes: 'All required documents obtained and verified. Phytosanitary cert from Brazilian authority confirmed authentic.',
-    created_at: '2026-02-24T10:00:00Z',
-  },
-]
+interface FlagRecord {
+  id: string
+  deal_id?: string
+  deal_number?: string
+  commodity?: string
+  flag_type: string
+  severity: string
+  message: string
+  recommendation?: string
+  requires_human_review?: boolean
+  blocks_execution?: boolean
+  resolved: boolean
+  resolved_by?: string
+  resolved_at?: string
+  resolution_notes?: string
+  created_at: string
+}
 
 export default function ComplianceDashboard() {
-  const [flags, setFlags] = useState(mockFlags)
+  const [flags, setFlags] = useState<FlagRecord[]>([])
+  const [stats, setStats] = useState({ critical_unresolved: 0, high_unresolved: 0, medium_unresolved: 0, total_unresolved: 0, total_resolved: 0, total: 0 })
+  const [loading, setLoading] = useState(true)
   const [filterSeverity, setFilterSeverity] = useState('all')
   const [filterResolved, setFilterResolved] = useState('pending')
   const [searchTerm, setSearchTerm] = useState('')
   const [resolvingFlag, setResolvingFlag] = useState<string | null>(null)
   const [resolutionForm, setResolutionForm] = useState({ resolvedBy: '', notes: '' })
+  const [resolveLoading, setResolveLoading] = useState(false)
+
+  const fetchFlags = useCallback(async () => {
+    setLoading(true)
+    const p = new URLSearchParams()
+    if (filterSeverity !== 'all') p.set('severity', filterSeverity)
+    if (filterResolved !== 'all') p.set('resolved', filterResolved === 'resolved' ? 'true' : 'false')
+    try {
+      const res = await fetch(`/api/compliance/flags?${p}`)
+      const data = await res.json()
+      setFlags(data.flags || [])
+      if (data.stats) setStats(data.stats)
+    } catch { /* ignore */ }
+    finally { setLoading(false) }
+  }, [filterSeverity, filterResolved])
+
+  useEffect(() => { fetchFlags() }, [fetchFlags])
 
   const filteredFlags = flags.filter(flag => {
-    const matchesSearch = flag.deal_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         flag.client_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         flag.commodity.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesSeverity = filterSeverity === 'all' || flag.severity === filterSeverity
-    const matchesResolved = filterResolved === 'all' || 
-                           (filterResolved === 'pending' && !flag.resolved) ||
-                           (filterResolved === 'resolved' && flag.resolved)
-    return matchesSearch && matchesSeverity && matchesResolved
+    if (!searchTerm) return true
+    const q = searchTerm.toLowerCase()
+    return (flag.deal_number || '').toLowerCase().includes(q) ||
+           (flag.commodity || '').toLowerCase().includes(q) ||
+           (flag.message || '').toLowerCase().includes(q)
   })
 
-  const criticalCount = flags.filter(f => f.severity === 'CRITICAL' && !f.resolved).length
-  const highCount = flags.filter(f => f.severity === 'HIGH' && !f.resolved).length
-  const pendingReviewCount = flags.filter(f => f.requires_human_review && !f.resolved).length
-
-  const handleResolve = (flagId: string) => {
+  const handleResolve = async (flagId: string) => {
     if (!resolutionForm.resolvedBy || !resolutionForm.notes) {
       alert('Please enter your name and resolution notes')
       return
     }
-
-    // In production: POST to /api/compliance/flags/:id/resolve
-    setFlags(flags.map(f => 
-      f.id === flagId 
-        ? { 
-            ...f, 
-            resolved: true, 
-            resolved_by: resolutionForm.resolvedBy,
-            resolved_at: new Date().toISOString(),
-            resolution_notes: resolutionForm.notes
-          }
-        : f
-    ))
-    
-    setResolvingFlag(null)
-    setResolutionForm({ resolvedBy: '', notes: '' })
+    setResolveLoading(true)
+    try {
+      const res = await fetch(`/api/compliance/flags/${flagId}/resolve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resolved_by: resolutionForm.resolvedBy, resolution_notes: resolutionForm.notes }),
+      })
+      if (res.ok) {
+        setResolvingFlag(null)
+        setResolutionForm({ resolvedBy: '', notes: '' })
+        fetchFlags()
+      }
+    } catch { /* ignore */ }
+    finally { setResolveLoading(false) }
   }
 
   return (
@@ -153,7 +114,7 @@ export default function ComplianceDashboard() {
               <span className="text-red-800 text-sm font-semibold">CRITICAL Flags</span>
               <XCircle className="w-5 h-5 text-red-600" />
             </div>
-            <div className="text-3xl font-bold text-red-800">{criticalCount}</div>
+            <div className="text-3xl font-bold text-red-800">{stats.critical_unresolved}</div>
             <p className="text-xs text-red-700 mt-1">Blocks execution</p>
           </div>
           
@@ -162,7 +123,7 @@ export default function ComplianceDashboard() {
               <span className="text-amber-800 text-sm font-semibold">HIGH Flags</span>
               <AlertTriangle className="w-5 h-5 text-amber-600" />
             </div>
-            <div className="text-3xl font-bold text-amber-800">{highCount}</div>
+            <div className="text-3xl font-bold text-amber-800">{stats.high_unresolved}</div>
             <p className="text-xs text-amber-700 mt-1">Requires approval</p>
           </div>
           
@@ -171,7 +132,7 @@ export default function ComplianceDashboard() {
               <span className="text-blue-800 text-sm font-semibold">Pending Review</span>
               <FileText className="w-5 h-5 text-blue-600" />
             </div>
-            <div className="text-3xl font-bold text-blue-800">{pendingReviewCount}</div>
+            <div className="text-3xl font-bold text-blue-800">{stats.total_unresolved}</div>
             <p className="text-xs text-blue-700 mt-1">Requires human review</p>
           </div>
           
@@ -180,9 +141,7 @@ export default function ComplianceDashboard() {
               <span className="text-green-800 text-sm font-semibold">Resolved</span>
               <CheckCircle className="w-5 h-5 text-green-600" />
             </div>
-            <div className="text-3xl font-bold text-green-800">
-              {flags.filter(f => f.resolved).length}
-            </div>
+            <div className="text-3xl font-bold text-green-800">{stats.total_resolved}</div>
             <p className="text-xs text-green-700 mt-1">Total resolved</p>
           </div>
         </div>
@@ -361,10 +320,11 @@ export default function ComplianceDashboard() {
                           <div className="flex gap-3">
                             <button
                               onClick={() => handleResolve(flag.id)}
-                              className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
+                              disabled={resolveLoading}
+                              className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2 disabled:opacity-50"
                             >
                               <CheckCircle className="w-4 h-4" />
-                              Mark as Resolved
+                              {resolveLoading ? 'Saving...' : 'Mark as Resolved'}
                             </button>
                             <button
                               onClick={() => {
