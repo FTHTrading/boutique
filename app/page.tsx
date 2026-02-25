@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Coffee } from 'lucide-react'
+import { TrendingUp, Shield, Globe } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -8,60 +8,91 @@ export default function Home() {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center max-w-4xl mx-auto">
           <div className="flex items-center justify-center mb-6">
-            <Coffee size={64} className="text-coffee-dark" />
+            <Globe size={64} className="text-coffee-dark" />
           </div>
           
           <h1 className="text-6xl font-bold text-coffee-dark mb-6">
-            Coffee Advisory OS
+            FTH Trading
           </h1>
           
           <p className="text-2xl text-coffee-medium mb-4">
-            AI-Native Distribution Intelligence Platform
+            Global Commodity Sourcing & Structuring
           </p>
           
-          <p className="text-xl text-coffee-light mb-12">
-            From warehouse to espresso machine — automated, intelligent, regenerative
+          <p className="text-xl text-coffee-light mb-8">
+            We source and structure supply for select commodities globally. All transactions subject to applicable laws; deals may require compliance review prior to execution.
+          </p>
+          
+          <p className="text-sm text-gray-600 mb-12 italic">
+            Serving institutional buyers since 1976 • Coffee • Cocoa • Metals • Energy
           </p>
           
           <div className="flex gap-4 justify-center">
             <Link
-              href="/dashboard"
+              href="/commodities"
               className="bg-coffee-dark text-cream px-8 py-4 rounded-lg text-lg font-semibold hover:bg-coffee-medium transition-colors"
             >
-              Open Dashboard
+              View Commodities
             </Link>
             
             <Link
-              href="/leads/new"
+              href="/request-terms"
               className="border-2 border-coffee-dark text-coffee-dark px-8 py-4 rounded-lg text-lg font-semibold hover:bg-coffee-dark hover:text-cream transition-colors"
             >
-              Add New Lead
+              Request Terms
             </Link>
           </div>
         </div>
       </div>
       
-      {/* Features Grid */}
+      {/* Commodities Grid */}
       <div className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold text-center text-coffee-dark mb-12">
-          Distribution Intelligence Layer
+          Commodity Categories
         </h2>
         
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+        <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          {commodities.map((commodity) => (
+            <Link
+              href={`/commodities/${commodity.slug}`}
+              key={commodity.title}
+              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow group"
             >
-              <div className="text-3xl mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-coffee-dark mb-2">
-                {feature.title}
+              <div className="text-3xl mb-4">{commodity.icon}</div>
+              <h3 className="text-xl font-semibold text-coffee-dark mb-2 group-hover:text-coffee-medium transition-colors">
+                {commodity.title}
               </h3>
-              <p className="text-coffee-light">
-                {feature.description}
+              <p className="text-coffee-light text-sm">
+                {commodity.description}
               </p>
-            </div>
+            </Link>
           ))}
+        </div>
+      </div>
+      
+      {/* Features Grid */}
+      <div className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-coffee-dark mb-12">
+            Compliance-First Structuring
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {features.map((feature) => (
+              <div
+                key={feature.title}
+                className="bg-white p-6 rounded-lg shadow-md"
+              >
+                <div className="text-3xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-coffee-dark mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-coffee-light">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       
@@ -82,58 +113,73 @@ export default function Home() {
       {/* CTA */}
       <div className="container mx-auto px-4 py-16 text-center">
         <h2 className="text-3xl font-bold text-coffee-dark mb-4">
-          Ready to transform your distribution?
+          Global Sourcing, Institutional Standards
         </h2>
-        <p className="text-xl text-coffee-medium mb-8">
-          This isn't a coffee CRM. It's a distribution intelligence layer.
+        <p className="text-xl text-coffee-medium mb-4">
+          50 years of relationship capital. AI-powered compliance intelligence.
+        </p>
+        <p className="text-sm text-gray-600 mb-8 max-w-2xl mx-auto">
+          <strong>Disclaimer:</strong> This platform flags potential compliance issues for human review. It does not constitute legal advice, regulatory certification, or a guarantee of compliance. All determinations subject to review by qualified professionals.
         </p>
         <Link
-          href="/dashboard"
+          href="/request-terms"
           className="bg-coffee-dark text-cream px-8 py-4 rounded-lg text-lg font-semibold hover:bg-coffee-medium transition-colors inline-block"
         >
-          Get Started
+          Request Terms
         </Link>
       </div>
     </main>
   )
 }
 
+const commodities = [
+  {
+    slug: 'coffee',
+    icon: '☕',
+    title: 'Coffee',
+    description: 'Arabica & Robusta. Brazil, Colombia origins. Regenerative certified.',
+  },
+  {
+    slug: 'cocoa',
+    icon: '🍫',
+    title: 'Cocoa',
+    description: 'West African origins. Fair trade certified. Sustainable sourcing.',
+  },
+  {
+    slug: 'precious-metals',
+    icon: '🥇',
+    title: 'Precious Metals',
+    description: 'Gold, Silver, Platinum. LBMA custody. Chain-of-custody verification.',
+  },
+  {
+    slug: 'base-metals',
+    icon: '⚙️',
+    title: 'Base Metals',
+    description: 'Copper, Aluminum, Nickel. Industrial grade. Global warehousing.',
+  },
+]
+
 const features = [
   {
-    icon: '🎯',
-    title: 'AI Proposal Generation',
-    description: 'RAG-powered custom proposals tailored to each coffee shop's profile and needs',
+    icon: <Shield className="w-12 h-12 text-coffee-medium" />,
+    title: 'Compliance Intelligence',
+    description: 'Risk-based sanctions screening, export controls, and AML flagging. Human-reviewed gates before execution.',
   },
   {
-    icon: '💳',
-    title: 'Auto Credit Scoring',
-    description: 'Instant creditworthiness assessment with payment term recommendations',
+    icon: <TrendingUp className="w-12 h-12 text-coffee-medium" />,
+    title: 'Credit Structuring',
+    description: '110-point credit scoring with payment term recommendations. Bankability analysis and counterparty verification.',
   },
   {
-    icon: '🌱',
-    title: 'Regenerative Sourcing',
-    description: 'Brazil & Colombia regenerative lots with sustainability certificates',
-  },
-  {
-    icon: '📧',
-    title: 'Smart Outreach',
-    description: 'AI-drafted emails and automated follow-ups that feel personal',
-  },
-  {
-    icon: '📊',
-    title: 'Predictive Analytics',
-    description: '90-day reorder forecasting and inventory optimization',
-  },
-  {
-    icon: '🔒',
-    title: 'Compliance Guardian',
-    description: 'Automated verification of terms, pricing, and legal requirements',
+    icon: <Globe className="w-12 h-12 text-coffee-medium" />,
+    title: 'Jurisdiction Intelligence',
+    description: 'Country-specific sanctions risk, licensing requirements, and documentation frameworks. Source-tracked metadata.',
   },
 ]
 
 const stats = [
-  { value: '3×', label: 'Faster Deals' },
-  { value: '71%', label: 'Conversion' },
-  { value: '100%', label: 'Regenerative' },
-  { value: '24/7', label: 'Intelligence' },
+  { value: '50+', label: 'Years Trading' },
+  { value: '4', label: 'Commodity Categories' },
+  { value: '24/7', label: 'Compliance Screening' },
+  { value: 'ISO', label: 'Standards' },
 ]
