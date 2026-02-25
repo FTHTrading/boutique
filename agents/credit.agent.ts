@@ -1,5 +1,5 @@
 import { scoreCredit, updateClientCreditScore } from '../lib/creditScorer';
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 import type { CreditScore } from '@/types';
 
 /**

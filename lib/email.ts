@@ -15,7 +15,7 @@
  * - DMARC: v=DMARC1; p=quarantine; rua=mailto:dmarc@fthtrading.com
  */
 
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 import { contactValidationAgent } from '../agents/contact-validation-agent';
 
 export interface EmailMessage {

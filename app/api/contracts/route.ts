@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 import { contractAgent } from '@/agents/contract-agent';
 import { sendContractForSigning } from '@/lib/email';
 

@@ -1,5 +1,5 @@
 import { generateProposal, regenerateProposal } from '../lib/proposalGenerator';
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 import type { ProposalGenerationRequest, ProposalGenerationResponse } from '@/types';
 
 /**

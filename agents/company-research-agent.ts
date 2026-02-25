@@ -19,7 +19,7 @@
  */
 
 import OpenAI from 'openai';
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 
 /**
  * POST /api/compliance/flags/[id]/resolve

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 import { runComplianceScreen } from '@/agents/trade-compliance-agent';
 import { sendCriticalComplianceAlert } from '@/lib/email';
 

@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 import type { Client } from '@/types';
 
 const openai = new OpenAI({

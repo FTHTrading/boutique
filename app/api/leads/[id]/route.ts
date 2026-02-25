@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { sql } from '@vercel/postgres'
+﻿import { NextRequest, NextResponse } from 'next/server'
+import { sql } from '@/lib/sql'
 import { updateClientCreditScore } from '@/lib/creditScorer'
 
 /**

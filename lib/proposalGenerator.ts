@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 import { findSimilarProposals, indexProposal } from './rag';
 import type { Client, Product, ProposalGenerationRequest, ProposalGenerationResponse } from '@/types';
 

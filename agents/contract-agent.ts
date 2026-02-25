@@ -19,7 +19,7 @@
 
 import OpenAI from 'openai';
 import { createHash, randomBytes } from 'crypto';
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 

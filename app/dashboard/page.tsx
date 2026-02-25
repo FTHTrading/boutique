@@ -1,4 +1,4 @@
-import { sql } from '@vercel/postgres'
+import { sql } from '@/lib/sql'
 import { BarChart3, TrendingUp, Users, DollarSign, AlertCircle, Coffee } from 'lucide-react'
 
 export default async function DashboardPage() {

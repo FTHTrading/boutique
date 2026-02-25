@@ -18,7 +18,7 @@
  * - Monitor bounce/complaint rates
  */
 
-import { sql } from '@vercel/postgres';
+import { sql } from '@/lib/sql';
 
 export interface ContactValidationResult {
   email: string;

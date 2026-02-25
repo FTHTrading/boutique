@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { sql } from '@vercel/postgres';
+﻿import { NextRequest, NextResponse } from 'next/server';
+import { sql } from '@/lib/sql';
 import { ContractAgent } from '@/agents/contract-agent';
 
 const contractAgent = new ContractAgent();
