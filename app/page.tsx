@@ -46,7 +46,14 @@ export default function Home() {
               href="/sign-in"
               className="bg-amber-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-amber-700 transition-colors"
             >
-              Team Login →
+              Team Sign In
+            </Link>
+
+            <Link
+              href="/sign-up"
+              className="border-2 border-amber-600 text-amber-700 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-amber-50 transition-colors"
+            >
+              Register
             </Link>
           </div>
         </div>

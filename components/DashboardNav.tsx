@@ -16,7 +16,9 @@ import {
   Globe,
   ChevronRight,
   Menu,
-  X
+  X,
+  Star,
+  BarChart2
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -25,6 +27,14 @@ const navSections = [
     label: 'Main',
     items: [
       { href: '/dashboard', label: 'Overview', icon: LayoutDashboard, description: 'Summary & metrics' },
+      { href: '/dashboard/my-hub', label: 'My Hub', icon: Star, description: 'Personal command centre' },
+    ]
+  },
+  {
+    label: 'Team & Finance',
+    items: [
+      { href: '/dashboard/commissions', label: 'Commissions', icon: DollarSign, description: 'Earnings & payments' },
+      { href: '/dashboard/team', label: 'Team', icon: Users, description: 'Members & performance' },
     ]
   },
   {
