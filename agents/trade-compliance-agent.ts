@@ -14,7 +14,7 @@
  * - Export control regulations (EAR/ITAR screening when applicable)
  */
 
-import { db } from '@/lib/db';
+import { sql } from '@/lib/sql';
 
 // Severity levels
 export type FlagSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -353,63 +353,54 @@ async function screenValue(deal: Deal): Promise<ComplianceFlag[]> {
  */
 export async function persistFlags(dealId: string, flags: ComplianceFlag[]): Promise<void> {
   for (const flag of flags) {
-    await db.complianceFlags.create({
-      data: {
-        deal_id: dealId,
-        flag_type: flag.flag_type,
-        severity: flag.severity,
-        message: flag.message,
-        recommendation: flag.recommendation,
-        requires_human_review: flag.requires_human_review,
-        blocks_execution: flag.blocks_execution,
-        resolved: false
-      }
-    });
+    await sql`
+      INSERT INTO compliance_flags (
+        deal_id, flag_type, severity, message, recommendation,
+        requires_human_review, blocks_execution, resolved
+      ) VALUES (
+        ${dealId}, ${flag.flag_type}, ${flag.severity}, ${flag.message},
+        ${flag.recommendation}, ${flag.requires_human_review}, ${flag.blocks_execution}, false
+      )
+    `;
   }
 
   // Log screening action
-  await db.complianceActions.create({
-    data: {
-      deal_id: dealId,
-      action_type: 'SCREEN',
-      action_by: 'TradeComplianceAgent',
-      action_notes: `Generated ${flags.length} compliance flag(s)`,
-      metadata: { flag_count: flags.length, critical_count: flags.filter(f => f.severity === 'CRITICAL').length }
-    }
-  });
+  const metadata = JSON.stringify({ flag_count: flags.length, critical_count: flags.filter(f => f.severity === 'CRITICAL').length });
+  await sql`
+    INSERT INTO compliance_actions (deal_id, action_type, action_by, action_notes, metadata)
+    VALUES (${dealId}, 'SCREEN', 'TradeComplianceAgent', ${`Generated ${flags.length} compliance flag(s)`}, ${metadata})
+  `;
 }
 
 /**
  * Check if deal is cleared for execution
  */
 export async function isDealCleared(dealId: string): Promise<boolean> {
-  const criticalFlags = await db.complianceFlags.findMany({
-    where: {
-      deal_id: dealId,
-      severity: 'CRITICAL',
-      resolved: false
-    }
-  });
-
-  return criticalFlags.length === 0;
+  const { rows } = await sql`
+    SELECT id FROM compliance_flags
+    WHERE deal_id = ${dealId} AND severity = 'CRITICAL' AND resolved = false
+  `;
+  return rows.length === 0;
 }
 
 /**
  * Helper: Get jurisdiction data
  */
 async function getJurisdiction(countryCode: string): Promise<Jurisdiction | null> {
-  return await db.jurisdictions.findFirst({
-    where: { country_code: countryCode }
-  });
+  const { rows } = await sql`
+    SELECT * FROM jurisdictions WHERE country_code = ${countryCode} LIMIT 1
+  `;
+  return (rows[0] as Jurisdiction) || null;
 }
 
 /**
  * Helper: Get commodity data
  */
 async function getCommodity(commodityId: number): Promise<Commodity | null> {
-  return await db.commodities.findUnique({
-    where: { id: commodityId }
-  });
+  const { rows } = await sql`
+    SELECT * FROM commodities WHERE id = ${commodityId} LIMIT 1
+  `;
+  return (rows[0] as Commodity) || null;
 }
 
 /**
@@ -432,13 +423,11 @@ export async function runComplianceScreen(deal: Deal): Promise<{
   const criticalCount = flags.filter(f => f.severity === 'CRITICAL').length;
 
   // Update deal compliance status
-  await db.deals.update({
-    where: { id: deal.id },
-    data: {
-      compliance_cleared: cleared,
-      critical_flags_count: criticalCount
-    }
-  });
+  await sql`
+    UPDATE deals
+    SET compliance_cleared = ${cleared}, critical_flags_count = ${criticalCount}, updated_at = NOW()
+    WHERE id = ${deal.id}
+  `;
 
   return { flags, cleared, criticalCount };
 }

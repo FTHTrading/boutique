@@ -330,7 +330,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
  * Handle tool calls
  */
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name, arguments: args } = request.params;
+  const { name, arguments: rawArgs } = request.params;
+  const args: Record<string, unknown> = rawArgs ?? {};
   
   try {
     switch (name) {
@@ -460,15 +461,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'generate_contract': {
         const result = await contractAgent.generateContract({
-          contract_type: args.contract_type as string,
+          contract_type: args.contract_type as any,
           party_b_name: args.party_b_name as string,
           party_b_signatory: (args.party_b_signatory as string) || '',
           party_b_email: args.party_b_email as string,
           commodity: args.commodity as string,
           governing_law: (args.governing_law as string) || 'England and Wales',
-          deal_value: args.deal_value as number | undefined,
+          deal_value_usd: args.deal_value as number | undefined,
           special_terms: args.special_terms as string | undefined,
-        });
+          created_by: (args.created_by as string) || 'mcp-agent',
+        } as any);
         // Return safe summary (exclude full HTML)
         const { document_html: _, ...summary } = result;
         return {

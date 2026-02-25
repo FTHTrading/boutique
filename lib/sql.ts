@@ -27,7 +27,7 @@ function getPool(): Pool {
   return _pool;
 }
 
-export interface SqlResult<T = Record<string, unknown>> {
+export interface SqlResult<T = Record<string, any>> {
   rows: T[];
   rowCount: number;
 }
@@ -37,7 +37,7 @@ export interface SqlResult<T = Record<string, unknown>> {
  *
  *   const { rows } = await sql`SELECT * FROM deals WHERE id = ${id}`;
  */
-async function sqlTag<T = Record<string, unknown>>(
+async function sqlTag<T = Record<string, any>>(
   strings: TemplateStringsArray,
   ...values: unknown[]
 ): Promise<SqlResult<T>> {
@@ -52,19 +52,19 @@ async function sqlTag<T = Record<string, unknown>>(
     }
   });
 
-  const result = await getPool().query<T>(text, params as any[]);
-  return { rows: result.rows, rowCount: result.rowCount ?? 0 };
+  const result = await getPool().query(text, params as any[]);
+  return { rows: result.rows as T[], rowCount: result.rowCount ?? 0 };
 }
 
 /**
  * sql.query(text, params) — for dynamic queries that can't use tagged templates.
  */
-sqlTag.query = async function <T = Record<string, unknown>>(
+sqlTag.query = async function <T = Record<string, any>>(
   text: string,
   params?: unknown[]
 ): Promise<SqlResult<T>> {
-  const result = await getPool().query<T>(text, params as any[]);
-  return { rows: result.rows, rowCount: result.rowCount ?? 0 };
+  const result = await getPool().query(text, params as any[]);
+  return { rows: result.rows as T[], rowCount: result.rowCount ?? 0 };
 };
 
 /**

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 import { sql } from '@/lib/sql';
@@ -5,7 +6,7 @@ import { sendEmail, renderTemplate } from '@/lib/email';
 import { contactValidationAgent } from '@/agents/contact-validation-agent';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder' });
 
 /**
  * POST /api/outreach/send

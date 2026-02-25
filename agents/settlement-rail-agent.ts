@@ -73,7 +73,7 @@ export interface ProofAnchorResult {
   objectHash: string;     // SHA-256 hex
   xrplTxHash?: string;
   stellarTxHash?: string;
-  status: 'SUBMITTED' | 'CONFIRMED' | 'FAILED';
+  status: 'PENDING' | 'SUBMITTED' | 'CONFIRMED' | 'FAILED';
   anchorId?: string;      // UUID from DB
 }
 

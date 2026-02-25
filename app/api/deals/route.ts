@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 import { sql } from '@/lib/sql';
@@ -115,7 +116,8 @@ export async function POST(req: NextRequest) {
     // Run compliance screening
     let flags: any[] = [];
     try {
-      flags = await runComplianceScreen(deal);
+      const screening = await runComplianceScreen(deal as any);
+      flags = screening.flags;
 
       // Check if CRITICAL flags were generated
       const criticalFlags = flags.filter((f) => f.severity === 'CRITICAL');

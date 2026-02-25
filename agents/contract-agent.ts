@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ContractAgent
  *
  * Manages the full contract lifecycle:
@@ -21,7 +21,7 @@ import OpenAI from 'openai';
 import { createHash, randomBytes } from 'crypto';
 import { sql } from '@/lib/sql';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder', dangerouslyAllowBrowser: false });
 
 export type ContractType = 'NCNDA' | 'supply_agreement' | 'MOU' | 'LOI' | 'purchase_order';
 
@@ -550,5 +550,6 @@ Format as clean HTML with professional styling.`,
   }
 }
 
+export { ContractAgent };
 export const contractAgent = new ContractAgent();
 export default ContractAgent;

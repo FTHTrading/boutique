@@ -18,6 +18,9 @@ interface ProofAnchor {
   stellar_ledger: number | null;
   status: string;
   anchored_at: string;
+  // camelCase aliases from API response
+  xrplTxHash?: string;
+  stellarTxHash?: string;
 }
 
 const CHAIN_COLOR: Record<string, string> = {

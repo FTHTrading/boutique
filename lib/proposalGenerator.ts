@@ -4,7 +4,7 @@ import { findSimilarProposals, indexProposal } from './rag';
 import type { Client, Product, ProposalGenerationRequest, ProposalGenerationResponse } from '@/types';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder',
 });
 
 /**
@@ -266,7 +266,7 @@ export async function generateProposal(
       confidence: proposal.agent_confidence,
       ragSources: similarProposals.map(p => ({
         document_id: p.id,
-        similarity_score: p.similarity,
+        similarity_score: p.similarity ?? 0,
         excerpt: p.content.substring(0, 200),
       })),
     };

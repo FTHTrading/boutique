@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 import { 
   Shield, 
   AlertTriangle, 
@@ -18,7 +19,9 @@ interface FlagRecord {
   id: string
   deal_id?: string
   deal_number?: string
+  client_name?: string
   commodity?: string
+  destination_country?: string
   flag_type: string
   severity: string
   message: string
@@ -237,7 +240,7 @@ export default function ComplianceDashboard() {
                       <div><span className="text-gray-600">Deal:</span> <Link href={`/dashboard/deals/${flag.deal_number}`} className="font-semibold text-coffee-medium hover:underline">{flag.deal_number}</Link></div>
                       <div><span className="text-gray-600">Client:</span> <span className="font-medium">{flag.client_name}</span></div>
                       <div><span className="text-gray-600">Commodity:</span> {flag.commodity}</div>
-                      <div><span className="text-gray-600">Destination:</span> {flag.destination}</div>
+                      <div><span className="text-gray-600">Destination:</span> {flag.destination_country}</div>
                     </div>
                   </div>
 

@@ -106,7 +106,7 @@ export function scoreCredit(client: Client): CreditScore {
     references_score: referencesScore,
     payment_history_score: paymentScore,
     recommendation,
-    risk_level,
+    risk_level: riskLevel,
   };
 }
 

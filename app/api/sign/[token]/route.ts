@@ -1,4 +1,5 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+﻿export const dynamic = 'force-dynamic'
+import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/sql';
 import { ContractAgent } from '@/agents/contract-agent';
 
@@ -86,12 +87,12 @@ export async function POST(
     );
 
     if (!result.success) {
-      return NextResponse.json({ success: false, error: result.error }, { status: 400 });
+      return NextResponse.json({ success: false, error: result.message }, { status: 400 });
     }
 
     return NextResponse.json({
       success: true,
-      contract_number: result.contract_number,
+      contract_id: result.contract_id,
       message: 'Contract has been executed successfully.',
     });
   } catch (err) {

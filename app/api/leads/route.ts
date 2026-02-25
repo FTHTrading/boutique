@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@/lib/sql'
 import { scoreCredit } from '@/lib/creditScorer'
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
     let creditScore = null
     if (lead.years_in_business && lead.monthly_revenue) {
       try {
-        creditScore = scoreCredit(lead)
+        creditScore = scoreCredit(lead as any)
         
         // Update with credit score
         await sql`

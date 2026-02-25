@@ -27,7 +27,7 @@ export default function Home() {
             Serving institutional buyers since 1976 • Coffee • Cocoa • Metals • Energy
           </p>
           
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-wrap gap-4 justify-center">
             <Link
               href="/commodities"
               className="bg-coffee-dark text-cream px-8 py-4 rounded-lg text-lg font-semibold hover:bg-coffee-medium transition-colors"
@@ -40,6 +40,13 @@ export default function Home() {
               className="border-2 border-coffee-dark text-coffee-dark px-8 py-4 rounded-lg text-lg font-semibold hover:bg-coffee-dark hover:text-cream transition-colors"
             >
               Request Terms
+            </Link>
+
+            <Link
+              href="/sign-in"
+              className="bg-amber-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-amber-700 transition-colors"
+            >
+              Team Login →
             </Link>
           </div>
         </div>

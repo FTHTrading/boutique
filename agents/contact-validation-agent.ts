@@ -271,5 +271,6 @@ class ContactValidationAgent {
   }
 }
 
+export { ContactValidationAgent };
 export const contactValidationAgent = new ContactValidationAgent();
 export default ContactValidationAgent;

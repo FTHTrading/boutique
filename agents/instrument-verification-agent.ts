@@ -1,4 +1,4 @@
-/**
+﻿/**
  * InstrumentVerificationAgent
  *
  * Performs automated consistency checks on banking instruments (SBLC, LC, etc.)
@@ -17,7 +17,7 @@
 import OpenAI from 'openai';
 import { sql } from '@/lib/sql';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder', dangerouslyAllowBrowser: false });
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

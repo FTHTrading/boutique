@@ -1,9 +1,9 @@
-import OpenAI from 'openai';
+﻿import OpenAI from 'openai';
 import { sql } from '@/lib/sql';
 import type { Client } from '@/types';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder',
 });
 
 /**
@@ -216,7 +216,7 @@ Keep it concise (2-3 paragraphs).
 Include a clear call-to-action.
 Avoid: Generic sales language, pushy tactics, excessive formality.`;
     
-    const purposePrompts = {
+    const purposePrompts: Record<string, string> = {
       initial: `This is an initial outreach to a new lead. 
 Focus on: Understanding their needs, introducing value proposition, scheduling a call.`,
       

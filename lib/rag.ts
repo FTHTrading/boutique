@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { vectorSearch, upsertDocument } from './db';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder',
 });
 
 /**

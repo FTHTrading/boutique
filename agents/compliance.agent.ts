@@ -46,13 +46,13 @@ class ComplianceAgent {
       
       // Check 1: Payment terms match credit score
       const termsMatch = this.checkPaymentTerms(proposal);
-      if (!termsMatch.valid) {
+      if (!termsMatch.valid && termsMatch.issue) {
         issues.push(termsMatch.issue);
       }
       
       // Check 2: Pricing within acceptable margins
       const pricingCheck = this.checkPricing(proposal);
-      if (!pricingCheck.valid) {
+      if (!pricingCheck.valid && pricingCheck.issue) {
         if (pricingCheck.severity === 'error') {
           issues.push(pricingCheck.issue);
         } else {
@@ -68,7 +68,7 @@ class ComplianceAgent {
       
       // Check 4: Credit approval for terms
       const creditCheck = this.checkCreditApproval(proposal);
-      if (!creditCheck.valid) {
+      if (!creditCheck.valid && creditCheck.issue) {
         warnings.push(creditCheck.issue);
       }
       
@@ -124,9 +124,9 @@ class ComplianceAgent {
     }
     
     // More lenient terms than recommended is an issue
-    const termsHierarchy = { 'prepay': 0, 'net-15': 1, 'net-30': 2 };
-    const proposedLevel = termsHierarchy[proposedTerms] || 0;
-    const recommendedLevel = termsHierarchy[recommendedTerms] || 0;
+    const termsHierarchy: Record<string, number> = { 'prepay': 0, 'net-15': 1, 'net-30': 2 };
+    const proposedLevel = termsHierarchy[proposedTerms as string] ?? 0;
+    const recommendedLevel = termsHierarchy[recommendedTerms] ?? 0;
     
     if (proposedLevel > recommendedLevel) {
       return {
@@ -267,7 +267,7 @@ class ComplianceAgent {
         WHERE created_at > CURRENT_DATE - INTERVAL '30 days'
       `;
       
-      const data = result.rows[0];
+      const data = result.rows[0] as any;
       const total = parseInt(data.total) || 0;
       const approved = parseInt(data.approved) || 0;
       const pending = parseInt(data.pending) || 0;

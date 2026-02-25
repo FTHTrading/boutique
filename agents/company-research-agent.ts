@@ -1,4 +1,4 @@
-/**
+﻿/**
  * CompanyResearchAgent
  *
  * Researches companies from LAWFUL PUBLIC SOURCES ONLY.
@@ -21,7 +21,7 @@
 import OpenAI from 'openai';
 import { sql } from '@/lib/sql';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder', dangerouslyAllowBrowser: false });
 
 export interface CompanyResearchResult {
   company_id?: string;
@@ -306,7 +306,7 @@ If no contacts found, return [].`;
           updated_at = NOW()
         WHERE domain = ${result.domain}
       `;
-      return existing.rows[0].company_id;
+      return (existing.rows[0] as any).company_id as string;
     }
 
     // Insert new
@@ -325,7 +325,7 @@ If no contacts found, return [].`;
       RETURNING company_id
     `;
 
-    const companyId = inserted.rows[0].company_id;
+    const companyId = (inserted.rows[0] as any).company_id as string;
 
     // Persist publicly listed contacts
     for (const contact of result.publicly_listed_contacts) {
@@ -388,5 +388,6 @@ If no contacts found, return [].`;
   }
 }
 
+export { CompanyResearchAgent };
 export const companyResearchAgent = new CompanyResearchAgent();
 export default CompanyResearchAgent;

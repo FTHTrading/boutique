@@ -1,4 +1,4 @@
-/**
+﻿/**
  * FundingStructureAgent
  *
  * Analyzes a trade deal and recommends an optimal funding instrument structure.
@@ -12,7 +12,7 @@
 import OpenAI from 'openai';
 import { sql } from '@/lib/sql';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? 'build-placeholder', dangerouslyAllowBrowser: false });
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
