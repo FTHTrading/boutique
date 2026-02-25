@@ -1,8 +1,16 @@
 export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs';
 import { sql } from '@/lib/sql';
 import { InstrumentVerificationAgent } from '@/agents/instrument-verification-agent';
+
+// Auth: pass-through when CLERK_SECRET_KEY is not set (internal platform)
+function auth(): { userId: string | null } {
+  if (!process.env.CLERK_SECRET_KEY) return { userId: 'dev' };
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    return require('@clerk/nextjs').auth();
+  } catch { return { userId: null }; }
+}
 
 const verifier = new InstrumentVerificationAgent();
 
