@@ -2,7 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { UserButton } from '@clerk/nextjs'
+import dynamic from 'next/dynamic'
+
+const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+const UserButton = hasClerk
+  ? dynamic(() => import('@clerk/nextjs').then(m => ({ default: m.UserButton })), { ssr: false })
+  : null
 import {
   LayoutDashboard,
   Users,
@@ -120,7 +125,7 @@ export function DashboardNav() {
       {/* Footer */}
       <div className="border-t border-gray-100 p-4">
         <div className="flex items-center gap-3">
-          <UserButton afterSignOutUrl="/" />
+          {UserButton ? <UserButton afterSignOutUrl="/" /> : <Link href="/sign-in" className="text-xs text-amber-700 font-medium">Sign in</Link>}
           <div className="min-w-0">
             <p className="text-xs text-gray-500 truncate">Signed in</p>
             <Link href="/" className="text-[10px] text-gray-400 hover:text-amber-700 flex items-center gap-1">

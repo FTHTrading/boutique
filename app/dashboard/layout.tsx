@@ -1,4 +1,3 @@
-import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { DashboardNav } from '@/components/DashboardNav'
 
@@ -7,8 +6,12 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { userId } = auth()
-  if (!userId) redirect('/sign-in')
+  // Only enforce auth when Clerk keys are configured
+  if (process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+    const { auth } = await import('@clerk/nextjs')
+    const { userId } = auth()
+    if (!userId) redirect('/sign-in')
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
