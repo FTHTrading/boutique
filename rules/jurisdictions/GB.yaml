@@ -1,0 +1,106 @@
+# United Kingdom Jurisdiction Metadata
+# Risk-Based Compliance Intelligence Layer
+# Last Updated: 2026-01-15
+# Reviewed By: Sarah Chen
+
+country: "United Kingdom"
+country_code: "GB"
+iso_alpha3: "GBR"
+
+sanctions_risk: "low"  # No U.S. sanctions; UK is a key trade partner and LBMA hub
+
+sanctions_notes: |
+  No U.S. sanctions against United Kingdom.
+  
+  Standard OFAC screening required:
+  - Screen all parties against SDN List
+  - UK entities generally not restricted
+  
+  UK Sanctions (OFSI - Office of Financial Sanctions Implementation):
+  - UK maintains independent sanctions regime post-Brexit
+  - Largely aligned with UN sanctions
+  - Russia sanctions: UK prohibits imports of Russian oil, coal, gold, diamonds
+  - UK Consolidated List: List of sanctioned individuals/entities
+  
+  Note: London is a major precious metals trading hub (LBMA) and financial center.
+
+aml_notes: |
+  UK AML Framework (Financial Conduct Authority - FCA):
+  - Customer Due Diligence (CDD) required per Money Laundering Regulations 2017
+  - Enhanced Due Diligence (EDD) for:
+    * Politically Exposed Persons (PEPs)
+    * High-risk third countries (per FATF)
+    * Correspondent banking relationships
+  
+  Beneficial Ownership:
+  - Persons of Significant Control (PSC) register - public beneficial ownership registry
+  - Verify ultimate beneficial owners (>25% shareholding)
+  
+  Precious Metals Specific:
+  - LBMA Good Delivery standards for gold/silver
+  - Chain-of-custody documentation required per OECD Guidance
+  - Source verification mandatory (conflict minerals regulations)
+  
+  Red Flags:
+  - Transactions with shell companies in secrecy jurisdictions
+  - Structuring to avoid £10,000 reporting threshold
+  - Precious metals from non-LBMA refiners
+  
+  Retention: 5 years minimum for AML records.
+
+licensing_notes: |
+  UK Export Controls (DIT - Department for International Trade):
+  - Export Control Act 2002
+  - Dual-use items require Open General Export License (OGEL) or Standard Individual Export License (SIEL)
+  - Precious metals generally do NOT require export license
+  
+  U.S.-UK Trade:
+  - No comprehensive FTA (post-Brexit), but most tariffs low/zero
+  - Duty-free for most commodities under MFN rates
+  
+  UK Import Requirements:
+  - Customs Declaration Service (CDS) replaced CHIEF system
+  - EORI number required for importers
+
+docs_required:
+  - Commercial Invoice
+  - Packing List
+  - Bill of Lading (or Air Waybill)
+  - Certificate of Origin (not required for U.S.-UK but may be requested)
+  - LBMA Refiner Certificate (if precious metals)
+  - Chain-of-Custody Documentation (for precious metals)
+  - Phytosanitary Certificate (if agricultural commodities)
+  - Customs Declaration (CDS system)
+
+customs_notes: |
+  UK Customs (HMRC - HM Revenue & Customs):
+  - Customs Declaration Service (CDS) for electronic declarations
+  - UK Global Tariff (UKGT) applies post-Brexit (replaces EU Common External Tariff)
+  - Northern Ireland Protocol: Special rules for goods moving between GB and NI
+  
+  U.S. Customs (CBP):
+  - UK goods generally eligible for low/zero tariffs under MFN
+  - Section 301 tariffs do NOT apply to UK
+  
+  Brexit Considerations:
+  - UK no longer in EU Customs Union (as of 2021)
+  - Separate customs declarations required for UK vs. EU
+  - Rules of Origin may apply for preferential treatment
+
+source_urls:
+  - "https://www.gov.uk/government/organisations/office-of-financial-sanctions-implementation"
+  - "https://www.fca.org.uk/"
+  - "https://www.gov.uk/government/organisations/hm-revenue-customs"
+  - "https://www.lbma.org.uk/"
+
+effective_date: "2026-01-15"
+next_review_date: "2026-04-15"
+reviewed_by: "Sarah Chen"
+version: "1.4"
+
+compliance_automation_notes: |
+  TradeComplianceAgent behavior:
+  - UK deals → LOW flag (standard screening)
+  - If commodity is precious metals → MEDIUM flag (LBMA verification required)
+  - Flag message: "UK: Standard OFAC screening required. UK is low-risk, LBMA custody hub."
+  - Recommendation: "For precious metals: (1) Verify LBMA Good Delivery status, (2) Obtain chain-of-custody documentation, (3) Verify PSC register for UK legal entities."

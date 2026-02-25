@@ -1,0 +1,111 @@
+# European Union Jurisdiction Metadata
+# Risk-Based Compliance Intelligence Layer
+# Last Updated: 2026-01-16
+# Reviewed By: Sarah Chen
+
+country: "European Union"
+country_code: "EU"
+iso_alpha3: "EUR"  # Note: EU is not a country; this represents the 27-member bloc
+
+sanctions_risk: "low"  # No U.S. sanctions; key trade partner
+
+sanctions_notes: |
+  No U.S. sanctions against EU member states.
+  
+  Standard OFAC screening required:
+  - Screen all parties against SDN List
+  - EU entities generally not restricted
+  
+  EU Sanctions:
+  - Common Foreign and Security Policy (CFSP)
+  - EU maintains comprehensive sanctions on: Russia, Belarus, Iran, Syria, North Korea
+  - EU Consolidated List: Sanctioned individuals/entities
+  - Member states implement EU sanctions through national laws
+  
+  Note: EU sanctions often broader than U.S. (e.g., Russian oil embargo includes maritime transport).
+
+aml_notes: |
+  EU AML Framework (4th & 5th AML Directives):
+  - Customer Due Diligence (CDD) required for all transactions
+  - Enhanced Due Diligence (EDD) for:
+    * Politically Exposed Persons (PEPs)
+    * High-risk third countries (per FATF)
+    * Complex ownership structures
+  
+  Beneficial Ownership:
+  - Ultimate Beneficial Owner (UBO) registers required in all member states (public or restricted access)
+  - Verify UBOs with >25% shareholding
+  
+  6th AML Directive (2020):
+  - Harmonized definition of money laundering across EU
+  - Extended liability to legal persons (companies can be held liable)
+  
+  Red Flags:
+  - Transactions with countries on EU high-risk list
+  - Shell companies in secrecy jurisdictions
+  - Inconsistent trade patterns
+  
+  Retention: 5 years minimum (some member states require 7-10 years).
+
+licensing_notes: |
+  EU Export Controls:
+  - Dual-Use Regulation (EU) 2021/821
+  - Dual-use items require export license (national licensing authorities in each member state)
+  - REACH Regulation: Restrictions on chemicals (commodities with hazardous substances)
+  
+  U.S.-EU Trade:
+  - No comprehensive FTA; Most-Favored-Nation (MFN) tariffs apply
+  - Some sectors have preferential access (e.g., pharmaceutical equipment)
+  
+  Intra-EU Trade:
+  - Goods move freely within EU Single Market (no customs duties)
+  - Intrastat reporting required for statistical purposes
+
+docs_required:
+  - Commercial Invoice (with VAT number where applicable)
+  - Packing List
+  - Bill of Lading (or Air Waybill)
+  - Certificate of Origin (EUR.1 or origin declaration for preferential treatment)
+  - Phytosanitary Certificate (if agricultural commodities)
+  - REACH SDS - Safety Data Sheet (if chemicals/hazardous materials)
+  - Export Declaration (national customs systems)
+  - Intrastat Declaration (for intra-EU trade)
+
+customs_notes: |
+  EU Customs (European Commission - Taxation and Customs Union):
+  - Union Customs Code (UCC)
+  - Common External Tariff applies to imports from outside EU
+  - EORI number required for importers
+  - AEO (Authorized Economic Operator) status offers simplified procedures
+  
+  U.S. Customs (CBP):
+  - EU goods subject to MFN tariffs (varies by commodity)
+  - Section 301 tariffs do NOT apply to EU (resolved 2021 steel/aluminum dispute)
+  
+  VAT Considerations:
+  - VAT applies to imports into EU (rates vary by member state: 17%-27%)
+  - Reverse charge mechanism for B2B intra-EU sales
+  
+  Brexit Impact:
+  - UK no longer in EU Customs Union (as of Jan 2021)
+  - Separate customs declarations now required for UK vs. EU
+
+source_urls:
+  - "https://policy.trade.ec.europa.eu/enforcement-and-protection/sanctions-and-export-controls_en"
+  - "https://finance.ec.europa.eu/financial-crime/eu-policy-anti-money-laundering-and-countering-financing-terrorism_en"
+  - "https://taxation-customs.ec.europa.eu/customs-4_en"
+  - "https://echa.europa.eu/regulations/reach"
+
+effective_date: "2026-01-16"
+next_review_date: "2026-04-16"
+reviewed_by: "Sarah Chen"
+version: "1.6"
+
+compliance_automation_notes: |
+  TradeComplianceAgent behavior:
+  - EU deals → LOW flag (standard screening)
+  - If commodity contains chemicals → MEDIUM flag (REACH compliance check required)
+  - Flag message: "EU: Standard OFAC screening required. EU is low-risk. Check member state-specific regulations."
+  - Recommendation: "Verify: (1) EORI number valid, (2) VAT treatment (import VAT vs. reverse charge), (3) UBO register consulted for EU legal entities, (4) REACH compliance if chemicals/hazardous materials."
+  
+  Note: This represents the EU as a whole. Individual member states (Germany, France, Netherlands, etc.) may have additional national requirements.

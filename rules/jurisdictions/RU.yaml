@@ -1,0 +1,82 @@
+# Russia Jurisdiction Metadata
+# Risk-Based Compliance Intelligence Layer
+# Last Updated: 2026-01-20
+# Reviewed By: Michael Rodriguez
+
+country: "Russia"
+country_code: "RU"
+iso_alpha3: "RUS"
+
+sanctions_risk: "critical"  # BLOCKS EXECUTION - CRITICAL severity flags mandatory
+
+sanctions_notes: |
+  ⚠️ COMPREHENSIVE SANCTIONS IN EFFECT ⚠️
+  
+  OFAC Executive Orders:
+  - EO 14024 (April 2021) - Blocking Property with Respect to Specified Harmful Foreign Activities
+  - EO 14066 (March 2022) - Prohibiting Certain Imports from Russia
+  - EO 14068 (March 2022) - Prohibiting Certain Imports, Exports, and New Investment with Respect to Continued Russian Federation Efforts
+  
+  General Prohibition: Most transactions with Russian entities/individuals PROHIBITED unless authorized by:
+  - OFAC General License (specific exemptions)
+  - OFAC Specific License (obtained through application)
+  
+  ⚠️ LEGAL COUNSEL REVIEW MANDATORY FOR ALL RUSSIA-RELATED TRANSACTIONS ⚠️
+
+aml_notes: |
+  Enhanced Due Diligence REQUIRED:
+  - FATF High-Risk Jurisdiction for ML/TF (Money Laundering / Terrorist Financing)
+  - Beneficial ownership verification CRITICAL
+  - Source of funds documentation mandatory
+  - Enhanced KYC on all parties
+  - Monitor for sanctions evasion schemes (shell companies, third-country routing, cryptocurrency)
+  
+  Red Flags:
+  - Use of intermediaries in non-sanctioned jurisdictions to mask Russian origin/destination
+  - Payment structures designed to obscure Russian nexus
+  - Commodity transshipment through third countries
+
+licensing_notes: |  Export/Import generally PROHIBITED except:
+  - Agricultural commodities, medicine, and medical devices (limited exemptions under General License 8)
+  - Telecommunications equipment (limited exemptions under General License 25)
+  
+  BIS Export Controls:
+  - Most EAR items require license for export to Russia
+  - License applications subject to "presumption of denial"
+  - Technology transfer restrictions
+
+docs_required:
+  - ⚠️ Legal counsel review report MANDATORY
+  - OFAC General License verification (if applicable)
+  - OFAC Specific License (if obtained)
+  - End-use statement
+  - Enhanced KYC documentation (all parties)
+  - Beneficial ownership disclosure
+  - Source of funds verification
+  - Sanctions compliance certification
+
+customs_notes: |
+  U.S. Customs:
+  - Import ban on Russian-origin crude oil, petroleum products, seafood, coal, gold, diamonds
+  - Strict enforcement on transshipment attempts
+  
+  EU Customs:
+  - Similar import bans plus aircraft/spacecraft parts, vodka, caviar
+  - Export restrictions on dual-use items, luxury goods, aviation/space technology
+
+source_urls:
+  - "https://ofac.treasury.gov/sanctions/programs/ukraine-eo13662"
+  - "https://home.treasury.gov/policy-issues/financial-sanctions/sanctions-programs-and-country-information/russian-harmful-foreign-activities-sanctions"
+  - "https://www.bis.doc.gov/index.php/policy-guidance/country-guidance/russia"
+  - "https://www.state.gov/russia-sanctions/"
+
+effective_date: "2026-01-20"
+next_review_date: "2026-04-20"
+reviewed_by: "Michael Rodriguez"
+version: "2.3"
+
+compliance_automation_notes: |
+  TradeComplianceAgent behavior:
+  - ANY deal with origin_country='RU' OR destination_country='RU' → CRITICAL flag, blocks_execution=true
+  - Flag message: "Russia is a sanctioned jurisdiction. Transaction BLOCKED pending legal review."
+  - Recommendation: "DO NOT PROCEED without OFAC General/Specific License verification. Contact legal counsel immediately."

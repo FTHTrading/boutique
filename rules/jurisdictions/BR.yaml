@@ -1,0 +1,99 @@
+# Brazil Jurisdiction Metadata
+# Risk-Based Compliance Intelligence Layer
+# Last Updated: 2026-01-18
+# Reviewed By: Carlos Mendes
+
+country: "Brazil"
+country_code: "BR"
+iso_alpha3: "BRA"
+
+sanctions_risk: "low"  # No U.S. sanctions; standard protocols
+
+sanctions_notes: |
+  No U.S. sanctions against Brazil.
+  
+  Standard OFAC screening required:
+  - Screen all parties against SDN List
+  - Screen for Cuban, Iranian, Venezuelan intermediaries (transshipment risk)
+  - Monitor for sanctions evasion schemes (shell companies routing through Brazil)
+  
+  Brazilian authorities enforce UN sanctions.
+
+aml_notes: |
+  Brazil AML Framework:
+  - COAF (Conselho de Controle de Atividades Financeiras) - Brazilian FIU
+  - Customer Due Diligence (CDD) required for all transactions
+  - Enhanced Due Diligence (EDD) for:
+    * Politically Exposed Persons (PEPs)
+    * High-value transactions (>BRL 100,000 / ~USD 20,000)
+    * Cash-intensive businesses
+  
+  Beneficial Ownership:
+  - Verify beneficial owners (>25% shareholding)
+  - Document corporate structure for legal entities
+  
+  Red Flags:
+  - Inconsistent shipping routes (e.g., coffee to non-consuming countries)
+  - Payments from third-party countries unrelated to trade
+  - Requests for unusual payment structures
+  
+  Retention: 5 years minimum for all AML records.
+
+licensing_notes: |
+  Export Licensing (Brazil):
+  - SECEX (Secretaria de Comércio Exterior) oversees exports
+  - Coffee (HS 0901) generally does NOT require export license
+  - Registration required for exporters (REI - Registro de Exportadores e Importadores)
+  
+  U.S. Import Requirements:
+  - Coffee imports to U.S. generally duty-free (no quota)
+  - FDA registration required for food imports
+  - No import license required for coffee
+  
+  Dual-Use Items:
+  - If exporting controlled items TO Brazil, check EAR CCL
+  - Brazil enforces export controls on sensitive technology
+
+docs_required:
+  - Commercial Invoice (with Brazil tax ID - CNPJ)
+  - Packing List
+  - Bill of Lading (or Air Waybill)
+  - Certificate of Origin (Form A for GSP eligibility if applicable)
+  - Phytosanitary Certificate (for agricultural commodities like coffee, cocoa)
+  - Fumigation Certificate (if applicable)
+  - Bill of Exchange (Letra de Câmbio) for payment terms
+  - Export Declaration (Declaração de Exportação)
+
+customs_notes: |
+  Brazilian Customs (RFB - Receita Federal do Brasil):
+  - SISCOMEX system for electronic customs declarations
+  - Inspection rates vary by commodity and port
+  - Non-Tariff Barriers (NTBs): phytosanitary inspections for agricultural goods
+  
+  U.S. Customs (CBP):
+  - Coffee imports: duty-free under HTS 0901
+  - FDA Prior Notice required (Bioterrorism Act)
+  - Certificate of Origin for preferential treatment (if applicable)
+  
+  Payment & Currency:
+  - Transactions typically in USD or BRL
+  - Bank documentation (SWIFT) required for payment verification
+  - Brazilian Central Bank monitors large forex transactions
+
+source_urls:
+  - "https://www.gov.br/receitafederal/en"
+  - "https://www.gov.br/agricultura/en"
+  - "https://www.trade.gov/country-commercial-guides/brazil"
+  - "https://www.fda.gov/food/guidance-regulation-food-and-dietary-supplements/prior-notice-imported-foods"
+
+effective_date: "2026-01-18"
+next_review_date: "2026-04-18"
+reviewed_by: "Carlos Mendes"
+version: "1.2"
+
+compliance_automation_notes: |
+  TradeComplianceAgent behavior:
+  - Brazil deals → LOW flag (standard screening)
+  - If commodity is coffee/cocoa → Flag: "Phytosanitary certificate required from Brazil MAPA."
+  - Flag message: "Brazil: Standard OFAC screening required. No country-wide sanctions."
+  - Recommendation: "Verify: (1) CNPJ tax ID valid, (2) Phytosanitary certificate from MAPA, (3) Payment structured through legitimate banking channels."

@@ -1,0 +1,66 @@
+# United States Jurisdiction Metadata
+# Risk-Based Compliance Intelligence Layer
+# Last Updated: 2025-12-15
+# Reviewed By: Sarah Chen
+
+country: "United States"
+country_code: "US"
+iso_alpha3: "USA"
+
+sanctions_risk: "low"  # low | medium | high | critical
+
+sanctions_notes: |
+  OFAC screening required for all transactions. Screen against:
+  - SDN List (Specially Designated Nationals)
+  - Entity List (BIS)
+  - Denied Persons List
+  - Foreign Sanctions Evaders List
+  
+  No country-wide sanctions. Targeted sanctions on specific entities/individuals.
+
+aml_notes: |
+  Apply risk-based KYC/AML per FinCEN Bank Secrecy Act guidance:
+  - Customer Due Diligence (CDD) required for all accounts
+  - Enhanced Due Diligence (EDD) for high-risk customers/transactions
+  - Currency Transaction Report (CTR) for cash transactions >$10,000
+  - Suspicious Activity Report (SAR) for suspicious transactions
+  - Beneficial Ownership disclosure for legal entities (>25% ownership)
+  - Retention: 5+ years
+
+licensing_notes: |
+  Export controls administered by:
+  - Bureau of Industry and Security (BIS) - EAR (Export Administration Regulations)
+  - Directorate of Defense Trade Controls (DDTC) - ITAR (International Traffic in Arms Regulations)
+  
+  License required for:
+  - Controlled items per Commerce Control List (CCL)
+  - Defense articles/services per U.S. Munitions List (USML)
+  - Exports to embargoed countries
+  - Transactions with Entity List parties
+
+docs_required:
+  - Commercial Invoice
+  - Packing List
+  - Bill of Lading
+  - Certificate of Origin
+  - Export License (if applicable)
+  - ITAR Technical Assistance Agreement (if applicable)
+
+customs_notes: |
+  U.S. Customs and Border Protection (CBP):
+  - Harmonized Tariff Schedule (HTS) classification required
+  - Importer of record responsibilities
+  - ACE (Automated Commercial Environment) filing
+  - ISF (Importer Security Filing) for ocean shipments
+
+source_urls:
+  - "https://ofac.treasury.gov"
+  - "https://www.bis.doc.gov"
+  - "https://www.pmddtc.state.gov"
+  - "https://www.cbp.gov"
+  - "https://www.fincen.gov"
+
+effective_date: "2025-12-15"
+next_review_date: "2026-03-15"
+reviewed_by: "Sarah Chen"
+version: "1.0"

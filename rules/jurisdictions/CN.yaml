@@ -1,0 +1,89 @@
+# China Jurisdiction Metadata
+# Risk-Based Compliance Intelligence Layer
+# Last Updated: 2026-01-10
+# Reviewed By: Sarah Chen
+
+country: "China"
+country_code: "CN"
+iso_alpha3: "CHN"
+
+sanctions_risk: "medium"  # Targeted sanctions, NOT country-wide embargo
+
+sanctions_notes: |
+  Targeted Sanctions (Entity-Specific):
+  - BIS Entity List: Specific Chinese companies prohibited from receiving U.S.-origin items without license
+  - Military End User (MEU) List: Chinese military entities subject to restrictions
+  - OFAC SDN List: Specific individuals/entities blocked
+  
+  ⚠️ Screen ALL parties (buyer, seller, intermediaries, freight forwarders, banks) against:
+  - Entity List
+  - MEU List
+  - SDN List
+  - Unverified List
+  
+  Note: NOT a comprehensive embargo. Most transactions permissible if parties are not on restricted lists.
+
+aml_notes: |
+  Standard AML protocols apply:
+  - Customer Due Diligence (CDD) required
+  - Enhanced Due Diligence (EDD) for high-value transactions or sensitive commodities
+  - Monitor for structuring (multiple transactions to avoid reporting thresholds)
+  - Verify beneficial ownership
+  - Document source of funds for high-value deals
+  
+  FATF Status: Compliant with AML/CFT standards (not high-risk jurisdiction)
+
+licensing_notes: |
+  Export Controls - Emerging & Foundational Technologies:
+  - EAR Part 744.6 restrictions on certain technology exports to China
+  - License required for items on Commerce Control List (CCL) with China-specific restrictions
+  - Categories of concern:
+    * Semiconductor manufacturing equipment
+    * AI/machine learning chips
+    * Quantum computing technology
+    * Hypersonics technology
+    * Certain aircraft/spacecraft components
+  
+  License applications assessed case-by-case (not blanket denial).
+  
+  Chinese Export Controls:
+  - Export Control Law (2020) - China now controls exports of sensitive tech
+  - Rare earth elements, drone technology subject to Chinese export licensing
+
+docs_required:
+  - Commercial Invoice
+  - Packing List
+  - Bill of Lading
+  - Certificate of Origin
+  - Export License (if commodity controlled per EAR)
+  - End-Use Certificate (if requested by Chinese customs)
+  - Form 9 (if applicable for dual-use items)
+
+customs_notes: |
+  U.S. Customs:
+  - Section 301 tariffs apply to many Chinese goods (25% additional duty on $370B+ in imports)
+  - De minimis exemption ($800) removed for certain products
+  - Detention risk for forced labor concerns (Uyghur Forced Labor Prevention Act - UFLPA)
+  
+  Chinese Customs:
+  - Advance declaration required for certain commodities
+  - Inspection rates higher for U.S.-origin goods in recent years
+  - Payment in RMB increasingly required
+
+source_urls:
+  - "https://www.bis.doc.gov/index.php/policy-guidance/lists-of-parties-of-concern/entity-list"
+  - "https://www.bis.doc.gov/index.php/documents/regulations-docs/2326-supplement-no-7-to-part-744-chinese-military-end-user-meu-list/file"
+  - "https://www.trade.gov/country-commercial-guides/china"
+  - "https://www.cbp.gov/trade/forced-labor/UFLPA"
+
+effective_date: "2026-01-10"
+next_review_date: "2026-04-10"
+reviewed_by: "Sarah Chen"
+version: "1.5"
+
+compliance_automation_notes: |
+  TradeComplianceAgent behavior:
+  - China deals → MEDIUM flag (standard sanctions screening)
+  - If commodity is technology, AI, semiconductors, aerospace → HIGH flag (export control verification)
+  - Flag message: "China: Targeted sanctions apply. Screen all parties against Entity List/MEU/SDN."
+  - Recommendation: "Verify counterparty is not on BIS Entity List, MEU List, or OFAC SDN. Document screening results."
