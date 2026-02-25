@@ -1,8 +1,10 @@
-# ☕ Coffee Advisory OS
+# 🌍 FTHTrading Boutique OS
 
-## AI-Native Sales + Credit + Distribution Intelligence Infrastructure
+## 50 Years of Global Commodity Intelligence. Now AI-Native.
 
-> From warehouse to espresso machine in 12 steps — automated.
+> *Five decades structuring transactions in coffee, precious metals, agricultural commodities, and raw materials — modernized through institutional-grade AI infrastructure.*
+
+**Est. 1976** | Coffee • Gold • Sugar • Cocoa • Base Metals • Energy
 
 ---
 
@@ -10,7 +12,9 @@
 
 | Section                 | Category            | Layer            |
 |:------------------------|:--------------------|:-----------------|
+| [🏛 Heritage & Mission](#-heritage--mission) | Company Overview | 🟪 Intelligence |
 | [🧠 What This Is](#-what-this-is) | System Overview | 🟪 Intelligence |
+| [🌍 Commodity Portfolio](#-commodity-portfolio) | Global Offerings | 🟩 Revenue |
 | [🏗 Architecture](#-architecture) | Technical Blueprint | ⚫ Infrastructure |
 | [🚀 Quick Start](#-quick-start) | Deployment | 🟦 Interface |
 | [📦 Core Modules](#-core-modules) | Revenue Engine | 🟩 Revenue |
@@ -24,20 +28,145 @@
 
 ---
 
+# 🏛 Heritage & Mission
+
+**Founded 1976** in the heart of the commodity trading corridor, FTHTrading has structured transactions across five continents for half a century.
+
+**Core Expertise:**
+- ☕ **Coffee & Agricultural Commodities** — Regenerative sourcing, micro-lot specialization since 1976
+- 🥇 **Precious Metals** — LBMA-certified custody, allocated storage partnerships
+- 🏭 **Base Metals & Industrial Materials** — LME integration, hedging strategies
+- ⚡ **Energy Products** — Forward contracts, terminal logistics
+
+**Philosophy:** Legacy relationships, modern infrastructure. We combine 50 years of institutional knowledge with AI-native intelligence to deliver high-end commodity advisory services that boutique traders and institutional buyers trust.
+
+Coffee remains our flagship specialty — the doorway through which most clients discover our broader capabilities.
+
+---
+
 # 🧠 What This Is
 
-A complete **MCP-orchestrated, RAG-powered** advisory system that automates:
+A complete **MCP-orchestrated, RAG-powered** global commodity advisory system that automates:
 
-* Lead qualification & credit scoring
+* Multi-commodity lead qualification & credit scoring
 * Custom proposal generation (PDF + Web + Email)
-* Inventory forecasting & supplier tracking
+* Cross-commodity inventory forecasting & supplier tracking
 * Terms management & invoice aging
 * Automated follow-ups & reorder prediction
-* Regenerative sourcing certificates
+* Regenerative sourcing certificates (agricultural)
+* LBMA custody tracking (precious metals)
+* Trade compliance screening (OFAC/AML/export controls)
 * Full analytics & CRM dashboard
 
-Built for boutique distribution.  
-Architected like a private investment bank.
+**Positioned:** Boutique advisory service  
+**Built:** Like institutional infrastructure  
+**Proven:** 50 years of commodity distribution
+
+---
+
+# 🌍 Commodity Portfolio
+
+## Flagship: Coffee & Agricultural Products ☕
+
+**Status:** Fully operational AI infrastructure  
+**Since:** 1976  
+**Specialization:** Regenerative sourcing, micro-lot traceability
+
+Coffee is our hero product — the doorway through which institutional buyers, retail chains, and boutique cafes discover our capabilities.
+
+| Product | Origins | Certifications | Typical Volume |
+|:--------|:--------|:---------------|:---------------|
+| Specialty Coffee | Brazil, Colombia, Ethiopia | Organic, Fair Trade, Regenerative | 100-10,000 lbs |
+| Cocoa | Côte d'Ivoire, Ecuador, Ghana | Fair Trade, Rainforest Alliance | 500-5,000 lbs |
+| Sugar | Brazil, India, Thailand | Organic, Non-GMO | Bulk containers |
+| Spices | India, Vietnam, Indonesia | Organic, Direct sourcing | Variable |
+
+**What's Automated:**
+- Regenerative impact certificates
+- ICO pricing intelligence
+- Origin documentation
+- Quality grading (cupping scores)
+- Phytosanitary compliance
+
+---
+
+## Precious Metals 🥇
+
+**Status:** Custody protocols active  
+**Since:** 1982  
+**Specialization:** LBMA-certified allocated storage
+
+| Metal | Standard | Trading Reference | Custody |
+|:------|:---------|:------------------|:--------|
+| Gold | .999 Fine | LBMA London Good Delivery | Secured vault network |
+| Silver | .999 Fine | LBMA/COMEX | Allocated storage |
+| Platinum | .9995 Fine | LPPM | Private vault partnerships |
+| Palladium | .9995 Fine | LPPM | Segregated accounts |
+
+**What's Automated:**
+- LBMA certification verification
+- Assay documentation
+- Custody tracking
+- Insurance certificate generation
+- AML/KYC screening
+
+---
+
+## Base Metals & Raw Materials 🏭
+
+**Status:** Trade compliance layer operational  
+**Since:** 1989  
+**Specialization:** LME integration, hedging strategies
+
+| Metal | Grade | Exchange | Application |
+|:------|:------|:---------|:------------|
+| Copper | Grade A Cathode | LME, COMEX | Industrial supply |
+| Aluminum | Primary A7 | LME | Manufacturing |
+| Nickel | Class 1 | LME | Battery sector |
+| Zinc | SHG | LME | Galvanization |
+
+**What's Automated:**
+- LME forward pricing
+- Quality specifications (ASTM/ISO)
+- Export control screening
+- Hedging recommendations
+
+---
+
+## Energy Products ⚡
+
+**Status:** Terminal logistics established  
+**Since:** 1995  
+**Specialization:** Forward contracts, basis trading
+
+| Product | Specification | Trading Hub |
+|:--------|:--------------|:------------|
+| Crude Oil | WTI, Brent | Cushing, Houston |
+| Natural Gas | Henry Hub | US pipeline network |
+| Refined Products | ULSD, RBOB | Terminal delivery |
+
+**What's Automated:**
+- Futures pricing intelligence
+- Transportation logistics
+- Certificate of quality generation
+- Regulatory compliance (DOE/EPA)
+
+---
+
+## Client Segmentation by Commodity
+
+| Client Type | Focus Commodity | Typical Transaction | Payment Terms |
+|:------------|:----------------|:--------------------|:--------------|
+| **Retail/Convenience** | Coffee | 100-1,000 lbs | Prepay to Net-30 |
+| **Boutique Cafes** | Coffee, specialty products | Micro-lots, 50-500 lbs | Net-15 to Net-30 |
+| **Investment Clients** | Precious metals | $50K-$1M transactions | Wire transfer, custody |
+| **Industrial Buyers** | Base metals | Container loads, metric tons | Net-30 to Net-60, LC |
+| **Trading Firms** | Energy, futures | Contracts, physical delivery | Margin accounts |
+| **Food Manufacturers** | Sugar, cocoa, spices | Bulk containers | Net-60, LC |
+
+---
+
+**See [docs/commodity-expansion.md](docs/commodity-expansion.md) for complete multi-commodity architecture, compliance frameworks, and expansion roadmap.**
 
 ---
 
