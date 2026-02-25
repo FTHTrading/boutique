@@ -392,6 +392,23 @@ vercel --prod
 
 ---
 
+## Compliance Intelligence Layer
+
+**NEW: Risk-Based Compliance System (Feb 2026)**
+
+The platform now includes automated compliance screening for sanctions, AML, export controls, and documentation requirements. 
+
+📋 **Complete deployment guide**: [docs/COMPLIANCE-DEPLOYMENT.md](docs/COMPLIANCE-DEPLOYMENT.md)
+
+**Key Features**:
+- TradeComplianceAgent screens deals for CRITICAL/HIGH/MEDIUM/LOW risks
+- 7 jurisdiction YAML files (US, Russia, China, Brazil, Switzerland, UK, EU)
+- Dashboard for flag review and resolution workflow
+- Audit trail with 7-year retention
+- **Legal boundary**: System flags risks for human review, does NOT certify compliance
+
+---
+
 **Coffee is the doorway. Commodities are the continent.  
 50 years proven. AI-native ready.**
 

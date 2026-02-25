@@ -55,12 +55,14 @@ A complete **MCP-orchestrated, RAG-powered** global commodity advisory system th
 * Automated follow-ups & reorder prediction
 * Regenerative sourcing certificates (agricultural)
 * LBMA custody tracking (precious metals)
-* Trade compliance screening (OFAC/AML/export controls)
+* **Trade compliance intelligence** (OFAC/AML/export controls) — NEW ✨
 * Full analytics & CRM dashboard
 
 **Positioned:** Boutique advisory service  
 **Built:** Like institutional infrastructure  
 **Proven:** 50 years of commodity distribution
+
+**NEW: Compliance Intelligence Layer** — Automated risk screening for sanctions, AML thresholds, export controls, and documentation requirements. Flags CRITICAL/HIGH/MEDIUM/LOW risks for human review. See [docs/compliance.md](docs/compliance.md).
 
 ---
 
@@ -853,6 +855,10 @@ boutique/
 | [README.md](README.md) | Overview & quick start | Everyone |
 | [QUICKSTART.md](QUICKSTART.md) | Step-by-step installation | Developers |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | Production deployment guide | DevOps |
+| [DEPLOYMENT-GUIDE.md](DEPLOYMENT-GUIDE.md) | Complete deployment reference | DevOps |
+| [docs/compliance.md](docs/compliance.md) | Compliance intelligence architecture | Compliance team |
+| [docs/commodities.md](docs/commodities.md) | Multi-commodity platform guide | Product team |
+| [docs/COMPLIANCE-DEPLOYMENT.md](docs/COMPLIANCE-DEPLOYMENT.md) | Compliance system deployment | DevOps |
 | [docs/architecture.md](docs/architecture.md) | Technical deep dive | Engineers |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines | Contributors |
 | [SECURITY.md](SECURITY.md) | Security policies | Security teams |
