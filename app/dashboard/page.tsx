@@ -7,8 +7,7 @@ import {
   CheckCircle, ArrowRight, Activity
 } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
-
+// Static export: DB queries fail gracefully at build time, show zeros until DB env is set
 async function getStats() {
   try {
     const [deals, contacts, flags, companies] = await Promise.all([
