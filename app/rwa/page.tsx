@@ -35,7 +35,7 @@ export default function RWAPage() {
             <span className="text-amber-600">On-Chain Infrastructure</span>
           </h1>
           <p className="text-lg text-[#a1887f] max-w-2xl mx-auto leading-relaxed mb-10">
-            FTH Trading anchors physical commodity transactions to the blockchain — creating immutable,
+            FTH Trading anchors physical commodity transactions to the blockchain  -  creating immutable,
             tamper-proof records that bring institutional-grade trust to global commodity trade without
             sacrificing compliance.
           </p>
@@ -58,18 +58,18 @@ export default function RWAPage() {
               <p className="text-xs font-semibold tracking-widest uppercase text-amber-600 mb-3">What is RWA?</p>
               <h2 className="text-3xl font-bold text-[#efebe9] mb-5">Tokenizing Physical Commodity Assets</h2>
               <p className="text-[#6d4c41] leading-relaxed mb-6">
-                Real World Assets (RWA) refers to physical, tangible assets — commodity inventories,
-                warehouse receipts, trade documents, and settlement instructions — that are represented
+                Real World Assets (RWA) refers to physical, tangible assets  -  commodity inventories,
+                warehouse receipts, trade documents, and settlement instructions  -  that are represented
                 or anchored on a blockchain ledger.
               </p>
               <p className="text-[#6d4c41] leading-relaxed mb-6">
                 At FTH Trading, we do not speculate on token prices. We use blockchain infrastructure
-                as an audit and settlement layer — creating cryptographically verified records of trade
+                as an audit and settlement layer  -  creating cryptographically verified records of trade
                 documentation and using programmable escrow to reduce counterparty risk.
               </p>
               <ul className="space-y-3">
                 {[
-                  'Not financial instruments — operational infrastructure',
+                  'Not financial instruments  -  operational infrastructure',
                   'Proof-of-existence for physical trade documents',
                   'Milestone-based escrow release, not speculative tokens',
                   'Fully compliant with OFAC/AML screening requirements',
@@ -103,7 +103,7 @@ export default function RWAPage() {
         <div className="mb-12">
           <p className="text-xs font-semibold tracking-widest uppercase text-amber-600 mb-3">Blockchain Networks</p>
           <h2 className="text-3xl font-bold text-[#efebe9] mb-4">XRPL & Stellar Integration</h2>
-          <p className="text-[#6d4c41] max-w-xl">Two proven public blockchains purpose-built for financial settlement — both integrated into the FTH deal structuring platform.</p>
+          <p className="text-[#6d4c41] max-w-xl">Two proven public blockchains purpose-built for financial settlement  -  both integrated into the FTH deal structuring platform.</p>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
           {/* XRPL */}
@@ -120,7 +120,7 @@ export default function RWAPage() {
             <ul className="space-y-2.5 mb-6">
               {[
                 'Native EscrowCreate / EscrowFinish transactions',
-                '3–5 second settlement finality',
+                '3-5 second settlement finality',
                 'Crypto-condition (SHA-256) hash-locks',
                 'Time-based or condition-based escrow release',
                 'Document hash anchoring via transaction memos',
@@ -207,11 +207,11 @@ export default function RWAPage() {
           <div className="bg-white/[0.025] border border-white/5 rounded-2xl p-7">
             <p className="text-sm font-bold text-[#6d4c41] mb-5 uppercase tracking-wider">Traditional</p>
             {[
-              ['Settlement time', '1–5 business days (SWIFT)'],
+              ['Settlement time', '1-5 business days (SWIFT)'],
               ['Escrow provider', 'Third-party escrow agent (fees)'],
               ['Audit trail', 'Paper records, email chains'],
               ['Document integrity', 'Relies on counterparty trust'],
-              ['Cross-border cost', '0.5–3% FX + SWIFT fees'],
+              ['Cross-border cost', '0.5-3% FX + SWIFT fees'],
               ['Dispute resolution', 'Legal action, weeks/months'],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between py-2.5 border-b border-white/5 last:border-0">
@@ -223,7 +223,7 @@ export default function RWAPage() {
           <div className="bg-amber-950/20 border border-amber-900/20 rounded-2xl p-7">
             <p className="text-sm font-bold text-amber-600 mb-5 uppercase tracking-wider">RWA-Backed (FTH)</p>
             {[
-              ['Settlement time', '3–5 seconds (XRPL) / 5s (Stellar)'],
+              ['Settlement time', '3-5 seconds (XRPL) / 5s (Stellar)'],
               ['Escrow provider', 'Protocol-native (no intermediary)'],
               ['Audit trail', 'Immutable on-chain hash records'],
               ['Document integrity', 'SHA-256 cryptographic proof'],
@@ -267,17 +267,17 @@ export default function RWAPage() {
   )
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // Data
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 const rwaFeatures: Array<{ icon: React.ElementType; title: string; body: string }> = [
-  { icon: Lock, title: 'SHA-256 Document Anchoring', body: 'Every deal document is hashed and anchored to XRPL/Stellar — creating immutable proof of existence without publishing sensitive content.' },
-  { icon: Coins, title: 'Warehouse Receipt Tokenization', body: 'Physical inventory in certified warehouses represented as on-chain tokens — enabling fractional financing and digital transfer of title.' },
+  { icon: Lock, title: 'SHA-256 Document Anchoring', body: 'Every deal document is hashed and anchored to XRPL/Stellar  -  creating immutable proof of existence without publishing sensitive content.' },
+  { icon: Coins, title: 'Warehouse Receipt Tokenization', body: 'Physical inventory in certified warehouses represented as on-chain tokens  -  enabling fractional financing and digital transfer of title.' },
   { icon: Zap, title: 'Programmable Escrow', body: 'Funds held in protocol-native escrow released automatically upon cryptographically verified milestone completion.' },
-  { icon: Shield, title: 'Compliance-First Design', body: 'Every counterparty and transaction is OFAC/AML screened. RWA infrastructure does not bypass compliance — it enforces it.' },
-  { icon: BarChart3, title: 'Settlement Reporting', body: 'Full on-chain transaction history available as audit evidence — importable for accounting, tax, and regulatory reporting.' },
-  { icon: FileText, title: 'Smart Document Routing', body: 'Contracts, inspection certificates, and B/Ls hash-linked to deal records on-chain — replacing fragmented email chains.' },
+  { icon: Shield, title: 'Compliance-First Design', body: 'Every counterparty and transaction is OFAC/AML screened. RWA infrastructure does not bypass compliance  -  it enforces it.' },
+  { icon: BarChart3, title: 'Settlement Reporting', body: 'Full on-chain transaction history available as audit evidence  -  importable for accounting, tax, and regulatory reporting.' },
+  { icon: FileText, title: 'Smart Document Routing', body: 'Contracts, inspection certificates, and B/Ls hash-linked to deal records on-chain  -  replacing fragmented email chains.' },
 ]
 
 const steps = [
@@ -294,7 +294,7 @@ const steps = [
   {
     step: 'Document Anchoring',
     title: 'SHA-256 Hash to XRPL / Stellar',
-    body: 'All key documents (contract, proforma invoice, SGS certificate terms) are hashed and anchored to the blockchain — creating a tamper-proof audit trail from day one.',
+    body: 'All key documents (contract, proforma invoice, SGS certificate terms) are hashed and anchored to the blockchain  -  creating a tamper-proof audit trail from day one.',
   },
   {
     step: 'EscrowCreate',

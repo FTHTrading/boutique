@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <main className="bg-[#0d0906] text-[#efebe9] min-h-screen">
 
-      {/* ── TOP NAV ─────────────────────────────────────────── */}
+      {/* -- TOP NAV ------------------------------------------- */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#0d0906]/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -54,7 +54,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── HERO ────────────────────────────────────────────── */}
+      {/* -- HERO ---------------------------------------------- */}
       <section className="relative min-h-screen flex flex-col justify-center px-6 pt-16 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(120,53,15,0.28),transparent)]" />
         <div className="absolute inset-0 opacity-[0.025]" style={{ backgroundImage: 'linear-gradient(rgba(239,235,233,1) 1px,transparent 1px),linear-gradient(90deg,rgba(239,235,233,1) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
@@ -92,7 +92,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── STATS ───────────────────────────────────────────── */}
+      {/* -- STATS --------------------------------------------- */}
       <section className="border-y border-white/5 bg-white/[0.02]">
         <div className="max-w-5xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-6 gap-6">
           {[
@@ -111,12 +111,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── INDUSTRY PILLARS ────────────────────────────────── */}
+      {/* -- INDUSTRY PILLARS ---------------------------------- */}
       <section className="max-w-5xl mx-auto px-6 py-24">
         <div className="mb-12">
           <p className="text-xs font-semibold tracking-widest uppercase text-amber-600 mb-3">How Global Commodity Trade Works</p>
           <h2 className="text-3xl md:text-4xl font-bold text-[#efebe9] mb-4">The Full Trade Stack</h2>
-          <p className="text-[#6d4c41] max-w-2xl">From origin sourcing to final settlement — we operate across every layer of the institutional commodity trade lifecycle.</p>
+          <p className="text-[#6d4c41] max-w-2xl">From origin sourcing to final settlement &mdash; we operate across every layer of the institutional commodity trade lifecycle.</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {pillars.map(({ icon: Icon, title, body }) => (
@@ -131,7 +131,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── COMMODITIES ─────────────────────────────────────── */}
+      {/* -- COMMODITIES --------------------------------------- */}
       <section className="border-t border-white/5 bg-white/[0.01]">
         <div className="max-w-5xl mx-auto px-6 py-24">
           <div className="mb-12">
@@ -158,7 +158,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── RWA ─────────────────────────────────────────────── */}
+      {/* -- RWA ----------------------------------------------- */}
       <section className="max-w-5xl mx-auto px-6 py-24">
         <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-white/[0.02] p-8 md:p-12">
           <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(120,53,15,0.15),transparent_70%)]" />
@@ -173,7 +173,7 @@ export default function Home() {
               </div>
             </div>
             <p className="text-[#a1887f] max-w-2xl mb-10 leading-relaxed">
-              We anchor physical commodity trades on-chain — creating immutable, tamper-proof proof-of-existence records for structured deals, escrow milestones, and settlement instructions using XRPL and Stellar networks.
+              We anchor physical commodity trades on-chain &mdash; creating immutable, tamper-proof proof-of-existence records for structured deals, escrow milestones, and settlement instructions using XRPL and Stellar networks.
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
               {rwaPoints.map(({ icon: Icon, title, body }) => (
@@ -196,7 +196,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── PLATFORM FEATURES ───────────────────────────────── */}
+      {/* -- PLATFORM FEATURES --------------------------------- */}
       <section className="border-t border-white/5 bg-white/[0.01]">
         <div className="max-w-5xl mx-auto px-6 py-24">
           <div className="mb-12">
@@ -224,7 +224,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── BROKER ONBOARDING ───────────────────────────────── */}
+      {/* -- BROKER ONBOARDING --------------------------------- */}
       <section className="max-w-5xl mx-auto px-6 py-16">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="relative overflow-hidden rounded-3xl border border-amber-900/20 bg-gradient-to-br from-[#1a0f08] to-[#0d0906] p-8">
@@ -280,7 +280,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── INSIGHTS ────────────────────────────────────────── */}
+      {/* -- INSIGHTS ------------------------------------------ */}
       <section className="border-t border-white/5 bg-white/[0.01]">
         <div className="max-w-5xl mx-auto px-6 py-24">
           <div className="flex items-end justify-between mb-12">
@@ -310,7 +310,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── TEAM PORTAL BANNER ──────────────────────────────── */}
+      {/* -- TEAM PORTAL BANNER -------------------------------- */}
       <section className="max-w-5xl mx-auto px-6 pb-16">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-950 via-[#2a1a0f] to-[#0d0906] border border-amber-900/30 px-8 md:px-14 py-12">
           <div className="absolute right-0 top-0 w-96 h-96 bg-amber-700/10 rounded-full blur-3xl" />
@@ -330,7 +330,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FINAL CTA ───────────────────────────────────────── */}
+      {/* -- FINAL CTA ----------------------------------------- */}
       <section className="border-t border-white/5 text-center py-24 px-6">
         <p className="text-xs font-semibold tracking-widest uppercase text-amber-600 mb-4">Institutional Inquiries</p>
         <h2 className="text-3xl md:text-4xl font-bold text-[#efebe9] mb-5">
@@ -342,7 +342,7 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* ── FOOTER ──────────────────────────────────────────── */}
+      {/* -- FOOTER -------------------------------------------- */}
       <footer className="border-t border-white/5 px-6 py-10">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 mb-10">
@@ -383,9 +383,9 @@ export default function Home() {
   )
 }
 
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 // Data
-// ─────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------
 
 const commodities: Array<{ slug: string; icon: React.ElementType; title: string; description: string; tags: string[] }> = [
   { slug: 'coffee', icon: Coffee, title: 'Coffee', description: 'Arabica & Robusta. Brazil, Colombia, Ethiopia origins. Regenerative & certified.', tags: ['FOB Santos', 'Arabica', 'Robusta', 'ICO'] },
@@ -418,19 +418,19 @@ const features: Array<{ icon: React.ElementType; title: string; description: str
 const pillars: Array<{ icon: React.ElementType; title: string; body: string }> = [
   { icon: Landmark, title: 'Documentary Trade Finance', body: 'Letters of Credit (LC), Standby LCs (SBLC), and Bank Guarantees (BG) structured under UCP 600, ISP98, and URDG 758 international rules.' },
   { icon: Globe, title: 'Origin Sourcing & Logistics', body: 'FOB, CIF, CFR, DDP Incoterms. Pre-export financing. Warehouse receipts. FCL/LCL sea freight coordination with certified forwarders.' },
-  { icon: Shield, title: 'Sanctions & Export Controls', body: 'OFAC SDN screening, EU & UN sanctions lists, BIS EAR export controls, FATF jurisdiction risk — verified before any instrument is raised.' },
+  { icon: Shield, title: 'Sanctions & Export Controls', body: 'OFAC SDN screening, EU & UN sanctions lists, BIS EAR export controls, FATF jurisdiction risk - verified before any instrument is raised.' },
   { icon: BarChart3, title: 'Price Risk & Hedging', body: 'ICE, LME, COMEX reference pricing. Basis risk analysis. Forward pricing for fixed-quantity contracts. Pricing clauses and escalation.' },
   { icon: Network, title: 'Correspondent Banking', body: 'SWIFT MT199/799 pre-advice, MT700 issuance, MT103/202 settlement. Bank-to-bank instrument negotiation with confirming bank selection.' },
   { icon: Zap, title: 'Digital Settlement Rails', body: 'XRPL EscrowCreate for milestone-based release. Stellar anchor payments. SHA-256 proof anchoring for tamper-evident audit trails.' },
   { icon: Lock, title: 'Escrow & Milestone Control', body: 'Structured escrow with defined release triggers: SGS/Bureau Veritas inspection, BL issuance, port discharge confirmation.' },
-  { icon: FileText, title: 'Contract & eSign Layer', body: 'Offtake agreements, SPA, MOU, NDAs — generated, signed, and stored on-platform with cryptographic timestamp signatures.' },
+  { icon: FileText, title: 'Contract & eSign Layer', body: 'Offtake agreements, SPA, MOU, NDAs - generated, signed, and stored on-platform with cryptographic timestamp signatures.' },
   { icon: BookOpen, title: 'KYC / KYB Due Diligence', body: 'Entity verification, UBO identification, beneficial ownership registers, director profiles, certificate of incorporation.' },
 ]
 
 const rwaPoints: Array<{ icon: React.ElementType; title: string; body: string }> = [
-  { icon: Lock, title: 'On-Chain Proof', body: 'SHA-256 hash of every deal document anchored to XRPL or Stellar — immutable and time-stamped.' },
+  { icon: Lock, title: 'On-Chain Proof', body: 'SHA-256 hash of every deal document anchored to XRPL or Stellar - immutable and time-stamped.' },
   { icon: Coins, title: 'Tokenised Inventory', body: 'Physical warehouse stock represented as on-chain tokens for fractional financing and transfer of title.' },
-  { icon: Zap, title: 'Programmable Escrow', body: 'Smart escrow with automatic milestone release — inspection passed, BL issued, discharge confirmed.' },
+  { icon: Zap, title: 'Programmable Escrow', body: 'Smart escrow with automatic milestone release - inspection passed, BL issued, discharge confirmed.' },
   { icon: Network, title: 'Settlement Finality', body: 'XRPL 3-5 second finality and Stellar 5-second settlement vs. 2-5 day SWIFT average.' },
 ]
 

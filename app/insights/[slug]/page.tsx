@@ -26,15 +26,15 @@ const POSTS: Record<string, {
       },
       {
         heading: 'Key LC Types in Commodity Trade',
-        body: 'Sight LCs require immediate payment upon presentation of complying documents. Usance (deferred payment) LCs allow a credit period — typically 30, 60, 90, or 180 days — enabling the buyer to take delivery and sell before payment falls due. Red Clause LCs allow the seller to draw an advance before shipment, useful for pre-financing production. Transferable LCs allow a middleman to transfer part of the credit to a supplier, essential in multi-tier commodity chains.',
+        body: 'Sight LCs require immediate payment upon presentation of complying documents. Usance (deferred payment) LCs allow a credit period  -  typically 30, 60, 90, or 180 days  -  enabling the buyer to take delivery and sell before payment falls due. Red Clause LCs allow the seller to draw an advance before shipment, useful for pre-financing production. Transferable LCs allow a middleman to transfer part of the credit to a supplier, essential in multi-tier commodity chains.',
       },
       {
         heading: 'Critical Documents for Commodity LCs',
-        body: 'A typical commodity LC requires: (1) Commercial Invoice — must match LC terms exactly; (2) Full set of original Clean On-Board Bills of Lading; (3) Packing List; (4) Certificate of Origin (preferably from Chamber of Commerce); (5) Phytosanitary / Health Certificate for agricultural commodities; (6) SGS or Bureau Veritas inspection report; (7) Weight & Quality Certificate from an accredited laboratory. Any discrepancy between presented documents and LC terms gives the issuing bank the right to refuse payment — a major risk if documents are not carefully reviewed pre-shipment.',
+        body: 'A typical commodity LC requires: (1) Commercial Invoice  -  must match LC terms exactly; (2) Full set of original Clean On-Board Bills of Lading; (3) Packing List; (4) Certificate of Origin (preferably from Chamber of Commerce); (5) Phytosanitary / Health Certificate for agricultural commodities; (6) SGS or Bureau Veritas inspection report; (7) Weight & Quality Certificate from an accredited laboratory. Any discrepancy between presented documents and LC terms gives the issuing bank the right to refuse payment  -  a major risk if documents are not carefully reviewed pre-shipment.',
       },
       {
         heading: 'Common Discrepancies and How to Avoid Them',
-        body: 'The most common LC discrepancies in commodity trade are: late presentation (documents presented after the expiry date or beyond the 21-day default); late shipment (B/L date after the latest shipment date in the LC); description mismatch (invoice description does not exactly match LC commodity description); quantity or amount tolerance breaches; and missing endorsements on B/L. To avoid these, FTH structures all LCs with clear tolerance clauses (typically ±5–10% on quantity and amount), realistic shipment windows, and a document review step before presentation.',
+        body: 'The most common LC discrepancies in commodity trade are: late presentation (documents presented after the expiry date or beyond the 21-day default); late shipment (B/L date after the latest shipment date in the LC); description mismatch (invoice description does not exactly match LC commodity description); quantity or amount tolerance breaches; and missing endorsements on B/L. To avoid these, FTH structures all LCs with clear tolerance clauses (typically +/-5-10% on quantity and amount), realistic shipment windows, and a document review step before presentation.',
       },
       {
         heading: 'FTH Trading\'s LC Structuring Approach',
@@ -49,11 +49,11 @@ const POSTS: Record<string, {
     title: 'How XRPL Escrow Is Changing Commodity Settlement',
     date: 'January 2026',
     readTime: '6 min',
-    intro: 'Cross-border commodity settlement has historically relied on correspondent banking, SWIFT messaging, and paper-based documentation — a process that can take days and carries significant counterparty risk. XRPL\'s native escrow functionality offers a programmatic alternative that reduces risk and time drastically.',
+    intro: 'Cross-border commodity settlement has historically relied on correspondent banking, SWIFT messaging, and paper-based documentation  -  a process that can take days and carries significant counterparty risk. XRPL\'s native escrow functionality offers a programmatic alternative that reduces risk and time drastically.',
     sections: [
       {
         heading: 'What is XRPL EscrowCreate?',
-        body: 'XRPL is a public blockchain with native escrow functionality built into the protocol layer — no smart contracts required. The EscrowCreate transaction locks XRP (or issued tokens) in escrow until one of two conditions is met: a specific expiry time passes (time-based escrow), or a cryptographic condition (hashlock) is fulfilled (crypto-condition escrow). This is ideal for commodity transactions where payment should only be released upon confirmed delivery or inspection.',
+        body: 'XRPL is a public blockchain with native escrow functionality built into the protocol layer  -  no smart contracts required. The EscrowCreate transaction locks XRP (or issued tokens) in escrow until one of two conditions is met: a specific expiry time passes (time-based escrow), or a cryptographic condition (hashlock) is fulfilled (crypto-condition escrow). This is ideal for commodity transactions where payment should only be released upon confirmed delivery or inspection.',
       },
       {
         heading: 'Milestone-Based Release in Commodity Deals',
@@ -61,11 +61,11 @@ const POSTS: Record<string, {
       },
       {
         heading: 'SHA-256 Document Anchoring',
-        body: 'Beyond escrow, FTH anchors all deal documents to XRPL using SHA-256 hash records in transaction memos. This creates an immutable timestamp proving that a specific document existed at a specific point in time — providing tamper-evident proof of existence for contracts, inspection reports, and settlement instructions without exposing sensitive content on-chain.',
+        body: 'Beyond escrow, FTH anchors all deal documents to XRPL using SHA-256 hash records in transaction memos. This creates an immutable timestamp proving that a specific document existed at a specific point in time  -  providing tamper-evident proof of existence for contracts, inspection reports, and settlement instructions without exposing sensitive content on-chain.',
       },
       {
         heading: 'Settlement Speed Advantage',
-        body: 'XRPL achieves finality in 3–5 seconds at fractions of a cent per transaction, compared to SWIFT\'s 1–5 business day settlement window. For commodity deals where speed of payment confirmation is operationally critical (e.g., port demurrage charges accumulate daily), this is a material advantage.',
+        body: 'XRPL achieves finality in 3-5 seconds at fractions of a cent per transaction, compared to SWIFT\'s 1-5 business day settlement window. For commodity deals where speed of payment confirmation is operationally critical (e.g., port demurrage charges accumulate daily), this is a material advantage.',
       },
     ],
     tags: ['XRPL', 'Blockchain', 'RWA', 'Escrow', 'Settlement', 'Commodity Trade'],
@@ -80,7 +80,7 @@ const POSTS: Record<string, {
     sections: [
       {
         heading: 'Who Does OFAC Apply To?',
-        body: 'OFAC sanctions apply directly to US persons and entities, but have extraterritorial reach through secondary sanctions — which threaten to cut off non-US persons from the US financial system if they transact with sanctioned parties. Since most commodity transactions settle in USD and pass through US correspondent banks, OFAC compliance is effectively mandatory for any firm operating in global commodity markets.',
+        body: 'OFAC sanctions apply directly to US persons and entities, but have extraterritorial reach through secondary sanctions  -  which threaten to cut off non-US persons from the US financial system if they transact with sanctioned parties. Since most commodity transactions settle in USD and pass through US correspondent banks, OFAC compliance is effectively mandatory for any firm operating in global commodity markets.',
       },
       {
         heading: 'SDN List: The Primary Screening Target',
@@ -88,11 +88,11 @@ const POSTS: Record<string, {
       },
       {
         heading: 'Secondary Sanctions & Jurisdictional Risk',
-        body: 'Secondary sanctions create additional risk for firms transacting in or through high-risk jurisdictions — including Russia, Iran, North Korea, Cuba, Venezuela, Syria, and portions of Ukraine. Even if no SDN is directly involved, transacting through these jurisdictions may trigger enforcement. FTH applies a FATF-aligned jurisdiction risk matrix to all deals and escalates high-risk jurisdictions to human review.',
+        body: 'Secondary sanctions create additional risk for firms transacting in or through high-risk jurisdictions  -  including Russia, Iran, North Korea, Cuba, Venezuela, Syria, and portions of Ukraine. Even if no SDN is directly involved, transacting through these jurisdictions may trigger enforcement. FTH applies a FATF-aligned jurisdiction risk matrix to all deals and escalates high-risk jurisdictions to human review.',
       },
       {
         heading: 'FTH Compliance Screening Protocol',
-        body: 'FTH\'s compliance layer runs automated OFAC SDN checks on: buyer entity and all named directors, seller entity and all named directors, freight forwarder, vessel name and IMO number, port and jurisdiction of origin/destination, and beneficiary banks. Every check is logged, timestamped, and attached to the deal record. High-risk flags are held for human review — no instrument is raised until compliance approval is granted.',
+        body: 'FTH\'s compliance layer runs automated OFAC SDN checks on: buyer entity and all named directors, seller entity and all named directors, freight forwarder, vessel name and IMO number, port and jurisdiction of origin/destination, and beneficiary banks. Every check is logged, timestamped, and attached to the deal record. High-risk flags are held for human review  -  no instrument is raised until compliance approval is granted.',
       },
     ],
     tags: ['OFAC', 'Sanctions', 'Compliance', 'SDN', 'AML', 'Trade Finance'],

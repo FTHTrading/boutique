@@ -29,7 +29,7 @@ const ALL_POSTS = [
   {
     slug: 'incoterms-guide-fob-cif',
     category: 'Trade Finance',
-    title: 'Incoterms 2020: FOB vs CIF vs DDP — Which Is Right for Your Commodity Deal?',
+    title: 'Incoterms 2020: FOB vs CIF vs DDP  -  Which Is Right for Your Commodity Deal?',
     excerpt: 'A deep dive into how Incoterms 2020 allocate risk, cost, and insurance obligations for physical commodity shipments.',
     date: 'November 2025',
     readTime: '9 min',
@@ -113,11 +113,11 @@ export default function InsightsPage() {
           </h1>
           <p className="text-[#6d4c41] max-w-xl">
             In-depth guides on commodity trade finance, compliance, blockchain settlement, and RWA
-            tokenization — written for institutional buyers, brokers, and trade professionals.
+            tokenization  -  written for institutional buyers, brokers, and trade professionals.
           </p>
         </div>
 
-        {/* Category filter (static display — functional filtering would require client component) */}
+        {/* Category filter (static display  -  functional filtering would require client component) */}
         <div className="flex flex-wrap gap-2 mb-10">
           {CATEGORIES.map((cat) => (
             <span

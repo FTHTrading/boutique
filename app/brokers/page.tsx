@@ -5,7 +5,7 @@ import { Globe, ArrowLeft, Check, Users, TrendingUp, Shield, FileText, ChevronRi
 
 const COMMODITIES = ['Coffee', 'Cocoa', 'Precious Metals (Gold/Silver/Platinum)', 'Base Metals (Copper/Aluminum/Nickel)', 'Energy', 'Soft Commodities (Sugar/Cotton)', 'Multiple Categories']
 const JURISDICTIONS = ['United Arab Emirates', 'United Kingdom', 'European Union', 'Singapore', 'Hong Kong', 'Switzerland', 'United States', 'Canada', 'Australia', 'Other']
-const VOLUMES = ['Under $500K/year', '$500K – $2M/year', '$2M – $10M/year', '$10M – $50M/year', '$50M+/year']
+const VOLUMES = ['Under $500K/year', '$500K - $2M/year', '$2M - $10M/year', '$10M - $50M/year', '$50M+/year']
 
 export default function BrokersPage() {
   const [form, setForm] = useState({
@@ -52,7 +52,7 @@ export default function BrokersPage() {
       <div className="max-w-5xl mx-auto px-6 py-16">
         <div className="grid lg:grid-cols-5 gap-12">
 
-          {/* Left column — info */}
+          {/* Left column  -  info */}
           <div className="lg:col-span-2">
             <span className="inline-block text-xs font-semibold tracking-widest uppercase text-amber-600 border border-amber-900/40 bg-amber-950/30 px-3 py-1 rounded-full mb-6">
               Broker Network
@@ -67,8 +67,8 @@ export default function BrokersPage() {
 
             <div className="space-y-4 mb-8">
               {[
-                { icon: TrendingUp, title: 'Tiered Commission (1–3%)', body: 'Performance-linked rates increasing with deal volume and tenure.' },
-                { icon: Shield, title: 'Compliance Support', body: 'Pre-screening for your clients — OFAC, KYC/KYB, sanctions checks included.' },
+                { icon: TrendingUp, title: 'Tiered Commission (1-3%)', body: 'Performance-linked rates increasing with deal volume and tenure.' },
+                { icon: Shield, title: 'Compliance Support', body: 'Pre-screening for your clients  -  OFAC, KYC/KYB, sanctions checks included.' },
                 { icon: Users, title: 'Platform Access', body: 'Full dashboard access: pipeline, contracts, funding tools, and team hub.' },
                 { icon: FileText, title: 'Dedicated RM', body: 'A relationship manager assigned to your firm from day one.' },
               ].map(({ icon: Icon, title, body }) => (
@@ -103,7 +103,7 @@ export default function BrokersPage() {
             </div>
           </div>
 
-          {/* Right column — form */}
+          {/* Right column  -  form */}
           <div className="lg:col-span-3">
             {status === 'success' ? (
               <div className="bg-white/[0.03] border border-green-900/40 rounded-2xl p-10 text-center">
@@ -136,7 +136,7 @@ export default function BrokersPage() {
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <Field label="License / Reg. Number" value={form.licenseNumber} onChange={(v) => set('licenseNumber', v)} placeholder="DMCC-123456" />
-                  <Field label="Regulatory Body" value={form.regulatoryBody} onChange={(v) => set('regulatoryBody', v)} placeholder="DMCC, FCA, MAS…" />
+                  <Field label="Regulatory Body" value={form.regulatoryBody} onChange={(v) => set('regulatoryBody', v)} placeholder="DMCC, FCA, MAS..." />
                 </div>
 
                 <SelectField label="Primary Commodity Specialty *" value={form.commodity} onChange={(v) => set('commodity', v)} options={COMMODITIES} required />
@@ -168,7 +168,7 @@ export default function BrokersPage() {
                   disabled={status === 'submitting'}
                   className="w-full bg-amber-700 hover:bg-amber-600 disabled:opacity-50 text-white font-semibold py-3.5 rounded-xl transition-colors"
                 >
-                  {status === 'submitting' ? 'Submitting…' : 'Submit Broker Inquiry'}
+                  {status === 'submitting' ? 'Submitting...' : 'Submit Broker Inquiry'}
                 </button>
 
                 {status === 'error' && (
@@ -218,7 +218,7 @@ function SelectField({
         required={required}
         className="w-full bg-[#1a0f08] border border-white/8 rounded-xl px-4 py-3 text-sm text-[#efebe9] focus:outline-none focus:border-amber-700"
       >
-        <option value="">Select…</option>
+        <option value="">Select...</option>
         {options.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
     </div>
