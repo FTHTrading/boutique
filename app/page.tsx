@@ -1,4 +1,4 @@
-﻿import Link from 'next/link'
+import Link from 'next/link'
 import {
   TrendingUp,
   Shield,
@@ -15,6 +15,10 @@ import {
   BarChart3,
   Network,
   Landmark,
+  Coffee,
+  Leaf,
+  Gem,
+  Cog,
 } from 'lucide-react'
 
 export default function Home() {
@@ -58,7 +62,7 @@ export default function Home() {
           <div className="flex items-center gap-2 mb-8">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-amber-500 border border-amber-800/50 bg-amber-950/40 px-3 py-1.5 rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-              Est. 1976 — Institutional Commodity Platform
+              Est. 1976 &mdash; Institutional Commodity Platform
             </span>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-8">
@@ -135,9 +139,11 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-bold text-[#efebe9]">Commodity Categories</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {commodities.map(({ slug, icon, title, description, tags }) => (
+            {commodities.map(({ slug, icon: CommodityIcon, title, description, tags }) => (
               <Link key={slug} href={`/commodities/${slug}`} className="group relative bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-amber-800/40 rounded-2xl p-6 transition-all duration-200">
-                <div className="text-3xl mb-4">{icon}</div>
+                <div className="w-10 h-10 rounded-xl bg-amber-950/60 border border-amber-800/20 flex items-center justify-center mb-4">
+                  <CommodityIcon size={20} className="text-amber-500" />
+                </div>
                 <h3 className="font-bold text-[#efebe9] mb-2 group-hover:text-amber-400 transition-colors">{title}</h3>
                 <p className="text-sm text-[#6d4c41] leading-relaxed mb-4">{description}</p>
                 <div className="flex flex-wrap gap-1">
@@ -233,7 +239,7 @@ export default function Home() {
                 Register your firm with FTH Trading. Join our global network of independent brokers and agents. Competitive commission structures. Full compliance support. Platform access from day one.
               </p>
               <ul className="space-y-2 mb-8">
-                {['Tiered commission structure (1–3%)','Deal pipeline management tools','Compliance pre-screening for your clients','Access to FTH funding & instrument layer','Dedicated relationship manager'].map((b) => (
+                {['Tiered commission structure (1-3%)','Deal pipeline management tools','Compliance pre-screening for your clients','Access to FTH funding & instrument layer','Dedicated relationship manager'].map((b) => (
                   <li key={b} className="flex items-start gap-2 text-xs text-[#6d4c41]">
                     <Check size={11} className="text-amber-700 mt-0.5 shrink-0" />{b}
                   </li>
@@ -312,7 +318,7 @@ export default function Home() {
             <div>
               <p className="text-xs font-semibold tracking-widest uppercase text-amber-500 mb-3">Internal Platform</p>
               <h2 className="text-2xl md:text-3xl font-bold text-[#efebe9] mb-3">Team Portal</h2>
-              <p className="text-[#a1887f] max-w-md text-sm">Deals pipeline, commission tracking, client management, compliance flags, contracts, and funding tools — all in one place.</p>
+              <p className="text-[#a1887f] max-w-md text-sm">Deals pipeline, commission tracking, client management, compliance flags, contracts, and funding tools &mdash; all in one place.</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 shrink-0">
               <Link href="/sign-in" className="inline-flex items-center justify-center gap-2 bg-amber-700 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
@@ -368,7 +374,7 @@ export default function Home() {
             <p className="text-[10px] text-[#3e2723] leading-relaxed max-w-3xl mb-4">
               <strong className="text-[#6d4c41]">Disclaimer:</strong> This platform flags potential compliance issues for human review. It does not constitute legal advice, regulatory certification, or a guarantee of compliance. All funding structures are non-binding drafts requiring human approval and review by qualified banking and legal professionals. FTH Trading does not issue financial instruments, act as a bank, broker-dealer, investment advisor, or money transmitter. All determinations subject to review by qualified professionals. Serving institutional buyers only. Non-US persons / entities only where applicable.
             </p>
-            <p className="text-[10px] text-[#3e2723]">© {new Date().getFullYear()} FTH Trading. All rights reserved.</p>
+            <p className="text-[10px] text-[#3e2723]">&copy; {new Date().getFullYear()} FTH Trading. All rights reserved.</p>
           </div>
         </div>
       </footer>
@@ -381,11 +387,11 @@ export default function Home() {
 // Data
 // ─────────────────────────────────────────────────────────────────
 
-const commodities = [
-  { slug: 'coffee', icon: '☕', title: 'Coffee', description: 'Arabica & Robusta. Brazil, Colombia, Ethiopia origins. Regenerative & certified.', tags: ['FOB Santos', 'Arabica', 'Robusta', 'ICO'] },
-  { slug: 'cocoa', icon: '🍫', title: 'Cocoa', description: 'West African origins. ICCO standards. Fair trade and Rainforest Alliance certified.', tags: ['Ivory Coast', 'Ghana', 'Fair Trade', 'ICCO'] },
-  { slug: 'precious-metals', icon: '🥇', title: 'Precious Metals', description: 'Gold, Silver, Platinum. LBMA approved custody. Full chain-of-custody verification.', tags: ['LBMA', 'Assayed', 'Vaulted', 'OFAC screened'] },
-  { slug: 'base-metals', icon: '⚙️', title: 'Base Metals', description: 'Copper, Aluminum, Nickel. Industrial grade. Global warehousing and LME delivery.', tags: ['LME', 'Industrial', 'Warehoused', 'ISO'] },
+const commodities: Array<{ slug: string; icon: React.ElementType; title: string; description: string; tags: string[] }> = [
+  { slug: 'coffee', icon: Coffee, title: 'Coffee', description: 'Arabica & Robusta. Brazil, Colombia, Ethiopia origins. Regenerative & certified.', tags: ['FOB Santos', 'Arabica', 'Robusta', 'ICO'] },
+  { slug: 'cocoa', icon: Leaf, title: 'Cocoa', description: 'West African origins. ICCO standards. Fair trade and Rainforest Alliance certified.', tags: ['Ivory Coast', 'Ghana', 'Fair Trade', 'ICCO'] },
+  { slug: 'precious-metals', icon: Gem, title: 'Precious Metals', description: 'Gold, Silver, Platinum. LBMA approved custody. Full chain-of-custody verification.', tags: ['LBMA', 'Assayed', 'Vaulted', 'OFAC screened'] },
+  { slug: 'base-metals', icon: Cog, title: 'Base Metals', description: 'Copper, Aluminum, Nickel. Industrial grade. Global warehousing and LME delivery.', tags: ['LME', 'Industrial', 'Warehoused', 'ISO'] },
 ]
 
 const features: Array<{ icon: React.ElementType; title: string; description: string; bullets: string[] }> = [
@@ -393,13 +399,13 @@ const features: Array<{ icon: React.ElementType; title: string; description: str
     icon: Shield,
     title: 'Compliance Intelligence',
     description: 'Risk-based sanctions screening, export controls, and AML flagging. Every deal screened before instrument request.',
-    bullets: ['OFAC SDN list screening', 'FATF jurisdiction risk matrix', 'AML threshold alerts (>$10K)', 'Human approval gate — mandatory'],
+    bullets: ['OFAC SDN list screening', 'FATF jurisdiction risk matrix', 'AML threshold alerts (>$10K)', 'Human approval gate - mandatory'],
   },
   {
     icon: TrendingUp,
     title: 'Credit & Deal Structuring',
     description: '110-point credit scoring. Payment term recommendations. Instrument selection: LC, SBLC, BG, Factoring.',
-    bullets: ['Readiness score (0–100)', 'KYC / KYB documentation checklist', 'UCP 600, ISP98, URDG758 frameworks', 'Term sheet generation (advisory)'],
+    bullets: ['Readiness score (0-100)', 'KYC / KYB documentation checklist', 'UCP 600, ISP98, URDG758 frameworks', 'Term sheet generation (advisory)'],
   },
   {
     icon: Globe,
