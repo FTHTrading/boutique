@@ -244,7 +244,7 @@ Since 1976, FTHTrading has structured commodity transactions across coffee, prec
 **Learn more:**
 - [Commodity Portfolio](../commodity-expansion.md)
 - [System Architecture](../agent-map.md)
-- [Contact Advisory Team](mailto:insights@fthtrading.com)
+- [Contact Advisory Team](mailto:insights@unykorn.org)
 
 ---
 

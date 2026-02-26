@@ -424,7 +424,7 @@ Since 1982, FTHTrading has facilitated precious metals transactions with LBMA-ce
 **Learn more:**
 - [Commodity Portfolio](../commodity-expansion.md)
 - [Metals Custody Infrastructure](../agent-map.md)
-- [Request Precious Metals Consultation](mailto:metals@fthtrading.com)
+- [Request Precious Metals Consultation](mailto:metals@unykorn.org)
 
 ---
 

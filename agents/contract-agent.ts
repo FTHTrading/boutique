@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ContractAgent
  *
  * Manages the full contract lifecycle:
@@ -52,9 +52,9 @@ export interface GeneratedContract {
   signing_url: string;
 }
 
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 // NCNDA Template
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 
 const NCNDA_TEMPLATE = (params: {
   contract_number: string;
@@ -216,7 +216,7 @@ ${params.effective_date}.
 
 <div class="signature-block">
   <div class="sig-col">
-    <strong>PARTY A — FTH Trading</strong>
+    <strong>PARTY A � FTH Trading</strong>
     <div class="sig-line">
       Signature: ___________________<br>
       Name: Bradley [Last Name]<br>
@@ -225,7 +225,7 @@ ${params.effective_date}.
     </div>
   </div>
   <div class="sig-col">
-    <strong>PARTY B — ${params.party_b_name}</strong>
+    <strong>PARTY B � ${params.party_b_name}</strong>
     <div class="sig-line">
       Signature: ___________________<br>
       Name: ${params.party_b_signatory}<br>
@@ -246,9 +246,9 @@ ${params.effective_date}.
 </html>
 `;
 
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 // Supply Agreement Template (simplified)
-// ─────────────────────────────────────────────────────────────
+// -------------------------------------------------------------
 
 class ContractAgent {
   private readonly name = 'ContractAgent';
@@ -308,7 +308,7 @@ class ContractAgent {
         created_by
       ) VALUES (
         ${contractNumber}, ${params.contract_type},
-        ${`${params.contract_type} — ${params.party_b_name} — ${params.commodity}`},
+        ${`${params.contract_type} � ${params.party_b_name} � ${params.commodity}`},
         ${params.company_id || null}, ${params.deal_id || null},
         'FTH Trading', ${params.party_b_name}, ${params.party_b_signatory}, ${params.party_b_email},
         ${params.commodity}, ${params.deal_value_usd || null},
@@ -335,9 +335,9 @@ class ContractAgent {
       VALUES (${contractId}, 'created', ${params.created_by}, ${JSON.stringify({ contract_type: params.contract_type, commodity: params.commodity })})
     `;
 
-    const signingUrl = `${process.env.NEXT_PUBLIC_URL || 'https://fthtrading.com'}/sign/${esignToken}`;
+    const signingUrl = `${process.env.NEXT_PUBLIC_URL || 'https://unykorn.org'}/sign/${esignToken}`;
 
-    console.log(`[${this.name}] ✅ Contract generated: ${contractNumber} (${contractId})`);
+    console.log(`[${this.name}] ? Contract generated: ${contractNumber} (${contractId})`);
 
     return {
       contract_id: contractId,
@@ -409,7 +409,7 @@ class ContractAgent {
       )
     `;
 
-    console.log(`[${this.name}] ✅ Signed: ${c.contract_number} by ${signatoryName}`);
+    console.log(`[${this.name}] ? Signed: ${c.contract_number} by ${signatoryName}`);
 
     return {
       success: true,

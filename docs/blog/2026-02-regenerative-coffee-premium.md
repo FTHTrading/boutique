@@ -408,7 +408,7 @@ Since 1976, FTHTrading has built direct relationships with coffee producers acro
 **Learn more:**
 - [Commodity Portfolio](../commodity-expansion.md)
 - [Coffee Advisory System](../agent-map.md)
-- [Request Regenerative Sourcing Consultation](mailto:sourcing@fthtrading.com)
+- [Request Regenerative Sourcing Consultation](mailto:sourcing@unykorn.org)
 
 ---
 

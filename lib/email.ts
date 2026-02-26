@@ -12,7 +12,7 @@
  * DNS Requirements (configure in your email provider):
  * - SPF: v=spf1 include:sendgrid.net ~all
  * - DKIM: 2048-bit key (auto-configured via SendGrid)
- * - DMARC: v=DMARC1; p=quarantine; rua=mailto:dmarc@fthtrading.com
+ * - DMARC: v=DMARC1; p=quarantine; rua=mailto:dmarc@unykorn.org
  */
 
 import { sql } from '@/lib/sql';
@@ -45,9 +45,9 @@ export interface SendResult {
 
 // FTH Trading physical address — required by CAN-SPAM
 const FTH_PHYSICAL_ADDRESS = process.env.FTH_PHYSICAL_ADDRESS || '[FTH Trading Physical Address — Set FTH_PHYSICAL_ADDRESS env var]';
-const FTH_FROM_ADDRESS = process.env.EMAIL_FROM || 'bradley@fthtrading.com';
+const FTH_FROM_ADDRESS = process.env.EMAIL_FROM || 'bradley@unykorn.org';
 const FTH_FROM_NAME = process.env.EMAIL_FROM_NAME || 'Bradley — FTH Trading';
-const FTH_UNSUBSCRIBE_BASE = process.env.NEXT_PUBLIC_URL || 'https://fthtrading.com';
+const FTH_UNSUBSCRIBE_BASE = process.env.NEXT_PUBLIC_URL || 'https://unykorn.org';
 
 /**
  * Inject CAN-SPAM required footer into email body.

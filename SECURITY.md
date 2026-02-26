@@ -22,7 +22,7 @@ Security vulnerabilities should **NEVER** be disclosed publicly until patched.
 
 ### Reporting Process
 
-**Email:** security@fthtrading.com
+**Email:** security@unykorn.org
 
 **Include:**
 1. **Vulnerability Type** (e.g., SQL injection, XSS, authentication bypass)
@@ -374,7 +374,7 @@ We recognize security researchers who responsibly disclose vulnerabilities:
 
 ## 📞 Security Contact
 
-**Primary Contact:** security@fthtrading.com
+**Primary Contact:** security@unykorn.org
 
 **PGP Key:** [Link to public key] *(coming soon)*
 

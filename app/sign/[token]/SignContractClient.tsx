@@ -83,7 +83,7 @@ export default function SignContractClient({ token }: { token: string }) {
           <h1 className="text-xl font-semibold text-gray-900 mb-2">Signing Link Error</h1>
           <p className="text-gray-500 mb-6">{error}</p>
           <p className="text-sm text-gray-400">
-            Contact <a href="mailto:contracts@fthtrading.com" className="underline">contracts@fthtrading.com</a> to request a new link.
+            Contact <a href="mailto:contracts@unykorn.org" className="underline">contracts@unykorn.org</a> to request a new link.
           </p>
         </div>
       </div>

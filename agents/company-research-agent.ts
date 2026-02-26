@@ -1,4 +1,4 @@
-﻿/**
+/**
  * CompanyResearchAgent
  *
  * Researches companies from LAWFUL PUBLIC SOURCES ONLY.
@@ -59,10 +59,10 @@ class CompanyResearchAgent {
    * Research a company from its public website.
    *
    * Flow:
-   * 1. Fetch homepage → extract company description, industry, address
-   * 2. Fetch /about or /team → extract publicly listed executive names
-   * 3. Fetch /contact → extract publicly listed emails and address
-   * 4. AI analysis → score commodity fit, infer industry positioning
+   * 1. Fetch homepage ? extract company description, industry, address
+   * 2. Fetch /about or /team ? extract publicly listed executive names
+   * 3. Fetch /contact ? extract publicly listed emails and address
+   * 4. AI analysis ? score commodity fit, infer industry positioning
    * 5. Persist to companies table
    *
    * @param websiteUrl  Full URL, e.g. 'https://acme.com'
@@ -78,19 +78,19 @@ class CompanyResearchAgent {
     const rawData: Record<string, any> = {};
     const publicContacts: PublicContact[] = [];
 
-    // ─── 1. Fetch and parse public pages ───────────────────────────────
+    // --- 1. Fetch and parse public pages -------------------------------
     const pages = await this.fetchPublicPages(websiteUrl);
     rawData.pages_fetched = pages.map((p) => p.url);
 
-    // ─── 2. Extract structured data via AI analysis ────────────────────
+    // --- 2. Extract structured data via AI analysis --------------------
     const combinedText = pages.map((p) => `\n\n=== ${p.url} ===\n${p.text}`).join('');
     const aiAnalysis = await this.analyzeWithAI(combinedText, domain, targetCommodities);
 
-    // ─── 3. Extract publicly listed contacts from text ─────────────────
+    // --- 3. Extract publicly listed contacts from text -----------------
     const extractedContacts = await this.extractPublicContacts(combinedText, pages);
     publicContacts.push(...extractedContacts);
 
-    // ─── 4. Build result ────────────────────────────────────────────────
+    // --- 4. Build result ------------------------------------------------
     const result: CompanyResearchResult = {
       name: aiAnalysis.company_name || domain,
       domain,
@@ -128,7 +128,7 @@ class CompanyResearchAgent {
       try {
         const response = await fetch(url, {
           headers: {
-            'User-Agent': 'FTHTradingBot/1.0 (business research; contact@fthtrading.com)',
+            'User-Agent': 'FTHTradingBot/1.0 (business research; contact@unykorn.org)',
           },
           signal: AbortSignal.timeout(8000),
         });
@@ -350,7 +350,7 @@ If no contacts found, return [].`;
       `;
     }
 
-    console.log(`[${this.name}] ✅ Persisted: ${result.name} (${companyId})`);
+    console.log(`[${this.name}] ? Persisted: ${result.name} (${companyId})`);
     return companyId;
   }
 

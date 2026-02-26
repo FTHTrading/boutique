@@ -165,7 +165,7 @@ curl https://your-domain.vercel.app/dashboard/deals
 
 Configure in Clerk Dashboard → Users → Public Metadata:
 
-**Compliance Officer** (sarah.chen@fthtrading.com):
+**Compliance Officer** (sarah.chen@unykorn.org):
 ```json
 {
   "role": "compliance_officer",
@@ -173,7 +173,7 @@ Configure in Clerk Dashboard → Users → Public Metadata:
 }
 ```
 
-**Legal Counsel** (michael.rodriguez@fthtrading.com):
+**Legal Counsel** (michael.rodriguez@unykorn.org):
 ```json
 {
   "role": "legal_counsel",

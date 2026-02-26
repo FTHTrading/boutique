@@ -71,7 +71,7 @@ FTHTrading Insights provides institutional-grade commodity intelligence based on
 ## Contact
 
 Questions about a specific market or commodity?  
-[Email our advisory team](mailto:insights@fthtrading.com)
+[Email our advisory team](mailto:insights@unykorn.org)
 
 ---
 

@@ -554,12 +554,12 @@ compliance_automation_notes: |
 
 For compliance questions or system support:
 
-- **Compliance Officer**: Sarah Chen (sarah.chen@fthtrading.com)
-- **Legal Counsel**: Michael Rodriguez (michael.rodriguez@fthtrading.com)
-- **System Administrator**: DevOps team (devops@fthtrading.com)
+- **Compliance Officer**: Sarah Chen (sarah.chen@unykorn.org)
+- **Legal Counsel**: Michael Rodriguez (michael.rodriguez@unykorn.org)
+- **System Administrator**: DevOps team (devops@unykorn.org)
 
 **Emergency Escalation** (CRITICAL flags requiring immediate legal counsel):
-- Email: compliance-emergency@fthtrading.com
+- Email: compliance-emergency@unykorn.org
 - Phone: [to be configured]
 
 ---

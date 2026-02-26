@@ -279,13 +279,13 @@ When Panama Canal was blocked (2023), our Brazilian suppliers rerouted via Mexic
 **Annual Volume:** $XXM (2025)  
 
 **Inquiries:**  
-- Coffee & Agricultural: [sourcing@fthtrading.com](mailto:sourcing@fthtrading.com)  
-- Precious Metals: [metals@fthtrading.com](mailto:metals@fthtrading.com)  
-- Base Metals & Energy: [industrial@fthtrading.com](mailto:industrial@fthtrading.com)  
-- Compliance & Legal: [compliance@fthtrading.com](mailto:compliance@fthtrading.com)
+- Coffee & Agricultural: [sourcing@unykorn.org](mailto:sourcing@unykorn.org)  
+- Precious Metals: [metals@unykorn.org](mailto:metals@unykorn.org)  
+- Base Metals & Energy: [industrial@unykorn.org](mailto:industrial@unykorn.org)  
+- Compliance & Legal: [compliance@unykorn.org](mailto:compliance@unykorn.org)
 
 **Advisory & AI Infrastructure:**  
-[boutique@fthtrading.com](mailto:boutique@fthtrading.com)
+[boutique@unykorn.org](mailto:boutique@unykorn.org)
 
 ---
 

@@ -420,7 +420,7 @@ For infrastructure changes:
 
 **DO NOT** open public issues for security vulnerabilities.
 
-Email: security@fthtrading.com
+Email: security@unykorn.org
 
 Include:
 - Vulnerability description
@@ -443,7 +443,7 @@ Include:
 - **GitHub Issues** – Bug reports, feature requests
 - **GitHub Discussions** – General questions, ideas
 - **Pull Requests** – Code contributions
-- **Email** – security@fthtrading.com (security only)
+- **Email** – security@unykorn.org (security only)
 
 ---
 

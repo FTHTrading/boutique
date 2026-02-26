@@ -223,7 +223,7 @@ export default function TeamPage() {
                   type="email"
                   value={newMember.email}
                   onChange={e => setNewMember(p => ({ ...p, email: e.target.value }))}
-                  placeholder="jane@fthtrading.com"
+                  placeholder="jane@unykorn.org"
                   className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>

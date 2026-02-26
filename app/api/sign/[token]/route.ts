@@ -1,11 +1,11 @@
-ï»¿export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/sql';
 import { ContractAgent } from '@/agents/contract-agent';
 
 const contractAgent = new ContractAgent();
 
-// GET /api/sign/[token] â€” fetch contract for review (public, no auth)
+// GET /api/sign/[token] — fetch contract for review (public, no auth)
 export async function GET(
   _req: NextRequest,
   { params }: { params: { token: string } }
@@ -45,7 +45,7 @@ export async function GET(
       const expires = new Date(contract.esign_expires_at);
       if (expires < new Date()) {
         return NextResponse.json(
-          { success: false, error: 'This signing link has expired. Please contact contracts@fthtrading.com for a new link.' },
+          { success: false, error: 'This signing link has expired. Please contact contracts@unykorn.org for a new link.' },
           { status: 410 }
         );
       }
@@ -58,7 +58,7 @@ export async function GET(
   }
 }
 
-// POST /api/sign/[token] â€” execute signature (public, no auth)
+// POST /api/sign/[token] — execute signature (public, no auth)
 export async function POST(
   req: NextRequest,
   { params }: { params: { token: string } }

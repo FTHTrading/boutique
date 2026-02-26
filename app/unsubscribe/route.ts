@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
   <p>${decodeURIComponent(email)} has been removed from all FTH Trading commercial emails.</p>
   <p>This takes effect immediately. You will not receive further commercial emails from FTH Trading.</p>
   <p>If you believe this was done in error, please reply directly to any previous email from us or 
-  contact <a href="mailto:compliance@fthtrading.com">compliance@fthtrading.com</a>.</p>
+  contact <a href="mailto:compliance@unykorn.org">compliance@unykorn.org</a>.</p>
   <hr style="margin:40px 0;border:none;border-top:1px solid #e5e7eb">
   <p style="font-size:11px;color:#9ca3af">FTH Trading | Global Commodity Advisory | Est. 1976</p>
 </body>
