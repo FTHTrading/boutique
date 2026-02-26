@@ -131,6 +131,20 @@ const CATEGORY_COLORS: Record<string, string> = {
   'Compliance': 'text-red-400 border-red-900/40 bg-red-950/30',
 }
 
+export function generateStaticParams() {
+  return [
+    'ucp-600-lc-structuring-guide',
+    'xrpl-commodity-escrow',
+    'ofac-sanctions-commodity-trade',
+    'incoterms-guide-fob-cif',
+    'rwa-commodity-tokenization',
+    'sblc-bg-trade-finance',
+    'kyc-kyb-commodity-buyers',
+    'stellar-anchor-settlement',
+    'fatf-grey-list-impact',
+  ].map((slug) => ({ slug }))
+}
+
 export default function InsightPost({ params }: { params: { slug: string } }) {
   const post = getPost(params.slug)
   if (!post) notFound()
