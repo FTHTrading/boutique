@@ -26,6 +26,7 @@ jobs:
           cache: 'npm'
 
       - name: Setup Pages
+        id: pages
         uses: actions/configure-pages@v5
         with:
           static_site_generator: next
@@ -48,7 +49,10 @@ jobs:
       - name: Build
         run: npm run build
         env:
+          GITHUB_ACTIONS: 'true'
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          NEXT_TELEMETRY_DISABLED: '1'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

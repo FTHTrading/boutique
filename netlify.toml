@@ -1,6 +1,42 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+  command   = "npm run build"
+  publish   = ".next"
+
+[build.environment]
+  NODE_VERSION             = "20"
+  NEXT_TELEMETRY_DISABLED  = "1"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Security + performance headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection       = "1; mode=block"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+    Permissions-Policy     = "camera=(), microphone=(), geolocation=()"
+
+# Immutable cache for hashed Next.js static assets
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Convenience redirects
+[[redirects]]
+  from   = "/portal"
+  to     = "/sign-in"
+  status = 301
+
+[[redirects]]
+  from   = "/login"
+  to     = "/sign-in"
+  status = 301
+
+[[redirects]]
+  from   = "/register"
+  to     = "/sign-up"
+  status = 301
