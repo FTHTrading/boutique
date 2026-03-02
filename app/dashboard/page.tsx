@@ -130,6 +130,40 @@ const sections = [
       },
     ],
   },
+  {
+    group: 'Prop Sharing',
+    color: 'amber',
+    items: [
+      {
+        href: '/dashboard/prop-sharing',
+        label: 'Prop Overview',
+        description: 'View prop trading program metrics — active accounts, total P&L, funded capital, and risk events at a glance.',
+        icon: TrendingUp,
+        cta: 'View Dashboard',
+      },
+      {
+        href: '/dashboard/prop-sharing/programs',
+        label: 'Programs',
+        description: 'Create and manage prop trading programs with customizable evaluation rules, funding tiers, and profit splits.',
+        icon: DollarSign,
+        cta: 'Manage Programs',
+      },
+      {
+        href: '/dashboard/prop-sharing/accounts',
+        label: 'Trader Accounts',
+        description: 'Track trader evaluations, funded accounts, balances, drawdowns, and win rates across all programs.',
+        icon: Users,
+        cta: 'View Accounts',
+      },
+      {
+        href: '/dashboard/prop-sharing/risk',
+        label: 'Risk Monitor',
+        description: 'Real-time risk events: drawdown breaches, position limit alerts, and daily loss violations requiring action.',
+        icon: AlertTriangle,
+        cta: 'Monitor Risk',
+      },
+    ],
+  },
 ]
 
 const colorMap: Record<string, { bg: string; icon: string; badge: string; border: string }> = {

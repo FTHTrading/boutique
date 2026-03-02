@@ -328,3 +328,196 @@ export interface LeadIntakeForm {
   
   lead_source?: string;
 }
+
+// ============================================================
+// Prop Sharing Layer — Proprietary Trading + Profit Sharing
+// ============================================================
+
+export type PropProgramStatus = 'active' | 'paused' | 'archived';
+export type PropAccountPhase = 'evaluation' | 'verification' | 'funded' | 'suspended' | 'terminated';
+export type PropPayoutStatus = 'pending' | 'approved' | 'processing' | 'paid' | 'disputed' | 'cancelled';
+export type PropTradeSide = 'long' | 'short';
+export type PropTradeStatus = 'open' | 'closed' | 'cancelled';
+export type PropRiskSeverity = 'warning' | 'breach' | 'critical';
+
+export interface PropProgram {
+  program_id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  commodity_focus?: string[];
+  status: PropProgramStatus;
+
+  // Funding
+  funded_capital: number;
+  currency: string;
+
+  // Evaluation Rules
+  eval_duration_days: number;
+  eval_profit_target: number;
+  eval_max_drawdown: number;
+  eval_daily_loss_limit: number;
+  eval_min_trading_days: number;
+  eval_fee: number;
+
+  // Funded Account Rules
+  max_drawdown: number;
+  daily_loss_limit: number;
+  max_position_size?: number;
+  max_open_positions?: number;
+  leverage_limit?: number;
+  scaling_plan?: Record<string, string>;
+
+  // Profit Split
+  trader_profit_pct: number;
+  firm_profit_pct: number;
+  payout_frequency: 'weekly' | 'biweekly' | 'monthly';
+  min_payout_amount?: number;
+  first_payout_delay?: number;
+
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface PropAccount {
+  account_id: string;
+  account_number: string;
+  program_id: string;
+  member_id?: string;
+
+  // Trader Info
+  trader_name: string;
+  trader_email: string;
+  trader_country?: string;
+  trader_experience?: 'beginner' | 'intermediate' | 'advanced' | 'professional';
+
+  // Account State
+  phase: PropAccountPhase;
+  starting_capital: number;
+  current_balance: number;
+  peak_balance: number;
+  current_drawdown: number;
+  daily_pnl: number;
+  total_pnl: number;
+  total_trades: number;
+  winning_trades: number;
+  losing_trades: number;
+  active_trading_days: number;
+
+  // Evaluation Tracking
+  eval_started_at?: Date;
+  eval_deadline?: Date;
+  eval_passed?: boolean;
+  eval_passed_at?: Date;
+
+  // Funded Tracking
+  funded_at?: Date;
+  last_payout_at?: Date;
+  total_payouts: number;
+
+  // Risk
+  risk_score: number;
+  risk_flags?: Array<{ rule: string; timestamp: string; detail: string }>;
+  suspended_at?: Date;
+  suspension_reason?: string;
+  terminated_at?: Date;
+  termination_reason?: string;
+
+  notes?: string;
+  created_at: Date;
+  updated_at: Date;
+
+  // Joined fields
+  program_name?: string;
+  program_slug?: string;
+}
+
+export interface PropTrade {
+  trade_id: string;
+  account_id: string;
+  trade_number: string;
+  commodity: string;
+  side: PropTradeSide;
+  quantity: number;
+  quantity_unit: string;
+  entry_price: number;
+  exit_price?: number;
+  stop_loss?: number;
+  take_profit?: number;
+
+  pnl?: number;
+  pnl_pct?: number;
+  fees: number;
+
+  status: PropTradeStatus;
+  opened_at: Date;
+  closed_at?: Date;
+  position_size_pct?: number;
+  risk_reward_ratio?: number;
+  notes?: string;
+  created_at: Date;
+}
+
+export interface PropPayout {
+  payout_id: string;
+  account_id: string;
+  program_id: string;
+
+  period_start: Date;
+  period_end: Date;
+  period_label?: string;
+
+  gross_profit: number;
+  trader_share_pct: number;
+  trader_payout: number;
+  firm_share: number;
+  fees_deducted: number;
+
+  status: PropPayoutStatus;
+  approved_by?: string;
+  approved_at?: Date;
+  paid_at?: Date;
+  payment_method?: string;
+  payment_reference?: string;
+  notes?: string;
+  created_at: Date;
+  updated_at: Date;
+
+  // Joined
+  trader_name?: string;
+  account_number?: string;
+  program_name?: string;
+}
+
+export interface PropRiskEvent {
+  event_id: string;
+  account_id: string;
+  trade_id?: string;
+
+  rule_violated: string;
+  severity: PropRiskSeverity;
+  description: string;
+  threshold_value?: number;
+  actual_value?: number;
+
+  resolved: boolean;
+  resolved_by?: string;
+  resolved_at?: Date;
+  resolution_notes?: string;
+  action_taken?: string;
+
+  created_at: Date;
+}
+
+export interface PropDashboardMetrics {
+  total_programs: number;
+  active_programs: number;
+  total_accounts: number;
+  accounts_by_phase: Record<PropAccountPhase, number>;
+  total_funded_capital: number;
+  total_pnl: number;
+  total_payouts_distributed: number;
+  pending_payouts: number;
+  active_risk_events: number;
+  avg_win_rate: number;
+}

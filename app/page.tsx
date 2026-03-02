@@ -19,6 +19,10 @@ import {
   Leaf,
   Gem,
   Cog,
+  Target,
+  DollarSign,
+  LineChart,
+  ShieldCheck,
 } from 'lucide-react'
 
 export default function Home() {
@@ -38,6 +42,7 @@ export default function Home() {
             {[
               ['Commodities', '/commodities'],
               ['RWA', '/rwa'],
+              ['Prop Sharing', '/prop-sharing'],
               ['Insights', '/insights'],
               ['Brokers', '/brokers'],
               ['Request Terms', '/request-terms'],
@@ -190,6 +195,44 @@ export default function Home() {
               </Link>
               <Link href="/request-terms" className="inline-flex items-center gap-2 border border-white/10 bg-white/5 hover:bg-white/10 text-[#efebe9] font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
                 Request Tokenized Terms
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* -- PROP SHARING ------------------------------------- */}
+      <section className="max-w-5xl mx-auto px-6 py-24">
+        <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-white/[0.02] p-8 md:p-12">
+          <div className="absolute left-0 bottom-0 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(120,53,15,0.12),transparent_70%)]" />
+          <div className="relative">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-amber-950/80 border border-amber-800/30 flex items-center justify-center">
+                <TrendingUp size={18} className="text-amber-500" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold tracking-widest uppercase text-amber-600">Funded Trading</p>
+                <h2 className="text-2xl md:text-3xl font-bold text-[#efebe9]">Prop Sharing Program</h2>
+              </div>
+            </div>
+            <p className="text-[#a1887f] max-w-2xl mb-10 leading-relaxed">
+              Trade commodity markets with FTH-funded capital. Pass our evaluation, prove your edge, and receive a funded account with institutional profit-sharing &mdash; up to 90% trader / 10% firm split.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+              {propSharingPoints.map(({ icon: Icon, title, body }) => (
+                <div key={title} className="bg-white/[0.03] border border-white/5 rounded-xl p-5">
+                  <Icon size={16} className="text-amber-600 mb-3" />
+                  <p className="font-semibold text-sm text-[#efebe9] mb-1">{title}</p>
+                  <p className="text-xs text-[#6d4c41] leading-relaxed">{body}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/prop-sharing" className="inline-flex items-center gap-2 bg-amber-700 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
+                View Programs <ArrowRight size={14} />
+              </Link>
+              <Link href="/sign-up" className="inline-flex items-center gap-2 border border-white/10 bg-white/5 hover:bg-white/10 text-[#efebe9] font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
+                Apply as Trader
               </Link>
             </div>
           </div>
@@ -458,10 +501,17 @@ const insights = [
   },
 ]
 
+const propSharingPoints: Array<{ icon: React.ElementType; title: string; body: string }> = [
+  { icon: Target, title: 'Structured Evaluation', body: 'Multi-phase assessment: profit targets, drawdown limits, and minimum trading days before funding.' },
+  { icon: DollarSign, title: 'Funded Capital', body: 'Trade with $10K to $500K+ in funded capital across multiple commodity markets.' },
+  { icon: LineChart, title: 'Real-Time Risk Engine', body: 'Automated drawdown monitoring, position limits, and daily loss tracking with instant alerts.' },
+  { icon: ShieldCheck, title: 'Transparent Payouts', body: 'Bi-weekly or monthly profit-share payouts. Full audit trail. No hidden fees or clawbacks.' },
+]
+
 const footerLinks: Array<{ section: string; links: [string, string][] }> = [
   {
     section: 'Platform',
-    links: [['Commodities', '/commodities'], ['RWA', '/rwa'], ['Request Terms', '/request-terms'], ['Broker Inquiry', '/brokers']],
+    links: [['Commodities', '/commodities'], ['RWA', '/rwa'], ['Prop Sharing', '/prop-sharing'], ['Request Terms', '/request-terms'], ['Broker Inquiry', '/brokers']],
   },
   {
     section: 'Insights',

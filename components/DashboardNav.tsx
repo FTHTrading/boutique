@@ -18,7 +18,11 @@ import {
   Menu,
   X,
   Star,
-  BarChart2
+  BarChart2,
+  TrendingUp,
+  Briefcase,
+  AlertTriangle,
+  Wallet,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -65,6 +69,16 @@ const navSections = [
       { href: '/dashboard/funding/instruments', label: 'Banking Instruments', icon: FileText, description: 'SBLC, LC, BG' },
       { href: '/dashboard/funding/settlement', label: 'Settlement', icon: Globe, description: 'FIAT / XRPL / Stellar' },
       { href: '/dashboard/funding/anchors', label: 'Proof Anchors', icon: Anchor, description: 'Blockchain audit trail' },
+    ]
+  },
+  {
+    label: 'Prop Sharing',
+    items: [
+      { href: '/dashboard/prop-sharing', label: 'Prop Overview', icon: TrendingUp, description: 'Program dashboard' },
+      { href: '/dashboard/prop-sharing/programs', label: 'Programs', icon: Briefcase, description: 'Funding tiers & rules' },
+      { href: '/dashboard/prop-sharing/accounts', label: 'Trader Accounts', icon: Users, description: 'Manage traders' },
+      { href: '/dashboard/prop-sharing/payouts', label: 'Payouts', icon: Wallet, description: 'Profit-share payments' },
+      { href: '/dashboard/prop-sharing/risk', label: 'Risk Monitor', icon: AlertTriangle, description: 'Risk events & alerts' },
     ]
   },
 ]
