@@ -23,33 +23,33 @@ interface Deal {
 
 function ReadinessGauge({ score }: { score: number }) {
   const color =
-    score >= 80 ? 'text-green-400' :
-    score >= 50 ? 'text-yellow-400' :
-    'text-red-400';
+    score >= 80 ? 'text-green-600' :
+    score >= 50 ? 'text-yellow-600' :
+    'text-red-600';
   const ring =
     score >= 80 ? 'ring-green-400' :
     score >= 50 ? 'ring-yellow-400' :
     'ring-red-400';
 
   return (
-    <div className={`flex flex-col items-center justify-center w-28 h-28 rounded-full ring-4 ${ring} bg-zinc-900`}>
+    <div className={`flex flex-col items-center justify-center w-28 h-28 rounded-full ring-4 ${ring} bg-white`}>
       <span className={`text-3xl font-bold ${color}`}>{score}</span>
-      <span className="text-xs text-zinc-400">/ 100</span>
+      <span className="text-xs text-gray-400">/ 100</span>
     </div>
   );
 }
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    PENDING: 'bg-zinc-700 text-zinc-300',
-    SUBMITTED: 'bg-blue-900 text-blue-300',
-    UNDER_REVIEW: 'bg-yellow-900 text-yellow-300',
-    APPROVED: 'bg-green-900 text-green-300',
-    REJECTED: 'bg-red-900 text-red-300',
-    WAIVED: 'bg-purple-900 text-purple-300',
+    PENDING: 'bg-gray-100 text-gray-600',
+    SUBMITTED: 'bg-blue-50 text-blue-700',
+    UNDER_REVIEW: 'bg-yellow-50 text-yellow-700',
+    APPROVED: 'bg-green-50 text-green-700',
+    REJECTED: 'bg-red-50 text-red-700',
+    WAIVED: 'bg-purple-50 text-purple-700',
   };
   return (
-    <span className={`px-2 py-0.5 rounded text-xs font-medium ${map[status] ?? 'bg-zinc-700 text-zinc-300'}`}>
+    <span className={`px-2 py-0.5 rounded text-xs font-medium ${map[status] ?? 'bg-gray-100 text-gray-600'}`}>
       {status}
     </span>
   );
@@ -90,27 +90,27 @@ export default function FundingOverviewPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Funding Overview</h1>
-          <p className="text-sm text-zinc-400 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900">Funding Overview</h1>
+          <p className="text-sm text-gray-500 mt-1">
             Orchestration layer — not a bank. Instruments require human review before execution.
           </p>
         </div>
         <div className="flex gap-3">
           <Link
             href="/dashboard/funding/instruments"
-            className="px-4 py-2 rounded bg-zinc-800 text-zinc-200 hover:bg-zinc-700 text-sm"
+            className="px-4 py-2 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium transition-colors"
           >
             Instruments
           </Link>
           <Link
             href="/dashboard/funding/settlement"
-            className="px-4 py-2 rounded bg-zinc-800 text-zinc-200 hover:bg-zinc-700 text-sm"
+            className="px-4 py-2 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium transition-colors"
           >
             Settlement
           </Link>
           <Link
             href="/dashboard/funding/anchors"
-            className="px-4 py-2 rounded bg-zinc-800 text-zinc-200 hover:bg-zinc-700 text-sm"
+            className="px-4 py-2 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium transition-colors"
           >
             Proof Anchors
           </Link>
@@ -119,11 +119,11 @@ export default function FundingOverviewPage() {
 
       {/* Deal Selector */}
       <div className="flex items-center gap-3">
-        <label className="text-sm text-zinc-400">Deal:</label>
+        <label className="text-sm text-gray-500">Deal:</label>
         <select
           value={selectedDeal}
           onChange={(e) => setSelectedDeal(e.target.value)}
-          className="bg-zinc-800 text-zinc-200 border border-zinc-700 rounded px-3 py-1.5 text-sm"
+          className="bg-white text-gray-900 border border-gray-200 rounded px-3 py-1.5 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         >
           {deals.map((d) => (
             <option key={d.id} value={d.id}>
@@ -136,35 +136,35 @@ export default function FundingOverviewPage() {
       {/* Score + Stats */}
       {selectedDeal && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="col-span-2 md:col-span-1 bg-zinc-900 border border-zinc-800 rounded-lg p-5 flex items-center justify-center">
+          <div className="col-span-2 md:col-span-1 bg-white border border-gray-100 rounded-xl p-5 flex items-center justify-center shadow-sm">
             <div className="text-center space-y-2">
-              <p className="text-xs text-zinc-400 uppercase tracking-wide">Readiness Score</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Readiness Score</p>
               <ReadinessGauge score={readinessScore} />
             </div>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
-            <p className="text-xs text-zinc-400 uppercase">Critical Pending</p>
-            <p className="text-3xl font-bold text-red-400 mt-1">{critical.length}</p>
-            <p className="text-xs text-zinc-500 mt-1">blocks funding</p>
+          <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+            <p className="text-xs text-gray-500 uppercase">Critical Pending</p>
+            <p className="text-3xl font-bold text-red-600 mt-1">{critical.length}</p>
+            <p className="text-xs text-gray-400 mt-1">blocks funding</p>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
-            <p className="text-xs text-zinc-400 uppercase">Optional Pending</p>
-            <p className="text-3xl font-bold text-yellow-400 mt-1">{optional.length}</p>
-            <p className="text-xs text-zinc-500 mt-1">recommended</p>
+          <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+            <p className="text-xs text-gray-500 uppercase">Optional Pending</p>
+            <p className="text-3xl font-bold text-yellow-600 mt-1">{optional.length}</p>
+            <p className="text-xs text-gray-400 mt-1">recommended</p>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
-            <p className="text-xs text-zinc-400 uppercase">Completed</p>
-            <p className="text-3xl font-bold text-green-400 mt-1">{approved.length}</p>
-            <p className="text-xs text-zinc-500 mt-1">approved / waived</p>
+          <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+            <p className="text-xs text-gray-500 uppercase">Completed</p>
+            <p className="text-3xl font-bold text-green-600 mt-1">{approved.length}</p>
+            <p className="text-xs text-gray-400 mt-1">approved / waived</p>
           </div>
         </div>
       )}
 
       {/* Requirements Table */}
       {selectedDeal && (
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
-          <div className="px-5 py-3 border-b border-zinc-800 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-white">Requirements Checklist</h2>
+        <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+          <div className="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-gray-900">Requirements Checklist</h2>
             <button
               onClick={async () => {
                 const deal = deals.find((d) => d.id === selectedDeal);
@@ -188,22 +188,22 @@ export default function FundingOverviewPage() {
                 setReadinessScore(d.readinessScore ?? 0);
                 setLoading(false);
               }}
-              className="px-3 py-1 text-xs rounded bg-indigo-700 hover:bg-indigo-600 text-white"
+              className="px-3 py-1 text-xs rounded bg-amber-700 hover:bg-amber-600 text-white font-medium transition-colors"
             >
               {loading ? 'Analyzing...' : 'AI Structure Analysis'}
             </button>
           </div>
 
           {loading ? (
-            <div className="p-8 text-center text-zinc-500 text-sm">Analyzing…</div>
+            <div className="p-8 text-center text-gray-400 text-sm">Analyzing…</div>
           ) : requirements.length === 0 ? (
-            <div className="p-8 text-center text-zinc-500 text-sm">
+            <div className="p-8 text-center text-gray-400 text-sm">
               No requirements yet. Run AI Structure Analysis to generate them.
             </div>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-zinc-800 text-zinc-400 text-xs uppercase">
+                <tr className="border-b border-gray-100 text-gray-500 text-xs uppercase">
                   <th className="px-5 py-3 text-left">Requirement</th>
                   <th className="px-5 py-3 text-left">Type</th>
                   <th className="px-4 py-3 text-center">Critical</th>
@@ -213,20 +213,20 @@ export default function FundingOverviewPage() {
               </thead>
               <tbody>
                 {requirements.map((req) => (
-                  <tr key={req.id} className="border-b border-zinc-800/60 hover:bg-zinc-800/30">
-                    <td className="px-5 py-3 text-zinc-200">{req.label}</td>
-                    <td className="px-5 py-3 text-zinc-400">{req.requirement_type}</td>
+                  <tr key={req.id} className="border-b border-gray-50 hover:bg-gray-50/60">
+                    <td className="px-5 py-3 text-gray-900">{req.label}</td>
+                    <td className="px-5 py-3 text-gray-500">{req.requirement_type}</td>
                     <td className="px-4 py-3 text-center">
                       {req.is_critical ? (
-                        <span className="text-red-400 font-bold">●</span>
+                        <span className="text-red-500 font-bold">●</span>
                       ) : (
-                        <span className="text-zinc-600">○</span>
+                        <span className="text-gray-300">○</span>
                       )}
                     </td>
                     <td className="px-5 py-3">
                       <StatusBadge status={req.status} />
                     </td>
-                    <td className="px-5 py-3 text-zinc-400 text-xs">
+                    <td className="px-5 py-3 text-gray-400 text-xs">
                       {req.due_date ? new Date(req.due_date).toLocaleDateString() : '—'}
                     </td>
                   </tr>

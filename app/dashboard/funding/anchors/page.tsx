@@ -18,25 +18,23 @@ interface ProofAnchor {
   stellar_ledger: number | null;
   status: string;
   anchored_at: string;
-  // camelCase aliases from API response
   xrplTxHash?: string;
   stellarTxHash?: string;
 }
 
 const CHAIN_COLOR: Record<string, string> = {
-  XRPL: 'bg-purple-900 text-purple-300',
-  STELLAR: 'bg-blue-900 text-blue-300',
-  BOTH: 'bg-indigo-900 text-indigo-300',
+  XRPL: 'bg-purple-50 text-purple-700',
+  STELLAR: 'bg-blue-50 text-blue-700',
+  BOTH: 'bg-indigo-50 text-indigo-700',
 };
 
 const STATUS_COLOR: Record<string, string> = {
-  PENDING: 'bg-zinc-700 text-zinc-300',
-  SUBMITTED: 'bg-yellow-900 text-yellow-300',
-  CONFIRMED: 'bg-green-900 text-green-300',
-  FAILED: 'bg-red-900 text-red-400',
+  PENDING: 'bg-gray-100 text-gray-600',
+  SUBMITTED: 'bg-yellow-50 text-yellow-700',
+  CONFIRMED: 'bg-green-50 text-green-700',
+  FAILED: 'bg-red-50 text-red-700',
 };
 
-// Explorer URLs
 function xrplExplorer(txHash: string) {
   return `https://xrpscan.com/tx/${txHash}`;
 }
@@ -93,39 +91,39 @@ export default function AnchorsPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Proof Anchors</h1>
-          <p className="text-sm text-zinc-400 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900">Proof Anchors</h1>
+          <p className="text-sm text-gray-500 mt-1">
             Audit-grade SHA-256 hash anchoring to XRPL and Stellar ledgers
           </p>
         </div>
-        <Link href="/dashboard/funding" className="text-sm text-zinc-400 hover:text-white">
+        <Link href="/dashboard/funding" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
           ← Funding Overview
         </Link>
       </div>
 
       {/* Explainer */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-xs text-zinc-400 space-y-1">
-        <p className="text-zinc-300 font-medium">How it works</p>
+      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 text-xs text-gray-600 space-y-1">
+        <p className="text-gray-900 font-medium">How it works</p>
         <p>
           A SHA-256 hash of the target object (instrument, contract, message) is embedded in a
           transaction Memo on XRPL, or as a Stellar Memo Hash. The ledger transaction hash serves
           as tamper-evident evidence that the document existed in a specific state at a specific time.
         </p>
-        <p className="text-amber-400">
+        <p className="text-amber-700">
           Note: Anchoring does not transfer funds. It creates an immutable timestamp proof only.
         </p>
       </div>
 
       {/* New Anchor form */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5 space-y-4">
-        <h2 className="text-sm font-semibold text-white">Anchor a Document</h2>
+      <div className="bg-white border border-gray-100 rounded-xl p-5 space-y-4 shadow-sm">
+        <h2 className="text-sm font-semibold text-gray-900">Anchor a Document</h2>
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="text-xs text-zinc-400 block mb-1">Object Type</label>
+            <label className="text-xs text-gray-500 block mb-1">Object Type</label>
             <select
               value={anchorForm.objectType}
               onChange={(e) => setAnchorForm((f) => ({ ...f, objectType: e.target.value }))}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded px-3 py-2 text-sm text-zinc-200"
+              className="w-full bg-white border border-gray-200 rounded px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
             >
               <option value="INSTRUMENT">Instrument</option>
               <option value="CONTRACT">Contract</option>
@@ -134,21 +132,21 @@ export default function AnchorsPage() {
             </select>
           </div>
           <div>
-            <label className="text-xs text-zinc-400 block mb-1">Object ID (UUID)</label>
+            <label className="text-xs text-gray-500 block mb-1">Object ID (UUID)</label>
             <input
               type="text"
               value={anchorForm.objectId}
               onChange={(e) => setAnchorForm((f) => ({ ...f, objectId: e.target.value }))}
               placeholder="Paste object UUID…"
-              className="w-full bg-zinc-800 border border-zinc-700 rounded px-3 py-2 text-sm text-zinc-200"
+              className="w-full bg-white border border-gray-200 rounded px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
             />
           </div>
           <div>
-            <label className="text-xs text-zinc-400 block mb-1">Anchor Chain</label>
+            <label className="text-xs text-gray-500 block mb-1">Anchor Chain</label>
             <select
               value={anchorForm.chain}
               onChange={(e) => setAnchorForm((f) => ({ ...f, chain: e.target.value as typeof anchorForm.chain }))}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded px-3 py-2 text-sm text-zinc-200"
+              className="w-full bg-white border border-gray-200 rounded px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
             >
               <option value="XRPL">XRPL only</option>
               <option value="STELLAR">Stellar only</option>
@@ -159,34 +157,34 @@ export default function AnchorsPage() {
         <button
           onClick={submitAnchor}
           disabled={submitting || !anchorForm.objectId}
-          className="px-4 py-2 bg-purple-800 hover:bg-purple-700 text-white rounded text-sm disabled:opacity-50"
+          className="px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white rounded text-sm font-medium disabled:opacity-50 transition-colors"
         >
           {submitting ? 'Anchoring…' : 'Submit Anchor'}
         </button>
 
         {submitResult && (
-          <div className="bg-zinc-800 rounded p-3 text-xs space-y-1">
-            <p className="text-green-400 font-medium">Anchor Submitted</p>
-            <p><span className="text-zinc-400">Hash:</span> <span className="font-mono text-zinc-300">{submitResult.object_hash}</span></p>
+          <div className="bg-gray-50 border border-gray-100 rounded-lg p-3 text-xs space-y-1">
+            <p className="text-green-700 font-medium">Anchor Submitted</p>
+            <p><span className="text-gray-500">Hash:</span> <span className="font-mono text-gray-700">{submitResult.object_hash}</span></p>
             {submitResult.xrplTxHash && (
               <p>
-                <span className="text-zinc-400">XRPL TX: </span>
+                <span className="text-gray-500">XRPL TX: </span>
                 <a href={xrplExplorer(submitResult.xrplTxHash)} target="_blank" rel="noopener noreferrer"
-                  className="font-mono text-purple-400 hover:text-purple-300 underline break-all">
+                  className="font-mono text-purple-600 hover:text-purple-500 underline break-all">
                   {submitResult.xrplTxHash}
                 </a>
               </p>
             )}
             {submitResult.stellarTxHash && (
               <p>
-                <span className="text-zinc-400">Stellar TX: </span>
+                <span className="text-gray-500">Stellar TX: </span>
                 <a href={stellarExplorer(submitResult.stellarTxHash)} target="_blank" rel="noopener noreferrer"
-                  className="font-mono text-blue-400 hover:text-blue-300 underline break-all">
+                  className="font-mono text-blue-600 hover:text-blue-500 underline break-all">
                   {submitResult.stellarTxHash}
                 </a>
               </p>
             )}
-            <p><span className="text-zinc-400">Status:</span> <span className="text-yellow-300">{submitResult.status}</span></p>
+            <p><span className="text-gray-500">Status:</span> <span className="text-yellow-700">{submitResult.status}</span></p>
           </div>
         )}
       </div>
@@ -198,23 +196,23 @@ export default function AnchorsPage() {
           placeholder="Deal ID to load anchors…"
           value={dealId}
           onChange={(e) => setDealId(e.target.value)}
-          className="bg-zinc-800 border border-zinc-700 rounded px-3 py-2 text-sm text-zinc-200 w-80"
+          className="bg-white border border-gray-200 rounded px-3 py-2 text-sm text-gray-900 w-80 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
         />
         <button
           onClick={load}
-          className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded text-sm"
+          className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded text-sm font-medium transition-colors"
         >
           Load Anchors
         </button>
       </div>
 
       {/* Anchors table */}
-      {loading && <div className="text-zinc-500 text-sm text-center py-4">Loading…</div>}
+      {loading && <div className="text-gray-400 text-sm text-center py-4">Loading…</div>}
       {!loading && anchors.length > 0 && (
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
+        <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800 text-zinc-400 text-xs uppercase">
+              <tr className="border-b border-gray-100 text-gray-500 text-xs uppercase">
                 <th className="px-5 py-3 text-left">Type</th>
                 <th className="px-5 py-3 text-left">Hash (SHA-256)</th>
                 <th className="px-4 py-3 text-left">Chain</th>
@@ -226,10 +224,10 @@ export default function AnchorsPage() {
             </thead>
             <tbody>
               {anchors.map((a) => (
-                <tr key={a.id} className="border-b border-zinc-800/60 hover:bg-zinc-800/30">
-                  <td className="px-5 py-3 text-zinc-200">{a.object_type}</td>
+                <tr key={a.id} className="border-b border-gray-50 hover:bg-gray-50/60">
+                  <td className="px-5 py-3 text-gray-900">{a.object_type}</td>
                   <td className="px-5 py-3">
-                    <span className="font-mono text-xs text-zinc-400 break-all">
+                    <span className="font-mono text-xs text-gray-500 break-all">
                       {a.object_hash.slice(0, 24)}…
                     </span>
                   </td>
@@ -241,7 +239,7 @@ export default function AnchorsPage() {
                   <td className="px-5 py-3">
                     {a.xrpl_tx_hash ? (
                       <a href={xrplExplorer(a.xrpl_tx_hash)} target="_blank" rel="noopener noreferrer"
-                        className="font-mono text-xs text-purple-400 hover:text-purple-300 underline">
+                        className="font-mono text-xs text-purple-600 hover:text-purple-500 underline">
                         {a.xrpl_tx_hash.slice(0, 16)}…
                       </a>
                     ) : '—'}
@@ -249,7 +247,7 @@ export default function AnchorsPage() {
                   <td className="px-5 py-3">
                     {a.stellar_tx_hash ? (
                       <a href={stellarExplorer(a.stellar_tx_hash)} target="_blank" rel="noopener noreferrer"
-                        className="font-mono text-xs text-blue-400 hover:text-blue-300 underline">
+                        className="font-mono text-xs text-blue-600 hover:text-blue-500 underline">
                         {a.stellar_tx_hash.slice(0, 16)}…
                       </a>
                     ) : '—'}
@@ -259,7 +257,7 @@ export default function AnchorsPage() {
                       {a.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-zinc-400 text-xs">
+                  <td className="px-4 py-3 text-gray-400 text-xs">
                     {new Date(a.anchored_at).toLocaleString()}
                   </td>
                 </tr>
