@@ -3,7 +3,7 @@
  * Reusable PDFKit helpers for institutional document generation.
  */
 import PDFDocument from 'pdfkit'
-import { colors, fonts, sizes, layout, docMeta } from './theme'
+import { colors, fonts, sizes, layout, docMeta, getVersionFooter } from './theme'
 
 // ── Types ─────────────────────────────────────────────
 
@@ -128,9 +128,9 @@ export function drawCoverPage(
 
   const metaItems = [
     { label: 'Date', value: date || new Date().toISOString().split('T')[0] },
-    { label: 'Version', value: version || docMeta.policyVersion },
+    { label: 'Policy', value: `v${version || docMeta.policyVersion}` },
     { label: 'Engine', value: `v${docMeta.engineVersion}` },
-    { label: 'Classification', value: classification || 'Internal' },
+    { label: 'Build', value: getVersionFooter().split(' · ').slice(-1)[0] },
   ]
 
   let metaX = sizes.marginLeft
@@ -239,22 +239,35 @@ export function addPageHeaders(
 
     // Footer
     doc
-      .rect(sizes.marginLeft, sizes.pageHeight - 40, layout.contentWidth, 0.5)
+      .rect(sizes.marginLeft, sizes.pageHeight - 44, layout.contentWidth, 0.5)
       .fill(colors.gray200)
 
+    // Version footer line
+    doc
+      .font(fonts.mono)
+      .fontSize(5.5)
+      .fillColor(colors.gray300)
+      .text(
+        getVersionFooter(),
+        sizes.marginLeft,
+        sizes.pageHeight - 38,
+        { width: layout.contentWidth, align: 'center' }
+      )
+
+    // Confidentiality + page number
     doc
       .font(fonts.body)
       .fontSize(sizes.footnote)
       .fillColor(colors.gray400)
       .text(
-        `Confidential — ${docMeta.companyName} · Policy v${docMeta.policyVersion}`,
+        `Confidential — ${docMeta.companyName}`,
         sizes.marginLeft,
-        sizes.pageHeight - 32
+        sizes.pageHeight - 28
       )
       .text(
         `Page ${i + 1}`,
         sizes.marginLeft,
-        sizes.pageHeight - 32,
+        sizes.pageHeight - 28,
         { width: layout.contentWidth, align: 'right' }
       )
   }

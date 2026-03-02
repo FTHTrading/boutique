@@ -9,7 +9,7 @@ import {
   calloutBox, dataTable, horizontalRule,
   addPageHeaders, renderToBuffer, ensureSpace,
 } from './components'
-import { colors, fonts, sizes, layout, docMeta } from './theme'
+import { colors, fonts, sizes, layout, docMeta, getVersionFooter, getCommitHash } from './theme'
 
 // ── Data Shape ────────────────────────────────────────
 
@@ -73,6 +73,51 @@ export async function generateGovernanceReport(data: GovernanceData): Promise<Bu
     date: dateStr,
     version: `${docMeta.policyVersion}-live`,
   })
+
+  // ── Live Governance State Badge ─────────────────────
+  const badgeY = 430
+  const badgeH = 60
+  const cw = layout.contentWidth
+
+  // Badge background
+  doc
+    .rect(sizes.marginLeft, badgeY, cw, badgeH)
+    .fill('#0A1F12')
+
+  // Green left accent
+  doc
+    .rect(sizes.marginLeft, badgeY, 4, badgeH)
+    .fill(colors.green)
+
+  // Badge icon dot
+  doc
+    .circle(sizes.marginLeft + 22, badgeY + badgeH / 2, 4)
+    .fill(colors.green)
+
+  // Badge title
+  doc
+    .font(fonts.bold)
+    .fontSize(8)
+    .fillColor(colors.green)
+    .text(
+      'GENERATED FROM LIVE GOVERNANCE STATE',
+      sizes.marginLeft + 36,
+      badgeY + 12,
+      { width: cw - 50 }
+    )
+
+  // Badge detail
+  doc
+    .font(fonts.body)
+    .fontSize(7)
+    .fillColor(colors.gray400)
+    .text(
+      `This report reflects live treasury, risk, and compounding data as of ${dateStr} ${timeStr} UTC. ` +
+      `Engine v${docMeta.engineVersion} · Policy ${docMeta.policyVersion} · Build ${getCommitHash()}`,
+      sizes.marginLeft + 36,
+      badgeY + 26,
+      { width: cw - 50, lineGap: 2 }
+    )
 
   // ── Page 2: Capital Overview ────────────────────────
   doc.addPage()

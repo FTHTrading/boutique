@@ -81,4 +81,29 @@ export const docMeta = {
   contactEmail: 'capital@fthtrading.com',
   engineVersion: '5.0',
   policyVersion: '2026.03',
+  simulationSuiteVersion: '1.0',
 } as const
+
+/** Build-time git short hash — falls back gracefully. */
+function resolveCommitHash(): string {
+  try {
+    const { execSync } = require('child_process')
+    return (execSync('git rev-parse --short HEAD', { encoding: 'utf8' }) as string).trim()
+  } catch {
+    return 'unknown'
+  }
+}
+
+let _commitHash: string | null = null
+
+/** Returns short commit hash (cached after first call). */
+export function getCommitHash(): string {
+  if (!_commitHash) _commitHash = resolveCommitHash()
+  return _commitHash
+}
+
+/** Full version footer string for every PDF. */
+export function getVersionFooter(): string {
+  const date = new Date().toISOString().split('T')[0]
+  return `FTH Prop v${docMeta.engineVersion} · Policy ${docMeta.policyVersion} · Sim Suite v${docMeta.simulationSuiteVersion} · ${date} · ${getCommitHash()}`
+}
