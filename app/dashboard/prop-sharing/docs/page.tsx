@@ -66,14 +66,22 @@ export default function PropSharingDocsPage() {
             Institutional documentation pack. Download any document instantly — the Governance Report is generated live from production data.
           </p>
         </div>
-        <a
-          href="/prop-sharing/docs"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 hover:text-amber-600 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-lg transition-colors"
-        >
-          <ExternalLink size={12} /> Public Docs Page
-        </a>
+        <div className="flex items-center gap-2 shrink-0">
+          <a
+            href="/dashboard/downloads"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 hover:text-amber-600 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <ExternalLink size={12} /> All Downloads
+          </a>
+          <a
+            href="/prop-sharing/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <ExternalLink size={12} /> Public Page
+          </a>
+        </div>
       </div>
 
       {/* Documents Grid */}
@@ -113,7 +121,7 @@ export default function PropSharingDocsPage() {
                 <div className="flex items-center gap-2 shrink-0">
                   {/* View in browser */}
                   <a
-                    href={`/api/prop-sharing/docs/${doc.slug}`}
+                    href={`/api/docs/${doc.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
@@ -122,7 +130,7 @@ export default function PropSharingDocsPage() {
                   </a>
                   {/* Download */}
                   <a
-                    href={`/api/prop-sharing/docs/${doc.slug}`}
+                    href={`/api/docs/${doc.slug}`}
                     download
                     className="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-amber-700 hover:bg-amber-600 px-3.5 py-2 rounded-lg transition-colors"
                   >
@@ -142,7 +150,7 @@ export default function PropSharingDocsPage() {
           <div>
             <p className="font-semibold text-amber-900 mb-1">On-Demand (API)</p>
             <p>
-              Every download link generates the PDF in real time via <code className="text-[11px] bg-amber-100 px-1 py-0.5 rounded">/api/prop-sharing/docs/&#123;slug&#125;</code>.
+              Every download link generates the PDF in real time via <code className="text-[11px] bg-amber-100 px-1 py-0.5 rounded">/api/docs/&#123;slug&#125;</code>.
               No files are stored — each PDF is built fresh with the current date, engine version, commit hash, and policy version stamped in the footer.
             </p>
           </div>

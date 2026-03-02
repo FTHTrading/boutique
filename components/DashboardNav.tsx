@@ -45,6 +45,7 @@ const navSections = [
     items: [
       { href: '/dashboard', label: 'Overview', icon: LayoutDashboard, description: 'Summary & metrics' },
       { href: '/dashboard/my-hub', label: 'My Hub', icon: Star, description: 'Personal command centre' },
+      { href: '/dashboard/downloads', label: 'Downloads & PDFs', icon: FileText, description: 'All platform documents' },
     ]
   },
   {

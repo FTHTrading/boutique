@@ -2,7 +2,7 @@
 /**
  * Static PDF Generation Script
  *
- * Generates pre-built copies of the 4 static documents to public/docs/.
+ * Generates pre-built copies of all static documents to public/docs/.
  * Run:  npx tsx scripts/generate-pdfs.ts
  *
  * The governance report is intentionally excluded — it must be
@@ -15,13 +15,39 @@ async function main() {
   const outDir = join(process.cwd(), 'public', 'docs')
   if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true })
 
-  console.log('── FTH Prop Sharing — Static PDF Generator ──\n')
+  console.log('── FTH Trading — Static PDF Generator ──\n')
 
   const docs: Array<{
     name: string
     filename: string
     generate: () => Promise<Buffer>
   }> = [
+    // ── Platform-wide ─────────────────────────
+    {
+      name: 'Platform Overview',
+      filename: 'FTH_Platform_Overview.pdf',
+      generate: async () => {
+        const { generatePlatformOverview } = await import('../lib/pdf/platform-overview')
+        return generatePlatformOverview()
+      },
+    },
+    {
+      name: 'Commodities Trading Guide',
+      filename: 'FTH_Commodities_Trading_Guide.pdf',
+      generate: async () => {
+        const { generateCommoditiesGuide } = await import('../lib/pdf/commodities-guide')
+        return generateCommoditiesGuide()
+      },
+    },
+    {
+      name: 'Terms & Definitions',
+      filename: 'FTH_Terms_and_Definitions.pdf',
+      generate: async () => {
+        const { generateTermsDefinitions } = await import('../lib/pdf/terms-definitions')
+        return generateTermsDefinitions()
+      },
+    },
+    // ── Prop Sharing ──────────────────────────
     {
       name: 'Architecture Overview',
       filename: 'FTH_Prop_Architecture_Overview.pdf',
@@ -75,7 +101,7 @@ async function main() {
   }
 
   console.log(`\n  Done: ${ok} generated, ${failed} failed`)
-  console.log('  Note: Governance report is dynamic — use /api/prop-sharing/docs/governance\n')
+  console.log('  Note: Governance report is dynamic — use /api/docs/governance\n')
 }
 
 main().catch((err) => {
