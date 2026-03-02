@@ -30,6 +30,7 @@ export default function PropSharingPage() {
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/" className="text-sm text-[#a1887f] hover:text-[#efebe9] transition-colors hidden sm:block">Home</Link>
+            <Link href="/prop-sharing/docs" className="text-sm text-[#a1887f] hover:text-[#efebe9] transition-colors hidden sm:block">Docs</Link>
             <Link href="/sign-up" className="text-sm font-medium bg-amber-700 hover:bg-amber-600 text-white px-4 py-2 rounded-lg transition-colors">Apply Now</Link>
           </div>
         </div>
