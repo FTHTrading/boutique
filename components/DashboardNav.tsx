@@ -105,7 +105,7 @@ const navSections = [
       { href: '/dashboard/prop-sharing/funnel', label: 'Funnel', icon: Target, description: 'Channel quality & cohorts' },
       { href: '/dashboard/prop-sharing/simulations', label: 'Simulations', icon: Activity, description: 'Stress tests & readiness' },
       { href: '/dashboard/prop-sharing/compounding', label: 'Compounding', icon: Coins, description: 'Capital reinvestment' },
-      { href: '/prop-sharing/docs', label: 'Docs & PDFs', icon: FileText, description: 'Institutional documents' },
+      { href: '/dashboard/prop-sharing/docs', label: 'Docs & PDFs', icon: FileText, description: 'Institutional documents' },
     ]
   },
 ]

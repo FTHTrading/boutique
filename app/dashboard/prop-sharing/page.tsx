@@ -77,7 +77,7 @@ export default function PropSharingDashboard() {
     { href: '/dashboard/prop-sharing/funnel', label: 'Funnel', description: 'Channel quality, cohort analysis, acquisition', icon: Target },
     { href: '/dashboard/prop-sharing/simulations', label: 'Simulations', description: 'Stress tests, enforcement verification, readiness', icon: Activity },
     { href: '/dashboard/prop-sharing/compounding', label: 'Compounding', description: 'Capital reinvestment policies and allocations', icon: Coins },
-    { href: '/prop-sharing/docs', label: 'Docs & PDFs', description: 'Institutional documentation and collateral pack', icon: FileText },
+    { href: '/dashboard/prop-sharing/docs', label: 'Docs & PDFs', description: 'Institutional documentation and collateral pack', icon: FileText },
   ]
 
   return (
