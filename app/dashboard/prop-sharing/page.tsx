@@ -6,6 +6,7 @@ import {
   TrendingUp, Users, DollarSign, AlertTriangle,
   ArrowRight, BarChart3, Shield, Activity,
   CheckCircle, Clock, XCircle, Briefcase,
+  Zap, Brain, Landmark, Target,
 } from 'lucide-react'
 
 interface Metrics {
@@ -70,6 +71,10 @@ export default function PropSharingDashboard() {
     { href: '/dashboard/prop-sharing/accounts', label: 'Trader Accounts', description: 'View evaluations, funded accounts, and performance', icon: Users },
     { href: '/dashboard/prop-sharing/payouts', label: 'Payouts', description: 'Profit-share payouts and payment status', icon: DollarSign },
     { href: '/dashboard/prop-sharing/risk', label: 'Risk Monitor', description: 'Drawdown breaches, rule violations, and alerts', icon: Shield },
+    { href: '/dashboard/prop-sharing/execution', label: 'Execution', description: 'Spread, slippage, latency, and kill switches', icon: Zap },
+    { href: '/dashboard/prop-sharing/behavior', label: 'Behavior', description: 'Stability scores and behavioral interventions', icon: Brain },
+    { href: '/dashboard/prop-sharing/treasury-guard', label: 'Treasury Guard', description: 'Reserve buffer, throttle control, stress tests', icon: Landmark },
+    { href: '/dashboard/prop-sharing/funnel', label: 'Funnel', description: 'Channel quality, cohort analysis, acquisition', icon: Target },
   ]
 
   return (

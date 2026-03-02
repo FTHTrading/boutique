@@ -850,3 +850,264 @@ export interface ScalingEvent {
   rule_name?: string;
   created_at: string;
 }
+
+// ── V4: Execution Architecture Types ──────────────────────────
+
+export type OrderType = 'market' | 'limit' | 'stop' | 'stop_limit';
+export type OrderStatus = 'pending' | 'filled' | 'partial' | 'rejected' | 'cancelled' | 'expired';
+export type FillType = 'full' | 'partial' | 'none';
+export type BlackoutAction = 'block' | 'warn' | 'log_only';
+
+export interface ExecutionConfig {
+  config_id: string;
+  instrument: string;
+  session_name: string;
+  base_spread_bps: number;
+  volatility_spread_mult: number;
+  base_slippage_bps: number;
+  size_slippage_mult: number;
+  size_threshold_lots: number;
+  commission_per_lot: number;
+  partial_fill_enabled: boolean;
+  max_partial_pct: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MarketSession {
+  session_id: string;
+  instrument: string;
+  session_name: string;
+  day_of_week: number;
+  open_time: string;
+  close_time: string;
+  timezone: string;
+  is_active: boolean;
+}
+
+export interface NewsBlackout {
+  blackout_id: string;
+  name: string;
+  instruments: string[];
+  blackout_start: string;
+  blackout_end: string;
+  pre_window_mins: number;
+  post_window_mins: number;
+  action: BlackoutAction;
+  severity: string;
+  is_recurring: boolean;
+  recurrence_rule?: string;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface ExecutionTrace {
+  trace_id: string;
+  trade_id: string;
+  account_id: string;
+  order_type: OrderType;
+  order_status: OrderStatus;
+  intended_price: number;
+  fill_price: number;
+  spread_applied: number;
+  slippage_applied: number;
+  commission_charged: number;
+  fill_type: FillType;
+  fill_pct: number;
+  quantity_requested: number;
+  quantity_filled: number;
+  execution_latency_ms: number;
+  market_session?: string;
+  volatility_regime: string;
+  blackout_active: boolean;
+  blackout_id?: string;
+  notes?: string;
+  executed_at: string;
+}
+
+export interface ExecutionDailySummary {
+  summary_id: string;
+  summary_date: string;
+  account_id?: string;
+  total_orders: number;
+  fills: number;
+  partial_fills: number;
+  rejections: number;
+  avg_spread_bps: number;
+  avg_slippage_bps: number;
+  total_commissions: number;
+  blackout_violations: number;
+}
+
+// ── V4: Behavioral Risk Scoring Types ─────────────────────────
+
+export type InterventionType = 'warning' | 'restriction' | 'freeze' | 'phase_rollback';
+export type InterventionStatus = 'pending' | 'active' | 'expired' | 'overridden';
+
+export interface StabilityScore {
+  score_id: string;
+  account_id: string;
+  overall_score: number;
+  discipline_score: number;
+  consistency_score: number;
+  aggression_score: number;
+  rule_adherence: number;
+  position_sizing_variance: number;
+  leverage_escalation_slope: number;
+  revenge_trade_count: number;
+  martingale_count: number;
+  overtrade_burst_count: number;
+  panic_exit_count: number;
+  rule_violation_count: number;
+  post_loss_aggression: number;
+  hold_time_cv: number;
+  previous_score?: number;
+  score_delta: number;
+  trend_direction: string;
+  calculated_at: string;
+  // Joined
+  account_number?: string;
+  trader_name?: string;
+}
+
+export interface Intervention {
+  intervention_id: string;
+  account_id: string;
+  intervention_type: InterventionType;
+  trigger_reason: string;
+  trigger_score?: number;
+  trigger_signals: Record<string, any>;
+  action_details: Record<string, any>;
+  status: InterventionStatus;
+  auto_triggered: boolean;
+  approved_by?: string;
+  expires_at?: string;
+  resolved_at?: string;
+  resolution_notes?: string;
+  created_at: string;
+  // Joined
+  account_number?: string;
+  trader_name?: string;
+}
+
+// ── V4: Treasury Capital Guard Types ──────────────────────────
+
+export type ThrottleStatus = 'normal' | 'caution' | 'throttled' | 'frozen';
+
+export interface ReservePolicy {
+  policy_id: string;
+  name: string;
+  min_reserve_absolute: number;
+  min_reserve_pct: number;
+  dynamic_buffer_enabled: boolean;
+  volatility_lookback_days: number;
+  volatility_buffer_mult: number;
+  max_funded_traders: number;
+  max_total_notional: number;
+  max_per_instrument: number;
+  max_per_sector_pct: number;
+  stress_gap_pct: number;
+  stress_correlation: number;
+  is_active: boolean;
+}
+
+export interface ThrottleState {
+  state_id: string;
+  status: ThrottleStatus;
+  available_capital: number;
+  reserve_required: number;
+  reserve_actual: number;
+  reserve_pct: number;
+  buffer_health: number;
+  funded_count: number;
+  funded_cap: number;
+  scaling_paused: boolean;
+  new_funding_paused: boolean;
+  reason?: string;
+  checked_at: string;
+}
+
+export interface StressTest {
+  test_id: string;
+  scenario_name: string;
+  scenario_type: string;
+  gap_pct?: number;
+  correlation_shock?: number;
+  estimated_loss: number;
+  capital_remaining: number;
+  survival: boolean;
+  survival_score: number;
+  affected_accounts: number;
+  details: Record<string, any>;
+  run_at: string;
+}
+
+export interface CapitalSnapshot {
+  snapshot_id: string;
+  snapshot_date: string;
+  total_capital: number;
+  deployed_capital: number;
+  reserve_capital: number;
+  unrealized_pnl: number;
+  retained_earnings: number;
+  eval_fee_revenue: number;
+  payout_obligations: number;
+  net_position: number;
+  firm_volatility_30d: number;
+  throttle_status: ThrottleStatus;
+}
+
+// ── V4: Funnel Optimization Types ─────────────────────────────
+
+export interface Cohort {
+  cohort_id: string;
+  cohort_type: string;
+  start_date: string;
+  end_date: string;
+  total_applicants: number;
+  total_paid: number;
+  total_started: number;
+  total_passed: number;
+  total_funded: number;
+  total_fraud_flagged: number;
+  avg_time_to_pass_days: number;
+  total_eval_revenue: number;
+  total_payouts: number;
+  net_revenue: number;
+}
+
+export interface ChannelQuality {
+  channel_id: string;
+  utm_source: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  total_applications: number;
+  total_paid: number;
+  total_passed: number;
+  total_funded: number;
+  total_fraud: number;
+  pay_rate: number;
+  pass_rate: number;
+  fund_rate: number;
+  fraud_rate: number;
+  quality_score: number;
+  ltv_proxy: number;
+  avg_funded_days: number;
+  avg_time_to_pass: number;
+  is_suppressed: boolean;
+  suppress_reason?: string;
+  top_countries: any[];
+  calculated_at: string;
+}
+
+export interface KillSwitch {
+  switch_id: string;
+  scope: 'trader' | 'instrument' | 'firm';
+  target_id?: string;
+  is_active: boolean;
+  reason?: string;
+  activated_by?: string;
+  activated_at?: string;
+  deactivated_at?: string;
+}

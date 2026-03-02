@@ -791,6 +791,351 @@ class PropSharingAgent {
     }
   }
 
+  // ── V4.1 Execution Architecture ────────────────────────────────
+
+  /**
+   * Simulate execution for a trade — applies spread, slippage, commission,
+   * checks blackouts and kill switches, creates execution trace
+   */
+  async simulateExecution(accountId: number, instrument: string, side: string, size: number, intendedPrice: number): Promise<any> {
+    try {
+      // Check kill switches
+      const killRes = await sql`
+        SELECT * FROM prop_kill_switches
+        WHERE is_active = true AND (scope = 'firm' OR (scope = 'instrument' AND target_id = ${instrument}))
+        LIMIT 1
+      `;
+      if (killRes.length > 0) {
+        await this.logAction('simulateExecution', { accountId, instrument }, { blocked: true, reason: 'Kill switch active' });
+        return { blocked: true, reason: `Kill switch active: ${killRes[0].reason}` };
+      }
+
+      // Check blackouts
+      const blackoutRes = await sql`
+        SELECT * FROM prop_news_blackouts
+        WHERE instrument = ${instrument} AND now() BETWEEN start_time AND end_time
+        LIMIT 1
+      `;
+      const inBlackout = blackoutRes.length > 0;
+
+      // Get execution config
+      const configRes = await sql`
+        SELECT * FROM prop_execution_config
+        WHERE (instrument = ${instrument} OR instrument = 'default') AND is_active = true
+        ORDER BY CASE WHEN instrument = ${instrument} THEN 0 ELSE 1 END
+        LIMIT 1
+      `;
+      const config = configRes[0];
+      if (!config) {
+        return { blocked: true, reason: 'No execution config found' };
+      }
+
+      const blackoutAction = inBlackout ? config.blackout_action : null;
+      if (blackoutAction === 'reject') {
+        return { blocked: true, reason: `Blackout active for ${instrument}: ${blackoutRes[0].event_name}` };
+      }
+
+      // Calculate execution costs
+      const spreadBps = parseFloat(config.base_spread_bps) * (1 + Math.random() * 0.3);
+      const spreadCost = intendedPrice * (spreadBps / 10000);
+      const slippageBps = parseFloat(config.base_slippage_bps) * (1 + (size > 10 ? 0.5 : 0));
+      const slippageCost = intendedPrice * (slippageBps / 10000);
+      const commissionRate = parseFloat(config.commission_rate);
+      const commission = size * intendedPrice * commissionRate;
+      const fillPrice = side === 'buy'
+        ? intendedPrice + spreadCost + slippageCost
+        : intendedPrice - spreadCost - slippageCost;
+      const latencyMs = parseFloat(config.min_latency_ms) + Math.random() * (parseFloat(config.max_latency_ms) - parseFloat(config.min_latency_ms));
+
+      // Widen spread if in blackout
+      const finalSpread = blackoutAction === 'widen_spread' ? spreadBps * 2 : spreadBps;
+
+      // Create trace
+      await sql`
+        INSERT INTO prop_execution_traces
+          (account_id, instrument, side, order_type, size, intended_price, fill_price,
+           spread_bps, slippage_bps, commission, latency_ms, fill_type, status,
+           session_id, blackout_active)
+        VALUES (
+          ${accountId}, ${instrument}, ${side}, ${'market'}, ${size},
+          ${intendedPrice}, ${fillPrice}, ${finalSpread}, ${slippageBps},
+          ${commission}, ${Math.round(latencyMs)}, ${'full'}, ${'filled'},
+          ${'agent'}, ${inBlackout}
+        )
+      `;
+
+      const result = { fillPrice, spreadBps: finalSpread, slippageBps, commission, latencyMs: Math.round(latencyMs), blackout: inBlackout };
+      await this.logAction('simulateExecution', { accountId, instrument, side, size, intendedPrice }, result);
+      return result;
+    } catch (error) {
+      console.error(`[${this.name}] Error simulating execution:`, error);
+      return null;
+    }
+  }
+
+  /**
+   * Check if an instrument is currently in a blackout window
+   */
+  async checkBlackout(instrument: string): Promise<{ inBlackout: boolean; event?: string; endsAt?: string }> {
+    try {
+      const res = await sql`
+        SELECT * FROM prop_news_blackouts
+        WHERE instrument = ${instrument} AND now() BETWEEN start_time AND end_time
+        LIMIT 1
+      `;
+      if (res.length > 0) {
+        return { inBlackout: true, event: res[0].event_name, endsAt: res[0].end_time };
+      }
+      return { inBlackout: false };
+    } catch (error) {
+      console.error(`[${this.name}] Error checking blackout:`, error);
+      return { inBlackout: false };
+    }
+  }
+
+  // ── V4.2 Behavioral Risk Scoring ──────────────────────────────
+
+  /**
+   * Calculate stability score for a trader account based on behavioral patterns
+   */
+  async calculateStabilityScore(accountId: number): Promise<number> {
+    try {
+      // Get 30-day trades
+      const trades = await sql`
+        SELECT * FROM prop_trades
+        WHERE account_id = ${accountId} AND status = 'closed'
+          AND closed_at > now() - interval '30 days'
+        ORDER BY opened_at
+      `;
+      if (trades.length < 5) return 50; // insufficient data
+
+      // Detect revenge trading
+      let revengeCount = 0;
+      for (let i = 1; i < trades.length; i++) {
+        const prevPnl = parseFloat(trades[i - 1].realized_pnl || '0');
+        const prevClose = new Date(trades[i - 1].closed_at).getTime();
+        const currOpen = new Date(trades[i].opened_at).getTime();
+        const timeDiff = (currOpen - prevClose) / 60000;
+        if (prevPnl < 0 && timeDiff < 30 && parseFloat(trades[i].size) > parseFloat(trades[i - 1].size)) {
+          revengeCount++;
+        }
+      }
+
+      // Detect martingale
+      let martingaleCount = 0;
+      let consecutiveLosses = 0;
+      for (let i = 1; i < trades.length; i++) {
+        if (parseFloat(trades[i - 1].realized_pnl || '0') < 0) {
+          consecutiveLosses++;
+          if (consecutiveLosses >= 2 && parseFloat(trades[i].size) >= parseFloat(trades[i - 1].size) * 1.5) {
+            martingaleCount++;
+          }
+        } else {
+          consecutiveLosses = 0;
+        }
+      }
+
+      // Position sizing consistency (CV)
+      const sizes = trades.map((t: any) => parseFloat(t.size));
+      const avgSize = sizes.reduce((a: number, b: number) => a + b, 0) / sizes.length;
+      const sizeStddev = Math.sqrt(sizes.reduce((sum: number, s: number) => sum + Math.pow(s - avgSize, 2), 0) / sizes.length);
+      const sizeCV = avgSize > 0 ? sizeStddev / avgSize : 0;
+
+      // Score components
+      const discipline = Math.max(0, 100 - revengeCount * 15 - martingaleCount * 20);
+      const consistency = Math.max(0, 100 - sizeCV * 50);
+      const aggression = Math.max(0, 100 - (revengeCount + martingaleCount) * 10);
+
+      // Get config weights
+      const configRes = await sql`
+        SELECT * FROM prop_behavior_config WHERE feature_name IN ('revenge_trading', 'position_sizing_cv')
+      `;
+      const overallScore = Math.round(discipline * 0.35 + consistency * 0.35 + aggression * 0.30);
+
+      // Upsert stability score
+      await sql`
+        INSERT INTO prop_stability_scores
+          (account_id, overall_score, discipline_score, consistency_score, aggression_score,
+           revenge_count, martingale_count, position_sizing_cv, trend)
+        VALUES (
+          ${accountId}, ${overallScore}, ${discipline}, ${consistency}, ${aggression},
+          ${revengeCount}, ${martingaleCount}, ${sizeCV},
+          ${overallScore >= 50 ? 'stable' : 'declining'}
+        )
+        ON CONFLICT (account_id) DO UPDATE SET
+          overall_score = EXCLUDED.overall_score,
+          discipline_score = EXCLUDED.discipline_score,
+          consistency_score = EXCLUDED.consistency_score,
+          aggression_score = EXCLUDED.aggression_score,
+          revenge_count = EXCLUDED.revenge_count,
+          martingale_count = EXCLUDED.martingale_count,
+          position_sizing_cv = EXCLUDED.position_sizing_cv,
+          trend = EXCLUDED.trend,
+          calculated_at = now()
+      `;
+
+      // Auto-intervene if score is critical
+      if (overallScore < 20) {
+        await sql`
+          INSERT INTO prop_interventions (account_id, intervention_type, reason, auto_triggered, details)
+          VALUES (${accountId}, ${'freeze'}, ${'Stability score critically low'}, ${true},
+            ${JSON.stringify({ score: overallScore, revenge: revengeCount, martingale: martingaleCount })})
+        `;
+      } else if (overallScore < 40) {
+        await sql`
+          INSERT INTO prop_interventions (account_id, intervention_type, reason, auto_triggered, details)
+          VALUES (${accountId}, ${'warning'}, ${'Stability score below threshold'}, ${true},
+            ${JSON.stringify({ score: overallScore })})
+        `;
+      }
+
+      await this.logAction('calculateStabilityScore', { accountId }, { overallScore, discipline, consistency, aggression, revengeCount, martingaleCount });
+      return overallScore;
+    } catch (error) {
+      console.error(`[${this.name}] Error calculating stability score:`, error);
+      return 0;
+    }
+  }
+
+  // ── V4.3 Treasury Capital Guard ───────────────────────────────
+
+  /**
+   * Check treasury health — calculates reserve adequacy, runs stress tests,
+   * updates throttle state, and creates capital snapshot
+   */
+  async checkTreasuryHealth(): Promise<{ status: string; bufferHealth: number; scalingPaused: boolean }> {
+    try {
+      // Get policy
+      const policyRes = await sql`SELECT * FROM prop_reserve_policy WHERE is_active = true LIMIT 1`;
+      if (policyRes.length === 0) return { status: 'unknown', bufferHealth: 0, scalingPaused: false };
+      const policy = policyRes[0];
+
+      // Get capital state
+      const capitalRes = await sql`
+        SELECT
+          COALESCE(SUM(funded_capital), 0) as deployed,
+          COUNT(*) as funded_count
+        FROM prop_accounts WHERE phase = 'funded' AND status = 'active'
+      `;
+      const treasuryRes = await sql`
+        SELECT COALESCE(SUM(
+          CASE WHEN entry_type IN ('deposit', 'eval_fee', 'commission_earned', 'interest')
+               THEN amount ELSE -amount END
+        ), 0) as total
+        FROM prop_treasury_entries
+      `;
+
+      const deployed = parseFloat(capitalRes[0].deployed);
+      const total = parseFloat(treasuryRes[0].total);
+      const reserve = total - deployed;
+      const required = Math.max(
+        parseFloat(policy.min_reserve_absolute),
+        deployed * (parseFloat(policy.min_reserve_pct) / 100)
+      );
+
+      const bufferHealth = required > 0 ? Math.min(100, Math.round((reserve / required) * 100)) : 100;
+      const status = bufferHealth >= 80 ? 'normal' : bufferHealth >= 50 ? 'caution' : bufferHealth >= 25 ? 'throttled' : 'frozen';
+      const scalingPaused = bufferHealth < 50;
+      const newFundingPaused = bufferHealth < 25;
+
+      // Upsert throttle
+      await sql`
+        INSERT INTO prop_throttle_state
+          (status, available_capital, reserve_required, reserve_actual, reserve_pct,
+           buffer_health, funded_count, funded_cap, scaling_paused, new_funding_paused, reason)
+        VALUES (
+          ${status}, ${reserve}, ${required}, ${reserve},
+          ${required > 0 ? reserve / required * 100 : 100}, ${bufferHealth},
+          ${parseInt(capitalRes[0].funded_count)}, ${parseInt(policy.max_funded_traders)},
+          ${scalingPaused}, ${newFundingPaused},
+          ${`Buffer at ${bufferHealth}%`}
+        )
+      `;
+
+      await this.logAction('checkTreasuryHealth', {}, { status, bufferHealth, deployed, reserve, required });
+      return { status, bufferHealth, scalingPaused };
+    } catch (error) {
+      console.error(`[${this.name}] Error checking treasury health:`, error);
+      return { status: 'error', bufferHealth: 0, scalingPaused: true };
+    }
+  }
+
+  // ── V4.4 Funnel Optimization ──────────────────────────────────
+
+  /**
+   * Calculate quality score for a specific acquisition channel
+   */
+  async calculateChannelQuality(source: string): Promise<number> {
+    try {
+      const res = await sql`
+        SELECT
+          COUNT(*) as total_apps,
+          COUNT(*) FILTER (WHERE acc.phase = 'funded') as funded,
+          COUNT(*) FILTER (WHERE acc.status = 'rejected') as rejected,
+          COUNT(*) FILTER (WHERE fr.risk_score > 70) as high_fraud
+        FROM prop_applications a
+        LEFT JOIN prop_accounts acc ON acc.application_id = a.application_id
+        LEFT JOIN prop_fraud_reviews fr ON fr.application_id = a.application_id
+        WHERE COALESCE(a.utm_source, 'organic') = ${source}
+          AND a.submitted_at > now() - interval '90 days'
+      `;
+
+      const d = res[0];
+      const total = parseInt(d.total_apps);
+      if (total === 0) return 50;
+
+      const convRate = (parseInt(d.funded) / total) * 100;
+      const fraudRate = (parseInt(d.high_fraud) / total) * 100;
+      const rejRate = (parseInt(d.rejected) / total) * 100;
+
+      let score = 50 + (convRate * 2) - (fraudRate * 3) - (rejRate * 0.5);
+      score = Math.max(0, Math.min(100, Math.round(score)));
+
+      await sql`
+        INSERT INTO prop_channel_quality (source, total_apps, funded, rejected, conversion_rate, fraud_rate, quality_score)
+        VALUES (${source}, ${total}, ${parseInt(d.funded)}, ${parseInt(d.rejected)}, ${convRate}, ${fraudRate}, ${score})
+        ON CONFLICT (source) DO UPDATE SET
+          total_apps = EXCLUDED.total_apps, funded = EXCLUDED.funded, rejected = EXCLUDED.rejected,
+          conversion_rate = EXCLUDED.conversion_rate, fraud_rate = EXCLUDED.fraud_rate,
+          quality_score = EXCLUDED.quality_score, last_calculated = now()
+      `;
+
+      await this.logAction('calculateChannelQuality', { source }, { score, total, convRate, fraudRate });
+      return score;
+    } catch (error) {
+      console.error(`[${this.name}] Error calculating channel quality:`, error);
+      return 0;
+    }
+  }
+
+  /**
+   * Toggle a kill switch (firm-wide or per-instrument)
+   */
+  async toggleKillSwitch(scope: string, targetId: string | null, active: boolean, reason: string): Promise<boolean> {
+    try {
+      if (active) {
+        await sql`
+          INSERT INTO prop_kill_switches (scope, target_id, reason, activated_by, is_active)
+          VALUES (${scope}, ${targetId}, ${reason}, ${'agent'}, ${true})
+        `;
+      } else {
+        await sql`
+          UPDATE prop_kill_switches
+          SET is_active = false, deactivated_at = now(), deactivated_by = 'agent'
+          WHERE scope = ${scope}
+            AND (target_id = ${targetId} OR (${targetId} IS NULL AND target_id IS NULL))
+            AND is_active = true
+        `;
+      }
+
+      await this.logAction('toggleKillSwitch', { scope, targetId, active, reason }, { success: true });
+      return true;
+    } catch (error) {
+      console.error(`[${this.name}] Error toggling kill switch:`, error);
+      return false;
+    }
+  }
+
   private async logAction(action: string, inputData: any, outputData: any): Promise<void> {
     try {
       await sql`

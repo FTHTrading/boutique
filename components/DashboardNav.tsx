@@ -29,6 +29,11 @@ import {
   ClipboardList,
   ShieldAlert,
   Scaling,
+  Zap,
+  Brain,
+  Landmark,
+  Target,
+  Power,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -92,6 +97,10 @@ const navSections = [
       { href: '/dashboard/prop-sharing/firm-risk', label: 'Firm Risk', icon: Shield, description: 'Firm-wide exposure' },
       { href: '/dashboard/prop-sharing/fraud', label: 'Fraud Detection', icon: ShieldAlert, description: 'Gaming & anomalies' },
       { href: '/dashboard/prop-sharing/scaling', label: 'Scaling Engine', icon: Scaling, description: 'Dynamic account scaling' },
+      { href: '/dashboard/prop-sharing/execution', label: 'Execution', icon: Zap, description: 'Spread, slippage & latency' },
+      { href: '/dashboard/prop-sharing/behavior', label: 'Behavior', icon: Brain, description: 'Stability scoring' },
+      { href: '/dashboard/prop-sharing/treasury-guard', label: 'Treasury Guard', icon: Landmark, description: 'Reserve & throttle' },
+      { href: '/dashboard/prop-sharing/funnel', label: 'Funnel', icon: Target, description: 'Channel quality & cohorts' },
     ]
   },
 ]
