@@ -34,6 +34,8 @@ import {
   Landmark,
   Target,
   Power,
+  Activity,
+  Coins,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -101,6 +103,8 @@ const navSections = [
       { href: '/dashboard/prop-sharing/behavior', label: 'Behavior', icon: Brain, description: 'Stability scoring' },
       { href: '/dashboard/prop-sharing/treasury-guard', label: 'Treasury Guard', icon: Landmark, description: 'Reserve & throttle' },
       { href: '/dashboard/prop-sharing/funnel', label: 'Funnel', icon: Target, description: 'Channel quality & cohorts' },
+      { href: '/dashboard/prop-sharing/simulations', label: 'Simulations', icon: Activity, description: 'Stress tests & readiness' },
+      { href: '/dashboard/prop-sharing/compounding', label: 'Compounding', icon: Coins, description: 'Capital reinvestment' },
     ]
   },
 ]

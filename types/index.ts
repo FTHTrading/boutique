@@ -1111,3 +1111,153 @@ export interface KillSwitch {
   activated_at?: string;
   deactivated_at?: string;
 }
+
+// ── V5-D: Stress Simulation Types ───────────────────────────
+
+export type SimulationStatus = 'pending' | 'running' | 'completed' | 'failed';
+export type AssertionResult = 'pass' | 'fail' | 'warn' | 'skip';
+export type ScenarioType = 'full_lifecycle' | 'treasury_throttle' | 'behavior_seams' | 'funnel_suppression' | 'execution_blackout' | 'enforcement_verify' | 'custom';
+
+export interface SimulationRun {
+  run_id: number;
+  scenario: ScenarioType;
+  scenario_name: string;
+  status: SimulationStatus;
+  seed: number;
+  config: Record<string, any>;
+  total_events: number;
+  total_assertions: number;
+  passed: number;
+  failed: number;
+  warnings: number;
+  enforcement_score: number;
+  trace_integrity_score: number;
+  behavior_seam_score: number;
+  funnel_cliff_score: number;
+  compounding_readiness: number;
+  started_at: string;
+  completed_at: string;
+  duration_ms: number;
+  error_message?: string;
+  created_at: string;
+}
+
+export interface SimulationEvent {
+  event_id: number;
+  run_id: number;
+  sequence_num: number;
+  event_type: string;
+  description: string;
+  input_state: Record<string, any>;
+  output_state: Record<string, any>;
+  entity_type: string;
+  entity_id: string;
+  audit_log_id?: string;
+  execution_trace_id?: string;
+  duration_ms: number;
+  created_at: string;
+}
+
+export interface SimulationAssertion {
+  assertion_id: number;
+  run_id: number;
+  event_id?: number;
+  category: string;
+  assertion_name: string;
+  description: string;
+  expected_value: string;
+  actual_value: string;
+  result: AssertionResult;
+  tolerance?: number;
+  deviation?: number;
+  severity: 'critical' | 'major' | 'minor';
+  created_at: string;
+}
+
+// ── V5-B: Capital Compounding Types ─────────────────────────
+
+export type CompoundingPolicyStatus = 'active' | 'paused' | 'draft' | 'retired';
+export type CompoundingActionType = 'allocate_to_vertical' | 'adjust_capacity' | 'adjust_marketing_cap' | 'propose_dividend' | 'lock_compounding';
+export type CompoundingRunMode = 'dry_run' | 'execute' | 'proposed';
+
+export interface CompoundingPolicy {
+  policy_id: number;
+  name: string;
+  description: string;
+  status: CompoundingPolicyStatus;
+  priority: number;
+  min_retained_earnings?: number;
+  min_buffer_health?: number;
+  min_buffer_days: number;
+  min_channel_quality?: number;
+  min_channel_quality_days: number;
+  min_cohort_survival?: number;
+  max_fraud_rate?: number;
+  min_readiness_score: number;
+  action_type: CompoundingActionType;
+  action_params: Record<string, any>;
+  requires_approval: boolean;
+  max_executions_per_quarter: number;
+  cooldown_days: number;
+  last_evaluated?: string;
+  last_executed?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CompoundingRun {
+  run_id: number;
+  mode: CompoundingRunMode;
+  retained_earnings: number;
+  buffer_health: number;
+  buffer_consecutive_days: number;
+  avg_channel_quality: number;
+  avg_cohort_survival: number;
+  fraud_rate: number;
+  readiness_score: number;
+  treasury_status: string;
+  policies_evaluated: number;
+  policies_eligible: number;
+  actions_proposed: number;
+  actions_executed: number;
+  actions_blocked: number;
+  blocked_reason?: string;
+  started_at: string;
+  completed_at?: string;
+  created_at: string;
+}
+
+export interface CompoundingAction {
+  action_id: number;
+  run_id: number;
+  policy_id: number;
+  action_type: CompoundingActionType;
+  action_params: Record<string, any>;
+  amount: number;
+  target_vertical?: string;
+  mode: CompoundingRunMode;
+  executed: boolean;
+  approved_by?: string;
+  approved_at?: string;
+  blocked: boolean;
+  blocked_reason?: string;
+  input_snapshot: Record<string, any>;
+  treasury_entry_id?: string;
+  audit_log_id?: string;
+  created_at: string;
+}
+
+export interface VerticalAllocation {
+  allocation_id: number;
+  vertical: string;
+  amount: number;
+  source: string;
+  action_id?: number;
+  policy_id?: number;
+  treasury_entry_id?: string;
+  status: 'pending' | 'allocated' | 'deployed' | 'returned';
+  deployed_at?: string;
+  notes?: string;
+  created_at: string;
+}
+
