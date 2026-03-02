@@ -27,6 +27,8 @@ import {
   UserCheck,
   BarChart3,
   ClipboardList,
+  ShieldAlert,
+  Scaling,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -87,6 +89,9 @@ const navSections = [
       { href: '/dashboard/prop-sharing/performance', label: 'Performance', icon: BarChart3, description: 'Trader analytics' },
       { href: '/dashboard/prop-sharing/payouts', label: 'Payouts', icon: Wallet, description: 'Profit-share payments' },
       { href: '/dashboard/prop-sharing/risk', label: 'Risk Monitor', icon: AlertTriangle, description: 'Risk events & alerts' },
+      { href: '/dashboard/prop-sharing/firm-risk', label: 'Firm Risk', icon: Shield, description: 'Firm-wide exposure' },
+      { href: '/dashboard/prop-sharing/fraud', label: 'Fraud Detection', icon: ShieldAlert, description: 'Gaming & anomalies' },
+      { href: '/dashboard/prop-sharing/scaling', label: 'Scaling Engine', icon: Scaling, description: 'Dynamic account scaling' },
     ]
   },
 ]

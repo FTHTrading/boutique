@@ -204,6 +204,17 @@ export default function PropSharingPage() {
             </div>
             <span className="font-bold text-[#efebe9] text-sm">FTH Trading</span>
           </div>
+          <div className="flex flex-wrap justify-center gap-3 mb-4 text-[11px]">
+            <Link href="/prop-sharing/rulebook" className="text-[#6d4c41] hover:text-amber-500 transition-colors">Challenge Rulebook</Link>
+            <span className="text-[#3e2723]">·</span>
+            <Link href="/prop-sharing/risk-disclosure" className="text-[#6d4c41] hover:text-amber-500 transition-colors">Risk Disclosure</Link>
+            <span className="text-[#3e2723]">·</span>
+            <Link href="/prop-sharing/compliance" className="text-[#6d4c41] hover:text-amber-500 transition-colors">AML & Compliance</Link>
+            <span className="text-[#3e2723]">·</span>
+            <Link href="/prop-sharing/terms" className="text-[#6d4c41] hover:text-amber-500 transition-colors">Terms of Service</Link>
+            <span className="text-[#3e2723]">·</span>
+            <Link href="/prop-sharing/privacy" className="text-[#6d4c41] hover:text-amber-500 transition-colors">Privacy Policy</Link>
+          </div>
           <p className="text-[10px] text-[#3e2723] max-w-xl mx-auto leading-relaxed mb-4">
             <strong className="text-[#6d4c41]">Disclaimer:</strong> Prop sharing programs involve risk. Past performance does not guarantee future results. All funded accounts are subject to platform risk management rules and compliance review. FTH Trading reserves the right to modify program terms. Not available in all jurisdictions.
           </p>

@@ -692,3 +692,161 @@ export interface DailySnapshot {
   locked_out: boolean;
 }
 
+// -----------------------------------------------------------------
+// Prop Sharing V3: Firm Risk, Fraud Detection, Dynamic Scaling
+// -----------------------------------------------------------------
+
+export type FraudAlertSeverity = 'low' | 'medium' | 'high' | 'critical';
+export type FraudAlertStatus = 'open' | 'investigating' | 'confirmed' | 'dismissed' | 'resolved';
+export type FraudAlertType =
+  | 'latency_arbitrage'
+  | 'overfit_scalping'
+  | 'copy_trade_cluster'
+  | 'statistical_anomaly'
+  | 'wash_trading'
+  | 'news_straddling'
+  | 'overnight_gap_exploit'
+  | 'manual_flag';
+export type ScalingDirection = 'scale_up' | 'scale_down' | 'hold';
+
+export interface FirmRiskConfig {
+  config_id: string;
+  config_key: string;
+  config_value: Record<string, any>;
+  description?: string;
+  updated_by?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FirmExposureSnapshot {
+  snapshot_id: string;
+  snapshot_time: string;
+  total_funded_accounts: number;
+  total_capital_deployed: number;
+  total_unrealized_pnl: number;
+  total_realized_pnl: number;
+  net_exposure: number;
+  capital_utilization_pct?: number;
+  margin_reserve?: number;
+  breach_flags: string[];
+  is_within_limits: boolean;
+  created_at: string;
+}
+
+export interface SectorExposure {
+  exposure_id: string;
+  snapshot_id: string;
+  sector: string;
+  commodity?: string;
+  long_exposure: number;
+  short_exposure: number;
+  net_exposure: number;
+  num_accounts: number;
+  pct_of_total?: number;
+  breach: boolean;
+  created_at: string;
+}
+
+export interface CorrelationAlert {
+  alert_id: string;
+  account_ids: string[];
+  commodity: string;
+  direction: string;
+  correlation?: number;
+  combined_exposure?: number;
+  num_accounts: number;
+  is_active: boolean;
+  resolved_at?: string;
+  resolved_by?: string;
+  created_at: string;
+}
+
+export interface FraudAlert {
+  alert_id: string;
+  account_id: string;
+  alert_type: FraudAlertType;
+  severity: FraudAlertSeverity;
+  status: FraudAlertStatus;
+  title: string;
+  description?: string;
+  evidence: Record<string, any>;
+  flagged_trades: string[];
+  detection_score?: number;
+  reviewed_by?: string;
+  reviewed_at?: string;
+  resolution_notes?: string;
+  action_taken?: string;
+  // Joined fields
+  account_number?: string;
+  trader_name?: string;
+  trader_email?: string;
+  program_name?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TraderBehaviorProfile {
+  profile_id: string;
+  account_id: string;
+  avg_hold_seconds?: number;
+  median_hold_seconds?: number;
+  min_hold_seconds?: number;
+  pct_under_60s?: number;
+  pct_under_10s?: number;
+  avg_entry_slippage_pct?: number;
+  avg_exit_slippage_pct?: number;
+  avg_mfe_pct?: number;
+  avg_mae_pct?: number;
+  preferred_session?: string;
+  trades_around_news?: number;
+  pct_trades_around_news?: number;
+  avg_lot_size?: number;
+  lot_size_stddev?: number;
+  max_concurrent_positions?: number;
+  most_similar_account_id?: string;
+  similarity_score?: number;
+  calculated_at: string;
+  updated_at: string;
+}
+
+export interface ScalingRule {
+  rule_id: string;
+  name: string;
+  is_active: boolean;
+  priority: number;
+  min_sharpe_ratio: number;
+  min_profit_factor: number;
+  max_drawdown_pct: number;
+  min_trading_days: number;
+  min_consistency_score: number;
+  min_trades: number;
+  scale_up_pct: number;
+  scale_down_pct: number;
+  max_scale_level: number;
+  cooldown_days: number;
+  volatility_lookback_days: number;
+  max_volatility_pct: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ScalingEvent {
+  event_id: string;
+  account_id: string;
+  rule_id?: string;
+  direction: ScalingDirection;
+  previous_level: number;
+  new_level: number;
+  previous_capital: number;
+  new_capital: number;
+  reason: string;
+  metrics_snapshot: Record<string, any>;
+  approved_by?: string;
+  auto_approved: boolean;
+  // Joined
+  account_number?: string;
+  trader_name?: string;
+  rule_name?: string;
+  created_at: string;
+}

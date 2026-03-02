@@ -544,6 +544,253 @@ class PropSharingAgent {
     }
   }
 
+  // ── V3: Firm Exposure Calculator ────────────────────────────────
+
+  /**
+   * Calculate and store a firm-wide exposure snapshot.
+   * Aggregates all funded account positions, checks breach limits.
+   */
+  async calculateFirmExposure(): Promise<{ deployed: number; net_exposure: number; utilization_pct: number; breaches: string[] }> {
+    try {
+      const configRes = await sql`SELECT config_key, config_value FROM prop_firm_risk_config`;
+      const config: Record<string, any> = {};
+      for (const row of configRes) config[row.config_key] = row.config_value;
+
+      const maxExposure = parseFloat(config.max_total_exposure?.value || '5000000');
+      const maxConcurrent = parseInt(config.max_concurrent_funded?.value || '100');
+      const dailyLossLimit = parseFloat(config.daily_firm_loss_limit?.value || '3');
+
+      const agg = await sql`
+        SELECT
+          COUNT(*) as funded_count,
+          COALESCE(SUM(balance), 0) as total_deployed,
+          COALESCE(SUM(balance - starting_balance), 0) as realized_pnl
+        FROM prop_accounts WHERE status = 'active' AND phase = 'funded'
+      `;
+      const row = agg[0];
+      const deployed = parseFloat(row.total_deployed);
+      const netExposure = deployed;
+      const utilization = maxExposure > 0 ? (deployed / maxExposure) * 100 : 0;
+
+      const breaches: string[] = [];
+      if (deployed > maxExposure) breaches.push('max_total_exposure');
+      if (parseInt(row.funded_count) > maxConcurrent) breaches.push('max_concurrent_funded');
+
+      await sql`
+        INSERT INTO prop_firm_exposure (total_deployed, unrealized_pnl, realized_pnl, net_exposure, available_capital, utilization_pct, breach_flags)
+        VALUES (${deployed}, ${0}, ${parseFloat(row.realized_pnl)}, ${netExposure}, ${maxExposure - deployed}, ${utilization}, ${breaches})
+      `;
+
+      await this.logAction('calculateFirmExposure', {}, { deployed, net_exposure: netExposure, utilization_pct: utilization, breaches });
+      return { deployed, net_exposure: netExposure, utilization_pct: utilization, breaches };
+    } catch (error) {
+      console.error(`[${this.name}] Error calculating firm exposure:`, error);
+      return { deployed: 0, net_exposure: 0, utilization_pct: 0, breaches: [] };
+    }
+  }
+
+  // ── V3: Fraud Pattern Detection ───────────────────────────────
+
+  /**
+   * Detect fraud patterns for a specific account.
+   * Checks: latency arbitrage, overfit scalping, statistical anomalies.
+   */
+  async detectFraudPatterns(accountId: string): Promise<{ alerts_created: number; patterns_found: string[] }> {
+    try {
+      const trades = await sql`
+        SELECT trade_id, commodity, direction, quantity, entry_price, exit_price, pnl,
+               opened_at, closed_at,
+               EXTRACT(EPOCH FROM (closed_at - opened_at)) as hold_seconds
+        FROM prop_trades WHERE account_id = ${accountId} AND status = 'closed'
+        ORDER BY opened_at DESC LIMIT 200
+      `;
+
+      if (trades.length < 5) return { alerts_created: 0, patterns_found: [] };
+
+      const patterns: string[] = [];
+      let alertCount = 0;
+
+      // Latency arbitrage check
+      const ultraShort = trades.filter((t: any) => parseFloat(t.hold_seconds) < 10);
+      if (ultraShort.length >= 5) {
+        const pct = (ultraShort.length / trades.length) * 100;
+        const wins = ultraShort.filter((t: any) => parseFloat(t.pnl) > 0).length;
+        const winRate = (wins / ultraShort.length) * 100;
+        if (pct > 30 && winRate > 80) {
+          patterns.push('latency_arbitrage');
+          const score = Math.min(((pct - 30) / 70 * 0.5) + ((winRate - 80) / 20 * 0.5), 1);
+          const existing = await sql`
+            SELECT alert_id FROM prop_fraud_alerts
+            WHERE account_id = ${accountId} AND alert_type = 'latency_arbitrage'
+            AND status IN ('open', 'investigating') AND created_at > now() - interval '7 days'
+          `;
+          if (existing.length === 0) {
+            await sql`
+              INSERT INTO prop_fraud_alerts (account_id, alert_type, severity, title, description, evidence, detection_score)
+              VALUES (${accountId}, 'latency_arbitrage',
+                ${score > 0.7 ? 'critical' : score > 0.4 ? 'high' : 'medium'},
+                ${`Latency arbitrage: ${pct.toFixed(0)}% trades <10s, ${winRate.toFixed(0)}% WR`},
+                ${'High percentage of ultra-short trades with abnormally high win rate'},
+                ${JSON.stringify({ pct_under_10s: pct, win_rate: winRate, count: ultraShort.length })},
+                ${score})
+            `;
+            alertCount++;
+          }
+        }
+      }
+
+      // Overfit scalping
+      const shortTrades = trades.filter((t: any) => parseFloat(t.hold_seconds) < 60);
+      if (shortTrades.length >= 10) {
+        const pctShort = (shortTrades.length / trades.length) * 100;
+        const avgPnl = shortTrades.reduce((s: number, t: any) => s + Math.abs(parseFloat(t.pnl)), 0) / shortTrades.length;
+        if (pctShort > 50 && avgPnl < 5) {
+          patterns.push('overfit_scalping');
+        }
+      }
+
+      // Win rate anomaly
+      if (trades.length >= 20) {
+        const wins = trades.filter((t: any) => parseFloat(t.pnl) > 0).length;
+        const winRate = (wins / trades.length) * 100;
+        if (winRate > 95) patterns.push('statistical_anomaly');
+      }
+
+      await this.logAction('detectFraudPatterns', { accountId }, { alerts_created: alertCount, patterns_found: patterns });
+      return { alerts_created: alertCount, patterns_found: patterns };
+    } catch (error) {
+      console.error(`[${this.name}] Error detecting fraud patterns:`, error);
+      return { alerts_created: 0, patterns_found: [] };
+    }
+  }
+
+  // ── V3: Behavior Profile Builder ──────────────────────────────
+
+  /**
+   * Build or update a statistical behavior profile for an account.
+   */
+  async buildBehaviorProfile(accountId: string): Promise<Record<string, any> | null> {
+    try {
+      const trades = await sql`
+        SELECT pnl, EXTRACT(EPOCH FROM (closed_at - opened_at)) as hold_seconds, quantity
+        FROM prop_trades WHERE account_id = ${accountId} AND status = 'closed'
+        ORDER BY closed_at DESC LIMIT 200
+      `;
+      if (trades.length < 5) return null;
+
+      const holdTimes = trades.map((t: any) => parseFloat(t.hold_seconds)).filter((h: number) => h > 0).sort((a: number, b: number) => a - b);
+      const avgHold = holdTimes.reduce((s: number, h: number) => s + h, 0) / holdTimes.length;
+      const medianHold = holdTimes[Math.floor(holdTimes.length / 2)];
+      const pctUnder60 = (holdTimes.filter((h: number) => h < 60).length / holdTimes.length) * 100;
+      const pctUnder10 = (holdTimes.filter((h: number) => h < 10).length / holdTimes.length) * 100;
+      const lotSizes = trades.map((t: any) => parseFloat(t.quantity));
+      const avgLot = lotSizes.reduce((s: number, l: number) => s + l, 0) / lotSizes.length;
+      const lotStddev = Math.sqrt(lotSizes.reduce((s: number, l: number) => s + Math.pow(l - avgLot, 2), 0) / lotSizes.length);
+
+      const profile = { avg_hold_seconds: avgHold, median_hold_seconds: medianHold, pct_under_60s: pctUnder60, pct_under_10s: pctUnder10, avg_lot_size: avgLot, lot_size_stddev: lotStddev };
+
+      await sql`
+        INSERT INTO prop_trader_behavior (account_id, avg_hold_seconds, median_hold_seconds, min_hold_seconds, pct_under_60s, pct_under_10s, avg_lot_size, lot_size_stddev, calculated_at, updated_at)
+        VALUES (${accountId}, ${avgHold}, ${medianHold}, ${holdTimes[0]}, ${pctUnder60}, ${pctUnder10}, ${avgLot}, ${lotStddev}, now(), now())
+        ON CONFLICT (account_id) DO UPDATE SET
+          avg_hold_seconds = ${avgHold}, median_hold_seconds = ${medianHold}, min_hold_seconds = ${holdTimes[0]},
+          pct_under_60s = ${pctUnder60}, pct_under_10s = ${pctUnder10}, avg_lot_size = ${avgLot}, lot_size_stddev = ${lotStddev},
+          calculated_at = now(), updated_at = now()
+      `;
+
+      await this.logAction('buildBehaviorProfile', { accountId }, profile);
+      return profile;
+    } catch (error) {
+      console.error(`[${this.name}] Error building behavior profile:`, error);
+      return null;
+    }
+  }
+
+  // ── V3: Scaling Evaluator ─────────────────────────────────────
+
+  /**
+   * Evaluate an account for scaling eligibility.
+   * Returns metrics and whether the account qualifies for the next tier.
+   */
+  async evaluateScaling(accountId: string): Promise<{ eligible: boolean; metrics: Record<string, number>; reason: string }> {
+    try {
+      const ruleRes = await sql`SELECT * FROM prop_scaling_rules WHERE is_active = true ORDER BY created_at DESC LIMIT 1`;
+      if (ruleRes.length === 0) return { eligible: false, metrics: {}, reason: 'No active scaling rule' };
+      const rule = ruleRes[0];
+
+      const acctRes = await sql`SELECT * FROM prop_accounts WHERE account_id = ${accountId}`;
+      if (acctRes.length === 0) return { eligible: false, metrics: {}, reason: 'Account not found' };
+      const acct = acctRes[0];
+
+      // Cooldown check
+      if (acct.last_scaling_event) {
+        const daysSince = (Date.now() - new Date(acct.last_scaling_event).getTime()) / (1000 * 86400);
+        if (daysSince < parseFloat(rule.cooldown_days)) {
+          return { eligible: false, metrics: {}, reason: `Cooldown: ${Math.ceil(parseFloat(rule.cooldown_days) - daysSince)} days remaining` };
+        }
+      }
+
+      const trades = await sql`
+        SELECT pnl, closed_at FROM prop_trades WHERE account_id = ${accountId} AND status = 'closed' ORDER BY closed_at DESC
+      `;
+      if (trades.length < 10) return { eligible: false, metrics: {}, reason: 'Insufficient trades (<10)' };
+
+      const pnls = trades.map((t: any) => parseFloat(t.pnl));
+      const avgPnl = pnls.reduce((s: number, p: number) => s + p, 0) / pnls.length;
+      const stddev = Math.sqrt(pnls.reduce((s: number, p: number) => s + Math.pow(p - avgPnl, 2), 0) / pnls.length);
+      const sharpe = stddev > 0 ? (avgPnl / stddev) * Math.sqrt(252) : 0;
+      const grossProfit = pnls.filter((p: number) => p > 0).reduce((s: number, p: number) => s + p, 0);
+      const grossLoss = Math.abs(pnls.filter((p: number) => p < 0).reduce((s: number, p: number) => s + p, 0));
+      const pf = grossLoss > 0 ? grossProfit / grossLoss : (grossProfit > 0 ? 99 : 0);
+
+      let peak = 0, maxDD = 0, running = 0;
+      for (const p of [...pnls].reverse()) { running += p; if (running > peak) peak = running; const dd = peak > 0 ? ((peak - running) / peak) * 100 : 0; if (dd > maxDD) maxDD = dd; }
+
+      const metrics = { sharpe, profit_factor: pf, max_drawdown: maxDD };
+      const eligible = sharpe >= parseFloat(rule.min_sharpe_ratio) && pf >= parseFloat(rule.min_profit_factor) && maxDD <= parseFloat(rule.max_drawdown_pct);
+
+      await sql`UPDATE prop_accounts SET consistency_score = ${((pnls.filter(p => p > 0).length / pnls.length) * 100)}, scaling_eligible = ${eligible}, updated_at = now() WHERE account_id = ${accountId}`;
+
+      await this.logAction('evaluateScaling', { accountId }, { eligible, metrics });
+      return { eligible, metrics, reason: eligible ? 'All criteria met' : 'Metrics below threshold' };
+    } catch (error) {
+      console.error(`[${this.name}] Error evaluating scaling:`, error);
+      return { eligible: false, metrics: {}, reason: 'Evaluation error' };
+    }
+  }
+
+  // ── V3: Consistency Score Calculator ──────────────────────────
+
+  /**
+   * Calculate a rolling consistency score for an account.
+   * Measures the proportion of positive trading days over the last 30 days.
+   */
+  async calculateConsistencyScore(accountId: string): Promise<number> {
+    try {
+      const trades = await sql`
+        SELECT pnl, closed_at FROM prop_trades
+        WHERE account_id = ${accountId} AND status = 'closed' AND closed_at > now() - interval '30 days'
+        ORDER BY closed_at
+      `;
+      if (trades.length === 0) return 0;
+
+      const dailyPnls: Record<string, number> = {};
+      for (const t of trades) {
+        const day = new Date(t.closed_at).toISOString().split('T')[0];
+        dailyPnls[day] = (dailyPnls[day] || 0) + parseFloat(t.pnl);
+      }
+      const days = Object.values(dailyPnls);
+      const score = days.length > 0 ? (days.filter(d => d > 0).length / days.length) * 100 : 0;
+
+      await sql`UPDATE prop_accounts SET consistency_score = ${score}, updated_at = now() WHERE account_id = ${accountId}`;
+      await this.logAction('calculateConsistencyScore', { accountId }, { score, trading_days: days.length });
+      return score;
+    } catch (error) {
+      console.error(`[${this.name}] Error calculating consistency score:`, error);
+      return 0;
+    }
+  }
+
   private async logAction(action: string, inputData: any, outputData: any): Promise<void> {
     try {
       await sql`

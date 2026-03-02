@@ -190,6 +190,27 @@ const sections = [
         icon: AlertTriangle,
         cta: 'Monitor Risk',
       },
+      {
+        href: '/dashboard/prop-sharing/firm-risk',
+        label: 'Firm Risk',
+        description: 'Firm-wide capital exposure, sector concentration tracking, correlation alerts, and breach monitoring.',
+        icon: Shield,
+        cta: 'View Exposure',
+      },
+      {
+        href: '/dashboard/prop-sharing/fraud',
+        label: 'Fraud Detection',
+        description: 'Automated fraud scanning: latency arbitrage, overfit scalping, news straddling, and statistical anomalies.',
+        icon: Shield,
+        cta: 'Review Alerts',
+      },
+      {
+        href: '/dashboard/prop-sharing/scaling',
+        label: 'Scaling Engine',
+        description: 'Dynamic account scaling based on Sharpe ratio, profit factor, max drawdown, and consistency metrics.',
+        icon: TrendingUp,
+        cta: 'Manage Scaling',
+      },
     ],
   },
 ]
