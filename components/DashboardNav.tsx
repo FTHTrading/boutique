@@ -23,6 +23,10 @@ import {
   Briefcase,
   AlertTriangle,
   Wallet,
+  BookOpen,
+  UserCheck,
+  BarChart3,
+  ClipboardList,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -77,6 +81,10 @@ const navSections = [
       { href: '/dashboard/prop-sharing', label: 'Prop Overview', icon: TrendingUp, description: 'Program dashboard' },
       { href: '/dashboard/prop-sharing/programs', label: 'Programs', icon: Briefcase, description: 'Funding tiers & rules' },
       { href: '/dashboard/prop-sharing/accounts', label: 'Trader Accounts', icon: Users, description: 'Manage traders' },
+      { href: '/dashboard/prop-sharing/applications', label: 'Applications', icon: ClipboardList, description: 'Challenge applicants' },
+      { href: '/dashboard/prop-sharing/kyc', label: 'KYC / Compliance', icon: UserCheck, description: 'Identity verification' },
+      { href: '/dashboard/prop-sharing/treasury', label: 'Treasury', icon: BookOpen, description: 'Capital accounting' },
+      { href: '/dashboard/prop-sharing/performance', label: 'Performance', icon: BarChart3, description: 'Trader analytics' },
       { href: '/dashboard/prop-sharing/payouts', label: 'Payouts', icon: Wallet, description: 'Profit-share payments' },
       { href: '/dashboard/prop-sharing/risk', label: 'Risk Monitor', icon: AlertTriangle, description: 'Risk events & alerts' },
     ]

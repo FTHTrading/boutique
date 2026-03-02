@@ -401,6 +401,149 @@ class PropSharingAgent {
     }
   }
 
+  // ── V2: Performance Metrics Engine ──────────────────────────────
+
+  /**
+   * Calculate deterministic performance metrics for an account.
+   * Sharpe, Sortino, Calmar, Max DD, Win Rate, Expectancy, Kelly
+   */
+  async calculatePerformanceMetrics(accountId: string): Promise<Record<string, any> | null> {
+    console.log(`[${this.name}] Calculating performance metrics for: ${accountId}`);
+    try {
+      const trades = await sql`
+        SELECT pnl, opened_at, closed_at FROM prop_trades
+        WHERE account_id = ${accountId} AND status = 'closed'
+        ORDER BY closed_at ASC
+      `;
+      if (trades.rows.length === 0) return null;
+
+      const pnls = trades.rows.map((t: any) => Number(t.pnl));
+      const n = pnls.length;
+      const wins = pnls.filter((p: number) => p > 0);
+      const losses = pnls.filter((p: number) => p < 0);
+      const totalPnl = pnls.reduce((s: number, p: number) => s + p, 0);
+      const winRate = wins.length / n;
+      const avgWin = wins.length > 0 ? wins.reduce((s: number, p: number) => s + p, 0) / wins.length : 0;
+      const avgLoss = losses.length > 0 ? Math.abs(losses.reduce((s: number, p: number) => s + p, 0) / losses.length) : 0;
+      const expectancy = (winRate * avgWin) - ((1 - winRate) * avgLoss);
+      const profitFactor = losses.length > 0 ? Math.abs(wins.reduce((s: number, p: number) => s + p, 0)) / Math.abs(losses.reduce((s: number, p: number) => s + p, 0)) : 0;
+
+      // Sharpe
+      const mean = totalPnl / n;
+      const variance = pnls.reduce((s: number, p: number) => s + Math.pow(p - mean, 2), 0) / n;
+      const stdDev = Math.sqrt(variance);
+      const sharpe = stdDev > 0 ? (mean / stdDev) * Math.sqrt(252) : 0;
+
+      // Sortino
+      const downsideVar = pnls.filter((p: number) => p < 0).reduce((s: number, p: number) => s + Math.pow(p, 2), 0) / n;
+      const sortino = Math.sqrt(downsideVar) > 0 ? (mean / Math.sqrt(downsideVar)) * Math.sqrt(252) : 0;
+
+      // Max DD
+      const acct = await sql`SELECT starting_balance FROM prop_accounts WHERE account_id = ${accountId}`;
+      const startBal = Number(acct.rows[0]?.starting_balance || 0);
+      let peak = startBal, maxDd = 0, cum = 0;
+      for (const p of pnls) { cum += p; const bal = startBal + cum; if (bal > peak) peak = bal; const dd = peak - bal; if (dd > maxDd) maxDd = dd; }
+      const maxDdPct = peak > 0 ? (maxDd / peak) * 100 : 0;
+
+      const calmar = maxDd > 0 ? (mean * 252) / maxDd : 0;
+
+      const result = { sharpe, sortino, calmar, winRate, profitFactor, expectancy, maxDd, maxDdPct, totalPnl, totalTrades: n };
+      await this.logAction('calculatePerformanceMetrics', { accountId }, result);
+      return result;
+    } catch (error) {
+      console.error(`[${this.name}] Error calculating metrics:`, error);
+      return null;
+    }
+  }
+
+  // ── V2: Daily Snapshot Generator ──────────────────────────────
+
+  /**
+   * Generate end-of-day snapshots for all active accounts.
+   * Captures balance, P&L, risk state at EOD.
+   */
+  async generateDailySnapshots(): Promise<number> {
+    console.log(`[${this.name}] Generating daily snapshots`);
+    let count = 0;
+    try {
+      const accounts = await sql`
+        SELECT a.*, p.eval_max_drawdown, p.max_drawdown, p.eval_daily_loss_limit, p.daily_loss_limit
+        FROM prop_accounts a
+        JOIN prop_programs p ON p.program_id = a.program_id
+        WHERE a.status IN ('active', 'funded')
+      `;
+
+      const today = new Date().toISOString().split('T')[0];
+
+      for (const acct of accounts.rows) {
+        // Get today's trades
+        const dayTrades = await sql`
+          SELECT COALESCE(SUM(pnl), 0) as day_pnl,
+            COUNT(*) as trade_count,
+            COALESCE(SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END), 0) as wins,
+            COALESCE(SUM(CASE WHEN pnl < 0 THEN 1 ELSE 0 END), 0) as losses
+          FROM prop_trades
+          WHERE account_id = ${acct.account_id} AND status = 'closed'
+            AND DATE(closed_at) = ${today}
+        `;
+
+        const dayPnl = Number(dayTrades.rows[0]?.day_pnl || 0);
+        const openBal = Number(acct.current_balance) - dayPnl;
+        const maxDD = acct.current_phase === 'evaluation' ? acct.eval_max_drawdown : acct.max_drawdown;
+        const dailyLimit = acct.current_phase === 'evaluation' ? acct.eval_daily_loss_limit : acct.daily_loss_limit;
+
+        await sql`
+          INSERT INTO prop_daily_snapshots (account_id, snapshot_date, opening_balance, closing_balance, daily_pnl, trades_count, max_drawdown_pct, daily_loss_pct, locked_out)
+          VALUES (
+            ${acct.account_id}, ${today}, ${openBal}, ${Number(acct.current_balance)},
+            ${dayPnl}, ${Number(dayTrades.rows[0]?.trade_count || 0)},
+            ${Number(acct.current_drawdown)},
+            ${Number(acct.starting_balance) > 0 ? (Math.abs(dayPnl) / Number(acct.starting_balance)) * 100 : 0},
+            ${acct.locked_out || false}
+          )
+          ON CONFLICT (account_id, snapshot_date) DO UPDATE SET
+            closing_balance = EXCLUDED.closing_balance,
+            daily_pnl = EXCLUDED.daily_pnl,
+            trades_count = EXCLUDED.trades_count,
+            max_drawdown_pct = EXCLUDED.max_drawdown_pct,
+            daily_loss_pct = EXCLUDED.daily_loss_pct,
+            locked_out = EXCLUDED.locked_out
+        `;
+
+        // Reset daily lockout at end of day
+        if (acct.locked_out && acct.status !== 'suspended') {
+          await sql`
+            UPDATE prop_accounts SET locked_out = false, locked_out_at = NULL, lock_reason = NULL, daily_pnl = 0
+            WHERE account_id = ${acct.account_id}
+          `;
+        }
+
+        count++;
+      }
+
+      await this.logAction('generateDailySnapshots', { date: today }, { snapshots: count });
+    } catch (error) {
+      console.error(`[${this.name}] Error generating snapshots:`, error);
+    }
+    return count;
+  }
+
+  // ── V2: Audit Logger ──────────────────────────────────────────
+
+  /**
+   * Write an immutable audit log entry for any prop sharing state change.
+   */
+  async logAudit(entityType: string, entityId: string, action: string, oldValue: any, newValue: any, performedBy: string, reason: string): Promise<void> {
+    try {
+      await sql`
+        INSERT INTO prop_audit_log (entity_type, entity_id, action, old_value, new_value, performed_by, reason)
+        VALUES (${entityType}, ${entityId}, ${action}, ${JSON.stringify(oldValue || null)}, ${JSON.stringify(newValue || null)}, ${performedBy}, ${reason})
+      `;
+    } catch (error) {
+      console.error(`[${this.name}] Error writing audit log:`, error);
+    }
+  }
+
   private async logAction(action: string, inputData: any, outputData: any): Promise<void> {
     try {
       await sql`

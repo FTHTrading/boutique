@@ -521,3 +521,174 @@ export interface PropDashboardMetrics {
   active_risk_events: number;
   avg_win_rate: number;
 }
+
+// -----------------------------------------------------------------
+// Prop Sharing V2: Treasury, Audit, KYC, Metrics
+// -----------------------------------------------------------------
+
+export type TreasuryEntryType =
+  | 'capital_allocated'
+  | 'capital_returned'
+  | 'trader_payout'
+  | 'firm_revenue'
+  | 'eval_fee_received'
+  | 'loss_absorbed'
+  | 'adjustment';
+
+export type KycStatus = 'pending' | 'in_review' | 'approved' | 'rejected' | 'expired';
+
+export type ChallengeApplicationStatus =
+  | 'submitted'
+  | 'payment_pending'
+  | 'payment_received'
+  | 'kyc_pending'
+  | 'kyc_approved'
+  | 'kyc_rejected'
+  | 'active'
+  | 'completed'
+  | 'failed'
+  | 'cancelled'
+  | 'refunded';
+
+export interface TreasuryEntry {
+  entry_id: string;
+  entry_type: TreasuryEntryType;
+  account_id?: string;
+  payout_id?: string;
+  program_id?: string;
+  amount: number;
+  direction: 'debit' | 'credit';
+  currency: string;
+  running_balance?: number;
+  description: string;
+  reference?: string;
+  performed_by?: string;
+  metadata?: Record<string, any>;
+  created_at: string;
+}
+
+export interface TreasurySummary {
+  total_capital_allocated: number;
+  total_capital_returned: number;
+  net_capital_deployed: number;
+  total_trader_payouts: number;
+  total_firm_revenue: number;
+  total_eval_fees: number;
+  total_losses_absorbed: number;
+  net_position: number;
+  entry_count: number;
+}
+
+export interface PropAuditLog {
+  log_id: string;
+  entity_type: string;
+  entity_id: string;
+  action: string;
+  old_value?: Record<string, any>;
+  new_value?: Record<string, any>;
+  performed_by: string;
+  ip_address?: string;
+  reason?: string;
+  created_at: string;
+}
+
+export interface PropTraderKyc {
+  kyc_id: string;
+  account_id?: string;
+  trader_email: string;
+  legal_name: string;
+  date_of_birth?: string;
+  nationality?: string;
+  country_of_residence: string;
+  government_id_type?: string;
+  government_id_number?: string;
+  status: KycStatus;
+  risk_level: string;
+  sanctions_checked: boolean;
+  sanctions_clear?: boolean;
+  pep_status: boolean;
+  source_of_funds?: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
+  rejection_reason?: string;
+  expires_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ChallengeApplication {
+  application_id: string;
+  program_id: string;
+  full_name: string;
+  email: string;
+  phone?: string;
+  country: string;
+  trading_experience?: string;
+  trading_style?: string;
+  commodities_interest?: string[];
+  bio?: string;
+  status: ChallengeApplicationStatus;
+  eval_fee_amount?: number;
+  eval_fee_currency?: string;
+  payment_method?: string;
+  payment_reference?: string;
+  payment_received_at?: string;
+  account_id?: string;
+  referral_code?: string;
+  program_name?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PropPerformanceMetrics {
+  metrics_id: string;
+  account_id: string;
+  sharpe_ratio?: number;
+  sortino_ratio?: number;
+  calmar_ratio?: number;
+  max_drawdown_pct?: number;
+  max_drawdown_amount?: number;
+  max_drawdown_duration_days?: number;
+  win_rate?: number;
+  loss_rate?: number;
+  avg_win?: number;
+  avg_loss?: number;
+  largest_win?: number;
+  largest_loss?: number;
+  profit_factor?: number;
+  expectancy?: number;
+  expectancy_ratio?: number;
+  current_streak: number;
+  longest_win_streak: number;
+  longest_loss_streak: number;
+  total_trades: number;
+  total_lots: number;
+  avg_hold_time_hours?: number;
+  avg_trades_per_day?: number;
+  risk_reward_avg?: number;
+  kelly_criterion?: number;
+  calculated_at: string;
+  updated_at: string;
+}
+
+export interface DailySnapshot {
+  snapshot_id: string;
+  account_id: string;
+  snapshot_date: string;
+  opening_balance: number;
+  closing_balance: number;
+  high_balance?: number;
+  low_balance?: number;
+  peak_balance: number;
+  daily_pnl: number;
+  daily_pnl_pct?: number;
+  daily_drawdown_pct?: number;
+  trades_opened: number;
+  trades_closed: number;
+  winning_trades: number;
+  losing_trades: number;
+  max_drawdown_pct?: number;
+  open_positions: number;
+  locked_out: boolean;
+}
+

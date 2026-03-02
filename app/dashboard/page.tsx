@@ -4,7 +4,7 @@ import { sql } from '@/lib/sql'
 import {
   Users, ShoppingCart, FileText, Shield, Mail,
   DollarSign, Anchor, Globe, TrendingUp, AlertTriangle,
-  CheckCircle, ArrowRight, Activity
+  CheckCircle, ArrowRight, Activity, BookOpen, UserCheck, BarChart3, ClipboardList
 } from 'lucide-react'
 
 // Static export: DB queries fail gracefully at build time, show zeros until DB env is set
@@ -156,9 +156,37 @@ const sections = [
         cta: 'View Accounts',
       },
       {
+        href: '/dashboard/prop-sharing/applications',
+        label: 'Applications',
+        description: 'Review and process challenge applications — payment confirmation, approval pipeline, and account creation.',
+        icon: ClipboardList,
+        cta: 'Review Apps',
+      },
+      {
+        href: '/dashboard/prop-sharing/kyc',
+        label: 'KYC / Compliance',
+        description: 'Trader identity verification, sanctions screening, PEP checks, and document review pipeline.',
+        icon: UserCheck,
+        cta: 'Review KYC',
+      },
+      {
+        href: '/dashboard/prop-sharing/treasury',
+        label: 'Treasury',
+        description: 'Capital accounting ledger — track allocated capital, eval fees, trader payouts, and net fund position.',
+        icon: BookOpen,
+        cta: 'View Ledger',
+      },
+      {
+        href: '/dashboard/prop-sharing/performance',
+        label: 'Performance',
+        description: 'Deterministic trader analytics — Sharpe, Sortino, Calmar, Max DD, win rate, expectancy, and Kelly criterion.',
+        icon: BarChart3,
+        cta: 'View Metrics',
+      },
+      {
         href: '/dashboard/prop-sharing/risk',
         label: 'Risk Monitor',
-        description: 'Real-time risk events: drawdown breaches, position limit alerts, and daily loss violations requiring action.',
+        description: 'Real-time risk events: drawdown breaches, daily lockouts, position limit alerts, and auto-freeze actions.',
         icon: AlertTriangle,
         cta: 'Monitor Risk',
       },
